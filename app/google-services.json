@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "236709432014",
+    "project_id": "zippy-162e8",
+    "storage_bucket": "zippy-162e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236709432014:android:60c2be1bdce23e8b789e9f",
+        "android_client_info": {
+          "package_name": "com.example.zippy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236709432014-ojm3g3gl60b0r9u5jters50capa9p5po.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zippy",
+            "certificate_hash": "65d2bca225486c31cbbdb6e95c7032eed8068771"
+          }
+        },
+        {
+          "client_id": "236709432014-kjpjuglpqk2og6ujsnlo0eu92kspiv48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVMANkuF8nUmsV_SZuJ6cjdtITF3hX9C8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236709432014-kjpjuglpqk2og6ujsnlo0eu92kspiv48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

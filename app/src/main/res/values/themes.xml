@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="Theme.Zippy.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Zippy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Zippy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>
