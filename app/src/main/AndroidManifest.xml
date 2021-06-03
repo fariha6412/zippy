@@ -17,7 +17,6 @@
         <activity android:name=".ui.register.RegisterInstructorActivity" />
         <activity android:name=".ChooseAccountType" />
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

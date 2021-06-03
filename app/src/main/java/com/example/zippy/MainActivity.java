@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
                 String email = editTXTemail.getText().toString().trim();
                 String password = editTXTpassword.getText().toString().trim();
-                validateEmail(email);
-                validatePassword(password);
+                if(!validateEmail(email))return;
+                if(!validatePassword(password))return;
 
                 loading.setVisibility(View.VISIBLE);
                 try {
@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                                                 //start the activity of profile of student
                                                 //startActivity(new Intent(MainActivity.this, SelfStudentProfileActivity.class));
                                                 Log.d("hi", "Value is: " + value);
+                                                loading.setVisibility(View.GONE);
                                             }
                                         }
 
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
                                             Log.w("hhi", "Failed to read value.", error.toException());
+                                            loading.setVisibility(View.GONE);
                                         }
                                     });
                                 }
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Verify your email and try again", Toast.LENGTH_SHORT).show();
                                     editTXTemail.setText("");
                                     editTXTpassword.setText("");
+                                    loading.setVisibility(View.GONE);
                                 }
                             }
                             else{
@@ -190,30 +193,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void validateEmail(String email){
+    private boolean validateEmail(String email){
         // if the email input field is empty
         if(email.isEmpty()){
             editTXTemail.setError("Enter an email address");
             editTXTemail.requestFocus();
-            return;
+            return false;
         }
         // if the email is valid
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             editTXTemail.setError("Enter a valid email address");
             editTXTemail.requestFocus();
-            return;
+            return false;
         }
         editTXTemail.setError(null);
+        return true;
     }
 
-    private void validatePassword(String password){
+    private boolean validatePassword(String password){
         // if the password input field is empty
         if(password.isEmpty()){
             editTXTpassword.setError("Enter a password");
             editTXTpassword.requestFocus();
-            return;
+            return false;
         }
         editTXTpassword.setError(null);
+        return true;
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
