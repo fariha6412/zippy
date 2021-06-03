@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity android:name=".ChangeProfilePictureActivity" />
+        <activity android:name=".ui.change.ChangeProfilePictureActivity" />
+        <activity android:name=".ui.register.RegisterStudentActivity" />
+        <activity android:name=".ui.register.RegisterInstructorActivity" />
         <activity android:name=".ChooseAccountType" />
         <activity android:name=".MainActivity">
             <intent-filter>
