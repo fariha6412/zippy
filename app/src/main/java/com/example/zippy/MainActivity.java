@@ -1,9 +1,12 @@
 package com.example.zippy;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.zippy.helper.StudentHelperClass;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +32,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,7 +69,39 @@ public class MainActivity extends AppCompatActivity {
         txtviewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ChooseAccountType.class));
+                EditText resetMail = new EditText(v.getContext());
+                AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
+                passwordResetDialog.setTitle("Reset Password").setMessage("Enter your email to receive reset link").setCancelable(false) ;
+                passwordResetDialog.setView(resetMail);
+
+                passwordResetDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String email = resetMail.getText().toString();
+                        if(email.isEmpty()||!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                            Toast.makeText(getApplicationContext(), "Enter a valid email address", Toast.LENGTH_SHORT).show();
+                            //return;
+                        };
+                        auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getApplicationContext(), "Reset link has been sent!", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error! Could not sent reset email!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = passwordResetDialog.create();
+                alert.show();
             }
         });
         loginbtn.setOnClickListener(new View.OnClickListener() {
@@ -90,18 +129,19 @@ public class MainActivity extends AppCompatActivity {
 
                                     referenceStudent.addValueEventListener(new ValueEventListener() {
                                         @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                        public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                                             // This method is called once with the initial value and again
                                             // whenever data at this location is updated.
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
+                                                //start the activity of profile of student
                                                 //startActivity(new Intent(MainActivity.this, SelfStudentProfileActivity.class));
-                                                //Log.d("hi", "Value is: " + value);
+                                                Log.d("hi", "Value is: " + value);
                                             }
                                         }
 
                                         @Override
-                                        public void onCancelled(DatabaseError error) {
+                                        public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
                                             Log.w("hhi", "Failed to read value.", error.toException());
                                         }
@@ -109,18 +149,19 @@ public class MainActivity extends AppCompatActivity {
 
                                     referenceInsturctor.addValueEventListener(new ValueEventListener() {
                                         @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                        public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                                             // This method is called once with the initial value and again
                                             // whenever data at this location is updated.
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
+                                                //start the activity of profile of instructor
                                                 //startActivity(new Intent(MainActivity.this, SelfInstructorProfileActivity.class));
                                                 //Log.d("hi", "Value is: " + value);
                                             }
                                         }
 
                                         @Override
-                                        public void onCancelled(DatabaseError error) {
+                                        public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
                                             Log.w("hhi", "Failed to read value.", error.toException());
                                         }

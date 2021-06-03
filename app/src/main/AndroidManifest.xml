@@ -12,11 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity
-            android:name=".SelfInstructorProfileActivity"
-            android:label="@string/title_activity_main2"></activity>
         <activity android:name=".ChangeProfilePictureActivity" />
-        <activity android:name=".SelfStudentProfileActivity" />
         <activity android:name=".ChooseAccountType" />
         <activity android:name=".MainActivity">
             <intent-filter>

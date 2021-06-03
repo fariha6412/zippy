@@ -1,53 +1,34 @@
 package com.example.zippy;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.zippy.ui.register.*;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.zippy.ui.register.RegisterInstructorActivity;
+import com.example.zippy.ui.register.RegisterStudentActivity;
 
 
 public class ChooseAccountType extends AppCompatActivity {
-
-    private Toolbar mtoolbar;
-    private TextView txtviewlogin;
-    private Button instructorbtn, studentbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
 
-        mtoolbar = findViewById(R.id.mtoolbar);
+        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
-        txtviewlogin = findViewById(R.id.txtviewlogin);
-        instructorbtn = findViewById(R.id.instructorbtn);
-        studentbtn = findViewById(R.id.studentbtn);
+        TextView txtviewlogin = findViewById(R.id.txtviewlogin);
+        Button instructorbtn = findViewById(R.id.instructorbtn);
+        Button studentbtn = findViewById(R.id.studentbtn);
 
-        txtviewlogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChooseAccountType.this, MainActivity.class));
-            }
-        });
-
-        instructorbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChooseAccountType.this, RegisterInstructorActivity.class));
-            }
-        });
-        studentbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChooseAccountType.this, RegisterStudentActivity.class));
-            }
-        });
+        txtviewlogin.setOnClickListener(v -> startActivity(new Intent(ChooseAccountType.this, MainActivity.class)));
+        instructorbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountType.this, RegisterInstructorActivity.class)));
+        studentbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountType.this, RegisterStudentActivity.class)));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
