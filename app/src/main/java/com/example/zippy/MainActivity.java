@@ -78,10 +78,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String email = resetMail.getText().toString();
-                        if(email.isEmpty()||!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                        if(email.isEmpty())return;
+                        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                             Toast.makeText(getApplicationContext(), "Enter a valid email address", Toast.LENGTH_SHORT).show();
                             return;
-                        };
+                        }
                         auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
