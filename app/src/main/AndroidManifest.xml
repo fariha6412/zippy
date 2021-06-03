@@ -14,12 +14,12 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".SelfInstructorProfileActivity"
-            android:label="@string/title_activity_self_instructor_profile"
-            android:theme="@style/Theme.Zippy.NoActionBar"></activity>
+            android:label="@string/title_activity_main2"></activity>
+        <activity android:name=".ChangeProfilePictureActivity" />
         <activity android:name=".SelfStudentProfileActivity" />
-        <activity android:name=".RegisterStudent" />
+        <activity android:name=".ui.register.RegisterStudent" />
         <activity android:name=".ChooseAccountType" />
-        <activity android:name=".RegisterInstructor" />
+        <activity android:name=".ui.register.RegisterInstructor" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

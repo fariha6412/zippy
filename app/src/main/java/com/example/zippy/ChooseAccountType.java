@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.example.zippy.ui.register.*;
+
 
 public class ChooseAccountType extends AppCompatActivity {
 

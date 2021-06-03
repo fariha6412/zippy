@@ -1,4 +1,4 @@
-package com.example.zippy;
+package com.example.zippy.ui.register;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.View;
@@ -16,6 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zippy.ChooseAccountType;
+import com.example.zippy.MainActivity;
+import com.example.zippy.R;
+import com.example.zippy.helper.StudentHelperClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +32,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.regex.Pattern;
-import androidx.annotation.NonNull;
 
 public class RegisterStudent extends AppCompatActivity {
 
@@ -57,6 +59,7 @@ public class RegisterStudent extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         TextView txtViewLogin = findViewById(R.id.txtviewlogin);
         Button registerbtn = findViewById(R.id.registerbtn);
+        String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/student.png?alt=media&token=112e1b57-ec64-4992-b24d-8c9aba3c88f7";
 
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
@@ -123,7 +126,7 @@ public class RegisterStudent extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "Verification Email has been sent", Toast.LENGTH_SHORT).show();
                                         rootNode = FirebaseDatabase.getInstance();
                                         reference = rootNode.getReference("students");
-                                        studentHelper = new StudentHelperClass(fullName, email, institution, registrationNo, password);
+                                        studentHelper = new StudentHelperClass(image, fullName, email, institution, registrationNo, password);
 
                                         reference.child(user.getUid().toString()).setValue(studentHelper);
                                         startActivity(new Intent(RegisterStudent.this, MainActivity.class));

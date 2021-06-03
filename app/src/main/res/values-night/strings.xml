@@ -26,4 +26,13 @@
     <string name="have_account">Already have an account?</string>
     <string name="str_register">Register</string>
     <string name="str_designation">Designation</string>
+    <string name="str_full_name">Full Name</string>
+    <string name="str_institution">Institution</string>
+    <string name="str_re_type_password">re-type password</string>
+    <string name="str_employee_id">Employee ID</string>
+    <string name="str_registration_no">Registration No</string>
+    <string name="action_settings">Settings</string>
+    <string name="cng_profile_pic">Change Profile Picture</string>
+    <string name="btn_upload">Upload Image</string>
+    <string name="btn_submit">Submit</string>
 </resources>

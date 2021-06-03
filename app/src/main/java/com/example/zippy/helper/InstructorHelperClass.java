@@ -1,17 +1,26 @@
-package com.example.zippy;
+package com.example.zippy.helper;
 
 public class InstructorHelperClass {
-    String fullName, email, institution, employeeID, designation, password;
+    String image, fullName, email, institution, employeeID, designation, password;
 
     public InstructorHelperClass(){}
 
-    public InstructorHelperClass(String fullName, String email, String institution, String employeeID, String designation, String password) {
+    public InstructorHelperClass(String image, String fullName, String email, String institution, String employeeID, String designation, String password) {
+        this.image = image;
         this.fullName = fullName;
         this.email = email;
         this.institution = institution;
         this.employeeID = employeeID;
         this.designation = designation;
         this.password = password;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getFullName() {

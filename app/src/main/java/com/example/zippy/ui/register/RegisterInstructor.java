@@ -1,4 +1,4 @@
-package com.example.zippy;
+package com.example.zippy.ui.register;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.View;
@@ -16,6 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.MainActivity;
+import com.example.zippy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,6 +60,7 @@ public class RegisterInstructor extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         TextView txtViewLogin = findViewById(R.id.txtviewlogin);
         Button registerbtn = findViewById(R.id.registerbtn);
+        String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/instructor.png?alt=media&token=7d594bc1-2490-4a36-b75f-765966a5ce82";
 
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
@@ -129,7 +132,7 @@ public class RegisterInstructor extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "Verification Email has been sent", Toast.LENGTH_SHORT).show();
                                         rootNode = FirebaseDatabase.getInstance();
                                         reference = rootNode.getReference("instructors");
-                                        instructorHelper = new InstructorHelperClass(fullName, email, institution, employeeId, designation, password);
+                                        instructorHelper = new InstructorHelperClass(image, fullName, email, institution, employeeId, designation, password);
 
                                         reference.child(user.getUid().toString()).setValue(instructorHelper);
                                         startActivity(new Intent(RegisterInstructor.this, MainActivity.class));
