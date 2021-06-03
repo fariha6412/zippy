@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                                             // whenever data at this location is updated.
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
-                                                startActivity(new Intent(MainActivity.this, SelfStudentProfileActivity.class));
+                                                //startActivity(new Intent(MainActivity.this, SelfStudentProfileActivity.class));
                                                 //Log.d("hi", "Value is: " + value);
                                             }
                                         }
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                                             // whenever data at this location is updated.
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
-                                                startActivity(new Intent(MainActivity.this, SelfInstructorProfileActivity.class));
+                                                //startActivity(new Intent(MainActivity.this, SelfInstructorProfileActivity.class));
                                                 //Log.d("hi", "Value is: " + value);
                                             }
                                         }

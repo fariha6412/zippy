@@ -39,13 +39,13 @@ public class ChooseAccountType extends AppCompatActivity {
         instructorbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChooseAccountType.this, RegisterInstructor.class));
+                startActivity(new Intent(ChooseAccountType.this, RegisterInstructorActivity.class));
             }
         });
         studentbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChooseAccountType.this, RegisterStudent.class));
+                startActivity(new Intent(ChooseAccountType.this, RegisterStudentActivity.class));
             }
         });
     }

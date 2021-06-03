@@ -17,9 +17,7 @@
             android:label="@string/title_activity_main2"></activity>
         <activity android:name=".ChangeProfilePictureActivity" />
         <activity android:name=".SelfStudentProfileActivity" />
-        <activity android:name=".ui.register.RegisterStudent" />
         <activity android:name=".ChooseAccountType" />
-        <activity android:name=".ui.register.RegisterInstructor" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
