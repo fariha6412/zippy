@@ -6,7 +6,6 @@ public class InstructorHelperClass {
     String image, fullName, email, institution, employeeID, designation, password;
 
     public InstructorHelperClass(){
-        throw new UnsupportedOperationException("Empty constructor is not supported.");
     }
 
     public InstructorHelperClass(String image, String fullName, String email, String institution, String employeeID, String designation, String password) {
