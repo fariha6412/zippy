@@ -1,10 +1,14 @@
 package com.example.zippy.helper;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StudentHelperClass {
 
     String image, fullName, email, institution, registrationNo, password;
 
-    public StudentHelperClass(){}
+    public StudentHelperClass(){
+        throw new UnsupportedOperationException("Empty constructor is not supported.");
+    }
 
     public StudentHelperClass(String image, String fullName, String email, String institution, String registrationNo, String password) {
         this.image = image;
@@ -56,5 +60,17 @@ public class StudentHelperClass {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return "StudentHelperClass{" +
+                "image='" + image + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", institution='" + institution + '\'' +
+                ", registrationNo='" + registrationNo + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

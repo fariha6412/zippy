@@ -13,7 +13,7 @@ import com.example.zippy.ui.register.RegisterInstructorActivity;
 import com.example.zippy.ui.register.RegisterStudentActivity;
 
 
-public class ChooseAccountType extends AppCompatActivity {
+public class ChooseAccountTypeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +26,9 @@ public class ChooseAccountType extends AppCompatActivity {
         Button instructorbtn = findViewById(R.id.instructorbtn);
         Button studentbtn = findViewById(R.id.studentbtn);
 
-        txtviewlogin.setOnClickListener(v -> startActivity(new Intent(ChooseAccountType.this, MainActivity.class)));
-        instructorbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountType.this, RegisterInstructorActivity.class)));
-        studentbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountType.this, RegisterStudentActivity.class)));
+        txtviewlogin.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, MainActivity.class)));
+        instructorbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, RegisterInstructorActivity.class)));
+        studentbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, RegisterStudentActivity.class)));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
