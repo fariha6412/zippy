@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.helper.ValidationChecker;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -70,35 +71,15 @@ public class RegisterInstructorActivity extends AppCompatActivity {
             String designation = editTXTDesignation.getText().toString().trim();
             String fullName = editTXTFullName.getText().toString().trim();
 
-            if(fullName.isEmpty()){
-                editTXTFullName.setError("Field can not be empty");
-                editTXTFullName.requestFocus();
-                return;
-            }
-            if(!validateEmail(email))return;
-            if(institution.isEmpty()){
-                editTXTInstitution.setError("Field can not be empty");
-                editTXTInstitution.requestFocus();
-                return;
-            }
-            if(employeeId.isEmpty()){
-                editTXTEmployeeID.setError("Field can not be empty");
-                editTXTEmployeeID.requestFocus();
-                return;
-            }
-            if(designation.isEmpty()){
-                editTXTDesignation.setError("Field can not be empty");
-                editTXTDesignation.requestFocus();
-                return;
-            }
-            if(!validatePassword(password))return;
-            if(rePassword.isEmpty()){
-                editTXTRePassword.setError("Enter password again");
-                editTXTRePassword.requestFocus();
-                return;
-            }
+            if(ValidationChecker.isFieldEmpty(fullName, editTXTFullName))return;
+            if(!ValidationChecker.isValidEmail(email, editTXTEmail))return;
+            if(ValidationChecker.isFieldEmpty(institution, editTXTInstitution))return;
+            if(ValidationChecker.isFieldEmpty(employeeId, editTXTEmployeeID))return;
+            if(ValidationChecker.isFieldEmpty(designation, editTXTDesignation))return;
+            if(!ValidationChecker.isValidPassword(password, editTXTPassword))return;
+            if(ValidationChecker.isFieldEmpty(rePassword, editTXTRePassword))return;
             if(!password.equals(rePassword)){
-                editTXTRePassword.setError("Re-type password does not match");
+                editTXTRePassword.setError("Re-typed password does not match");
                 editTXTRePassword.requestFocus();
             }
             loading.setVisibility(View.VISIBLE);
@@ -141,47 +122,7 @@ public class RegisterInstructorActivity extends AppCompatActivity {
             }
         });
     }
-    private boolean validateEmail(String email){
-        // if the email input field is empty
-        if(email.isEmpty()){
-            editTXTEmail.setError("Enter an email address");
-            editTXTEmail.requestFocus();
-            return false;
-        }
-        // if the email is valid
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            editTXTEmail.setError("Enter a valid email address");
-            editTXTEmail.requestFocus();
-            return false;
-        }
-        editTXTEmail.setError(null);
-        return true;
-    }
 
-    private boolean validatePassword(String password){
-        // if the password input field is empty
-        if(password.isEmpty()){
-            editTXTPassword.setError("Enter a password");
-            editTXTPassword.requestFocus();
-            return false;
-        }
-        Pattern PASSWORD_PATTERN =
-                Pattern.compile("^" +
-                        "(?=.*[@#$%^&+=])" +     // at least 1 special character
-                        "(?=\\S+$)" +            // no white spaces
-                        ".{6,}" +                // at least 4 characters
-                        "$");
-
-        // if password does not matches to the pattern
-        // it will display an error message "Password is too weak"
-        if(!PASSWORD_PATTERN.matcher(password).matches()) {
-            editTXTPassword.setError("Password is too weak\nRules:\n1.No white spaces\n"
-                    +"2.At least six characters\n3.At least one special character");
-            return false;
-        }
-        editTXTPassword.setError(null);
-        return true;
-    }
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +18,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.helper.ValidationChecker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -63,10 +65,13 @@ public class MainActivity extends AppCompatActivity {
         txtViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ChooseAccountType.class));
+                startActivity(new Intent(MainActivity.this, ChooseAccountTypeActivity.class));
             }
         });
         txtviewForgotPassword.setOnClickListener(new View.OnClickListener() {
+            Boolean wantToCloseDialog = false;
+            String email = "";
+
             @Override
             public void onClick(View v) {
                 EditText resetMail = new EditText(v.getContext());
@@ -74,35 +79,67 @@ public class MainActivity extends AppCompatActivity {
                 passwordResetDialog.setTitle("Reset Password").setMessage("Enter your email to receive reset link").setCancelable(false) ;
                 passwordResetDialog.setView(resetMail);
 
-                passwordResetDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                DialogInterface.OnClickListener yesBtnFunc = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String email = resetMail.getText().toString();
-                        if(email.isEmpty())return;
-                        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                            Toast.makeText(getApplicationContext(), "Enter a valid email address", Toast.LENGTH_SHORT).show();
+                        wantToCloseDialog = false;
+                    }
+
+                };
+                DialogInterface.OnClickListener noBtnFunc = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        wantToCloseDialog = true;
+                    }
+                };
+                passwordResetDialog.setPositiveButton("yes", yesBtnFunc);
+                passwordResetDialog.setNegativeButton("No", noBtnFunc);
+                AlertDialog alert = passwordResetDialog.create();
+                alert.show();
+
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        //Do stuff, possibly set wantToCloseDialog to true then...
+                        email = resetMail.getText().toString().trim();
+                        if(ValidationChecker.isFieldEmpty(email, resetMail)){
+                            return;
+                        }
+                        if(!ValidationChecker.isValidEmail(email, resetMail)) {
                             return;
                         }
                         auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
                                 Toast.makeText(getApplicationContext(), "Reset link has been sent!", Toast.LENGTH_SHORT).show();
+                                wantToCloseDialog = true;
+                                alert.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull @NotNull Exception e) {
                                 Toast.makeText(getApplicationContext(), "Error! Could not sent reset email!", Toast.LENGTH_SHORT).show();
+                                wantToCloseDialog = true;
+                                alert.dismiss();
                             }
                         });
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+
+                        if(wantToCloseDialog) {
+                            alert.dismiss();
+                        }
                     }
                 });
-                AlertDialog alert = passwordResetDialog.create();
-                alert.show();
+                alert.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        //Do stuff, possibly set wantToCloseDialog to true then...
+                        alert.dismiss();
+                    }
+                });
             }
         });
         loginbtn.setOnClickListener(new View.OnClickListener() {
@@ -111,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
 
                 String email = editTXTemail.getText().toString().trim();
                 String password = editTXTpassword.getText().toString().trim();
-                if(!validateEmail(email))return;
-                if(!validatePassword(password))return;
+                if(!ValidationChecker.isValidEmail(email, editTXTemail))return;
+                if(!ValidationChecker.isValidPassword(password, editTXTpassword))return;
 
                 loading.setVisibility(View.VISIBLE);
                 try {
@@ -137,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                                             if(value!=null){
                                                 //start the activity of profile of student
                                                 //startActivity(new Intent(MainActivity.this, SelfStudentProfileActivity.class));
-                                                Log.d("hi", "Value is: " + value);
+                                                Log.d("Response", "Value is: " + value.toString());
                                                 loading.setVisibility(View.GONE);
                                             }
                                         }
@@ -145,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
-                                            Log.w("hhi", "Failed to read value.", error.toException());
+                                            Log.w("Error", "Failed to read value.", error.toException());
                                         }
                                     });
 
@@ -158,14 +195,14 @@ public class MainActivity extends AppCompatActivity {
                                             if(value!=null){
                                                 //start the activity of profile of instructor
                                                 //startActivity(new Intent(MainActivity.this, SelfInstructorProfileActivity.class));
-                                                //Log.d("hi", "Value is: " + value);
+                                                Log.d("Response", "Value is: " + value.toString());
                                             }
                                         }
 
                                         @Override
                                         public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
-                                            Log.w("hhi", "Failed to read value.", error.toException());
+                                            Log.w("Error", "Failed to read value.", error.toException());
                                             loading.setVisibility(View.GONE);
                                         }
                                     });
@@ -193,34 +230,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    private boolean validateEmail(String email){
-        // if the email input field is empty
-        if(email.isEmpty()){
-            editTXTemail.setError("Enter an email address");
-            editTXTemail.requestFocus();
-            return false;
-        }
-        // if the email is valid
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            editTXTemail.setError("Enter a valid email address");
-            editTXTemail.requestFocus();
-            return false;
-        }
-        editTXTemail.setError(null);
-        return true;
-    }
-
-    private boolean validatePassword(String password){
-        // if the password input field is empty
-        if(password.isEmpty()){
-            editTXTpassword.setError("Enter a password");
-            editTXTpassword.requestFocus();
-            return false;
-        }
-        editTXTpassword.setError(null);
-        return true;
-    }
 
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
