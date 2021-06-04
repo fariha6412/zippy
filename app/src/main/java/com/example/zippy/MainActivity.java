@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
@@ -161,8 +162,8 @@ public class MainActivity extends AppCompatActivity {
                                 assert user != null;
                                 if(user.isEmailVerified()){
                                     rootNode = FirebaseDatabase.getInstance();
-                                    referenceStudent = rootNode.getReference("students/"+user.getUid().toString());
-                                    referenceInsturctor = rootNode.getReference("instructors/"+user.getUid().toString());
+                                    referenceStudent = rootNode.getReference("students/"+ user.getUid());
+                                    referenceInsturctor = rootNode.getReference("instructors/"+ user.getUid());
 
                                     referenceStudent.addValueEventListener(new ValueEventListener() {
                                         @Override
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                                             // This method is called once with the initial value and again
                                             // whenever data at this location is updated.
-                                            StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
+                                            InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
                                             if(value!=null){
                                                 //start the activity of profile of instructor
                                                 startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
