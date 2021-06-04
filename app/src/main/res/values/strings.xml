@@ -41,4 +41,11 @@
     <string name="title_chat">Chat</string>
     <string name="str_log_out">Log out</string>
     <string name="choose_screen_title">Choose Account Type</string>
+    <string name="str_img_des">Profile Picture</string>
+    <string name="str_courses">Enrolled Courses</string>
+    <string name="str_course_code">Code</string>
+    <string name="str_course_title">Title</string>
+    <string name="str_course_year">Year</string>
+    <string name="str_course_credit">Credit</string>
+    <string name="title_profile">Profile</string>
 </resources>

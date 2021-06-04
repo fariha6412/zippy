@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
+import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v)
                     {
-                        //Do stuff, possibly set wantToCloseDialog to true then...
+                        //Do stuff.
                         email = resetMail.getText().toString().trim();
                         if(ValidationChecker.isFieldEmpty(email, resetMail)){
                             return;
@@ -114,14 +115,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void unused) {
                                 Toast.makeText(getApplicationContext(), "Reset link has been sent!", Toast.LENGTH_SHORT).show();
-                                wantToCloseDialog = true;
                                 alert.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull @NotNull Exception e) {
                                 Toast.makeText(getApplicationContext(), "Error! Could not sent reset email!", Toast.LENGTH_SHORT).show();
-                                wantToCloseDialog = true;
                                 alert.dismiss();
                             }
                         });
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
                                                 //start the activity of profile of instructor
-                                                //startActivity(new Intent(MainActivity.this, SelfInstructorProfileActivity.class));
+                                                startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
                                             }
                                         }
