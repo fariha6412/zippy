@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         String email = resetMail.getText().toString();
                         if(email.isEmpty()||!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                             Toast.makeText(getApplicationContext(), "Enter a valid email address", Toast.LENGTH_SHORT).show();
-                            //return;
+                            return;
                         };
                         auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
