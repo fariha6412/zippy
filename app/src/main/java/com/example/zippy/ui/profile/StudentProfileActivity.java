@@ -31,20 +31,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class InstructorProfileActivity extends AppCompatActivity {
+public class StudentProfileActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
     FirebaseUser user;
 
-    TextView txtViewFullName, txtViewInstitution, txtViewDesignation, txtViewEmplyeeID;
+    TextView txtViewFullName, txtViewInstitution, txtViewRegistrationNo;
     ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_instructor_profile);
+        setContentView(R.layout.activity_student_profile);
         showProfile();
     }
     public boolean onCreateOptionsMenu(Menu menu){
@@ -57,12 +57,11 @@ public class InstructorProfileActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
         txtViewFullName = findViewById(R.id.txtviewfullname);
         txtViewInstitution = findViewById(R.id.txtviewinstitution);
-        txtViewDesignation = findViewById(R.id.txtviewdesignation);
-        txtViewEmplyeeID = findViewById(R.id.txtviewemployeeid);
+        txtViewRegistrationNo = findViewById(R.id.txtviewregistraionno);
         img = (ImageView)findViewById(R.id.imgview);
 
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference("instructors/"+ user.getUid());
+        reference = rootNode.getReference("students/"+ user.getUid());
 
         reference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -70,11 +69,10 @@ public class InstructorProfileActivity extends AppCompatActivity {
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
+                StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                 if(value!=null){
                     txtViewFullName.setText(value.getFullName());
-                    txtViewDesignation.setText(value.getDesignation());
-                    txtViewEmplyeeID.setText("EmployeeID: "+value.getEmployeeID());
+                    txtViewRegistrationNo.setText("RegistrationNO: "+value.getRegistrationNo());
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);

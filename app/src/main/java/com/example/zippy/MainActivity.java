@@ -23,6 +23,7 @@ import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
+import com.example.zippy.ui.profile.StudentProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
                                                 //start the activity of profile of student
-                                                //startActivity(new Intent(MainActivity.this, SelfStudentProfileActivity.class));
+                                                startActivity(new Intent(MainActivity.this, StudentProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
                                                 loading.setVisibility(View.GONE);
                                             }
