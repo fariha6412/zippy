@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
+        <activity android:name=".ui.profile.StudentProfileActivity"></activity>
         <activity android:name=".ui.profile.InstructorProfileActivity" />
         <activity android:name=".ui.change.ChangeProfilePictureActivity" />
         <activity android:name=".ui.register.RegisterStudentActivity" />
