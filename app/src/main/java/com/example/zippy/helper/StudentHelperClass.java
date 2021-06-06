@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 public class StudentHelperClass {
 
     String image, fullName, email, institution, registrationNo;
+    Long noOfCourses;
 
     public StudentHelperClass(){
     }
@@ -15,6 +16,7 @@ public class StudentHelperClass {
         this.email = email;
         this.institution = institution;
         this.registrationNo = registrationNo;
+        this.noOfCourses = 0L;
     }
     public String getImage() { return image; }
 
@@ -53,6 +55,13 @@ public class StudentHelperClass {
         this.institution = institution;
     }
 
+    public Long getNoOfCourses() {
+        return noOfCourses;
+    }
+
+    public void setNoOfCourses(Long noOfCourses) {
+        this.noOfCourses = noOfCourses;
+    }
 
     @Override
     public @NotNull String toString() {
@@ -62,6 +71,7 @@ public class StudentHelperClass {
                 ", email='" + email + '\'' +
                 ", institution='" + institution + '\'' +
                 ", registrationNo='" + registrationNo + '\'' +
+                ", noOfCourses= " + noOfCourses +
                 '}';
     }
 }

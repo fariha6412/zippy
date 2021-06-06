@@ -23,6 +23,7 @@ import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.example.zippy.ui.register.RegisterInstructorActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -60,7 +61,7 @@ public class CourseCreationActivity extends AppCompatActivity {
         editTXTCourseCredit = findViewById(R.id.edittxtcoursecredit);
         createbtn = findViewById(R.id.createbtn);
         cancelbtn = findViewById(R.id.cancelbtn);
-        regeneratePassCode = findViewById(R.id.generatepass);
+        regeneratePassCode = findViewById(R.id.regeneratepasscode);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -75,14 +76,13 @@ public class CourseCreationActivity extends AppCompatActivity {
 
 
         referenceInstructor.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
                 assert value != null;
-                noOfCourses[0] = (value.getNoOfCourses()) + Long.valueOf(1);
+                noOfCourses[0] = (value.getNoOfCourses()) + 1L;
             }
 
             @Override
@@ -92,12 +92,9 @@ public class CourseCreationActivity extends AppCompatActivity {
             }
         });
 
-        /*regeneratePassCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTXTCoursePassCode.setText(createNewPassCode());
-            }
-        });*/
+        regeneratePassCode.setOnClickListener(v -> {
+            editTXTCoursePassCode.setText(createNewPassCode());
+        });
 
         createbtn.setOnClickListener(v -> {
 
@@ -112,7 +109,24 @@ public class CourseCreationActivity extends AppCompatActivity {
             if(ValidationChecker.isFieldEmpty(courseTitle, edtTXTCourseTitle))return;
             if(ValidationChecker.isFieldEmpty(courseYear, editTXTCourseYear))return;
             if(ValidationChecker.isFieldEmpty(courseCredit, editTXTCourseCredit))return;
-            if(coursePassCode.isEmpty())editTXTCoursePassCode.setText(createNewPassCode());
+            if(coursePassCode.isEmpty()){
+                final boolean[] regenerate = {true};
+                while(regenerate[0]){
+                    coursePassCode = createNewPassCode();
+                    referenceCourse.child(coursePassCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            regenerate[0] = snapshot.exists();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            regenerate[0] = false;
+                        }
+                    });
+                }
+                editTXTCoursePassCode.setText(coursePassCode);
+            }
 
             CourseHelperClass courseHelper = new CourseHelperClass(courseCode, courseTitle, courseYear, courseCredit, coursePassCode, instructoruid);
             referenceCourse.child(coursePassCode).setValue(courseHelper, new DatabaseReference.CompletionListener(){
@@ -138,11 +152,11 @@ public class CourseCreationActivity extends AppCompatActivity {
                 }
             });
             Toast.makeText(getApplicationContext(), "Course Created", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(CourseCreationActivity.this, InstructorProfileActivity.class));
+            finish();
         });
 
         cancelbtn.setOnClickListener(v -> {
-            startActivity(new Intent(CourseCreationActivity.this, InstructorProfileActivity.class));
+            finish();
         });
 
     }
@@ -157,7 +171,7 @@ public class CourseCreationActivity extends AppCompatActivity {
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
 }

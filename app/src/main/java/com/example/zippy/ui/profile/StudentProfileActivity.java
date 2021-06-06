@@ -1,6 +1,7 @@
 package com.example.zippy.ui.profile;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,8 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.zippy.CourseCreationActivity;
+import com.example.zippy.CourseEnrollActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.StudentHelperClass;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +36,7 @@ public class StudentProfileActivity extends AppCompatActivity {
 
     TextView txtViewFullName, txtViewInstitution, txtViewRegistrationNo;
     ImageView img;
+    MaterialButton addbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class StudentProfileActivity extends AppCompatActivity {
         txtViewInstitution = findViewById(R.id.txtviewinstitution);
         txtViewRegistrationNo = findViewById(R.id.txtviewregistraionno);
         img = findViewById(R.id.imgview);
+        addbtn = findViewById(R.id.addbtn);
 
         rootNode = FirebaseDatabase.getInstance();
         referenceStudent = rootNode.getReference("students/"+ user.getUid());
@@ -83,6 +89,8 @@ public class StudentProfileActivity extends AppCompatActivity {
                 Log.w("Error", "Failed to read value.", error.toException());
             }
         });
-
+        addbtn.setOnClickListener(v -> {
+            startActivity(new Intent(StudentProfileActivity.this, CourseEnrollActivity.class));
+        });
     }
 }

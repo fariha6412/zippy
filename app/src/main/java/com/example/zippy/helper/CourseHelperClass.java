@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CourseHelperClass {
     String courseCode, courseTitle, coursePassCode, courseCredit, courseYear, instructoruid;
-    Integer noOfStudents;
+    Long noOfStudents;
 
     public CourseHelperClass(){
     }
@@ -19,7 +19,7 @@ public class CourseHelperClass {
         this.courseCredit = courseCredit;
         this.courseYear = courseYear;
         this.instructoruid = instructoruid;
-        noOfStudents = 0;
+        noOfStudents = 0L;
     }
 
     public String getCourseTitle() {
@@ -62,11 +62,11 @@ public class CourseHelperClass {
         this.instructoruid = instructoruid;
     }
 
-    public Integer getNoOfStudents() {
+    public Long getNoOfStudents() {
         return noOfStudents;
     }
 
-    public void setNoOfStudents(Integer noOfStudents) {
+    public void setNoOfStudents(Long noOfStudents) {
         this.noOfStudents = noOfStudents;
     }
 
