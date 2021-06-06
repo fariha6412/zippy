@@ -48,4 +48,10 @@
     <string name="str_course_year">Year</string>
     <string name="str_course_credit">Credit</string>
     <string name="title_profile">Profile</string>
+    <string name="str_created_courses">Created Courses</string>
+    <string name="str_enrolled_courses">Enrolled Courses</string>
+    <string name="str_create_new_course">Create New Course</string>
+    <string name="str_pass_code">PassCode</string>
+    <string name="str_create">Create</string>
+    <string name="str_cancel">Cancel</string>
 </resources>

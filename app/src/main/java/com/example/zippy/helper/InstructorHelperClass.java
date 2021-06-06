@@ -3,19 +3,20 @@ package com.example.zippy.helper;
 import org.jetbrains.annotations.NotNull;
 
 public class InstructorHelperClass {
-    String image, fullName, email, institution, employeeID, designation, password;
+    String image, fullName, email, institution, employeeID, designation;
+    Long noOfCourses;
 
     public InstructorHelperClass(){
     }
 
-    public InstructorHelperClass(String image, String fullName, String email, String institution, String employeeID, String designation, String password) {
+    public InstructorHelperClass(String image, String fullName, String email, String institution, String employeeID, String designation) {
         this.image = image;
         this.fullName = fullName;
         this.email = email;
         this.institution = institution;
         this.employeeID = employeeID;
         this.designation = designation;
-        this.password = password;
+        this.noOfCourses = Long.valueOf(0);
     }
 
     public String getImage() {
@@ -66,12 +67,12 @@ public class InstructorHelperClass {
         this.designation = designation;
     }
 
-    public String getPassword() {
-        return password;
+    public Long getNoOfCourses() {
+        return noOfCourses;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNoOfCourses(Long noOfCourses) {
+        this.noOfCourses = noOfCourses;
     }
 
     @Override
@@ -83,7 +84,7 @@ public class InstructorHelperClass {
                 ", institution='" + institution + '\'' +
                 ", employeeID='" + employeeID + '\'' +
                 ", designation='" + designation + '\'' +
-                ", password='" + password + '\'' +
+                ", noOfCourses=" + noOfCourses +
                 '}';
     }
 }

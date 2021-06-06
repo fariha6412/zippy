@@ -10,6 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -22,8 +24,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.jetbrains.annotations.NotNull;
 
 public class RegisterInstructorActivity extends AppCompatActivity {
 
@@ -78,6 +83,7 @@ public class RegisterInstructorActivity extends AppCompatActivity {
             if(!password.equals(rePassword)){
                 editTXTRePassword.setError("Re-typed password does not match");
                 editTXTRePassword.requestFocus();
+                return;
             }
             loading.setVisibility(View.VISIBLE);
             //user creation
@@ -93,9 +99,15 @@ public class RegisterInstructorActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Verification Email has been sent", Toast.LENGTH_SHORT).show();
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("instructors");
-                            instructorHelper = new InstructorHelperClass(image, fullName, email, institution, employeeId, designation, password);
+                            instructorHelper = new InstructorHelperClass(image, fullName, email, institution, employeeId, designation);
 
-                            reference.child(user.getUid()).setValue(instructorHelper);
+                            reference.child(user.getUid()).setValue(instructorHelper,new DatabaseReference.CompletionListener(){
+
+                                @Override
+                                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                    System.err.println("Value was set. Error = "+error);
+                                }
+                            });
                             startActivity(new Intent(RegisterInstructorActivity.this, MainActivity.class));
                         }).addOnFailureListener(e -> {
                             loading.setVisibility(View.GONE);

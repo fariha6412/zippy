@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.zippy.R;
@@ -26,7 +27,7 @@ public class StudentProfileActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     FirebaseDatabase rootNode;
-    DatabaseReference reference;
+    DatabaseReference referenceStudent, referenceCourse;
     FirebaseUser user;
 
     TextView txtViewFullName, txtViewInstitution, txtViewRegistrationNo;
@@ -49,12 +50,17 @@ public class StudentProfileActivity extends AppCompatActivity {
         txtViewFullName = findViewById(R.id.txtviewfullname);
         txtViewInstitution = findViewById(R.id.txtviewinstitution);
         txtViewRegistrationNo = findViewById(R.id.txtviewregistraionno);
-        img = (ImageView)findViewById(R.id.imgview);
+        img = findViewById(R.id.imgview);
 
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference("students/"+ user.getUid());
+        referenceStudent = rootNode.getReference("students/"+ user.getUid());
+        referenceCourse = rootNode.getReference("courses");
 
-        reference.addValueEventListener(new ValueEventListener() {
+        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
+
+        setSupportActionBar(mtoolbar);
+
+        referenceStudent.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {

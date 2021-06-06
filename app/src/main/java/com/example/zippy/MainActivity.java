@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar loading;
     private FirebaseAuth auth;
     FirebaseDatabase rootNode;
-    DatabaseReference referenceStudent, referenceInsturctor;
+    DatabaseReference referenceStudent, referenceInstructor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                                 if(user.isEmailVerified()){
                                     rootNode = FirebaseDatabase.getInstance();
                                     referenceStudent = rootNode.getReference("students/"+ user.getUid());
-                                    referenceInsturctor = rootNode.getReference("instructors/"+ user.getUid());
+                                    referenceInstructor = rootNode.getReference("instructors/"+ user.getUid());
 
                                     referenceStudent.addValueEventListener(new ValueEventListener() {
                                         @Override
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     });
 
-                                    referenceInsturctor.addValueEventListener(new ValueEventListener() {
+                                    referenceInstructor.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                                             // This method is called once with the initial value and again
@@ -227,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
