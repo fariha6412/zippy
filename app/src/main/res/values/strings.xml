@@ -54,4 +54,6 @@
     <string name="str_pass_code">PassCode</string>
     <string name="str_create">Create</string>
     <string name="str_cancel">Cancel</string>
+    <string name="str_enroll">Enroll</string>
+    <string name="str_add_course">Add Course</string>
 </resources>

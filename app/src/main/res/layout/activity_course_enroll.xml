@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".CourseEnrollActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"
@@ -35,11 +35,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/txtviewtitle"
@@ -47,50 +47,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/cng_profile_pic"
+                android:text="@string/str_add_course"
                 android:textAlignment="center"
-                android:layout_marginTop="40dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textColor="@color/titleColor"
+                android:textSize="@dimen/title"
                 android:textStyle="normal"
-                android:textSize="@dimen/title" />
+                tools:ignore="RtlHardcoded" />
 
-
-            <Button
-                android:id="@+id/uploadbtn"
-                android:layout_width="@dimen/button_width"
+            <EditText
+                android:id="@+id/edittxtcoursepasscode"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="@dimen/edit_txt_width"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_upload"
-                android:textSize="@dimen/button_txt"
-                app:backgroundTint="@color/buttonColor"
+                android:layout_marginTop="40dp"
+                android:background="@color/textfieldColor"
+                android:ems="10"
+                android:hint="@string/str_pass_code"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:paddingStart=".1in"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"/>
-
-            <ImageView
-                android:id="@+id/imgview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                tools:srcCompat="@tools:sample/avatars"
-                android:layout_gravity="center_horizontal"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black"
+                tools:ignore="MissingConstraints,RtlSymmetry" />
 
             <Button
-                android:id="@+id/submitbtn"
+                android:id="@+id/enrollbtn"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/btn_submit"
+                android:layout_marginTop="40dp"
+                android:text="@string/str_enroll"
+                android:typeface="normal"
                 android:textSize="@dimen/button_txt"
                 app:backgroundTint="@color/buttonColor"
                 android:layout_gravity="center_horizontal"/>
 
-            <ProgressBar
-                android:id="@+id/loading"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/cancelbtn"
+                android:layout_width="@dimen/button_width"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"/>
-    </LinearLayout>
+                android:layout_marginTop="10dp"
+                android:text="@string/str_cancel"
+                android:typeface="normal"
+                android:textSize="@dimen/button_txt"
+                app:backgroundTint="@color/buttonColor"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
