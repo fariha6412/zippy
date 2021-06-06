@@ -6,20 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseHelperClass {
-    String courseTitle, coursePassCode, courseCredit, year, instructoruid;
-    List<String> studentsuid;
+    String courseCode, courseTitle, coursePassCode, courseCredit, courseYear, instructoruid;
+    Integer noOfStudents;
 
     public CourseHelperClass(){
-        throw new UnsupportedOperationException("Empty constructor is not supported.");
     }
 
-    public CourseHelperClass(String courseTitle, String coursePassCode, String courseCredit, String year, String instructoruid) {
+    public CourseHelperClass(String courseCode, String courseTitle, String courseYear, String courseCredit, String coursePassCode, String instructoruid) {
+        this.courseCode = courseCode;
         this.courseTitle = courseTitle;
         this.coursePassCode = coursePassCode;
         this.courseCredit = courseCredit;
-        this.year = year;
+        this.courseYear = courseYear;
         this.instructoruid = instructoruid;
-        studentsuid = new ArrayList<String>();
+        noOfStudents = 0;
     }
 
     public String getCourseTitle() {
@@ -46,12 +46,12 @@ public class CourseHelperClass {
         this.courseCredit = courseCredit;
     }
 
-    public String getYear() {
-        return year;
+    public String getCourseYear() {
+        return courseYear;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setCourseYear(String courseYear) {
+        this.courseYear = courseYear;
     }
 
     public String getInstructoruid() {
@@ -62,12 +62,20 @@ public class CourseHelperClass {
         this.instructoruid = instructoruid;
     }
 
-    public List<String> getStudentsuid() {
-        return studentsuid;
+    public Integer getNoOfStudents() {
+        return noOfStudents;
     }
 
-    public void setStudentsuid(List<String> studentsuid) {
-        this.studentsuid = studentsuid;
+    public void setNoOfStudents(Integer noOfStudents) {
+        this.noOfStudents = noOfStudents;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
     @Override
@@ -76,9 +84,9 @@ public class CourseHelperClass {
                 "courseTitle='" + courseTitle + '\'' +
                 ", coursePassCode='" + coursePassCode + '\'' +
                 ", courseCredit='" + courseCredit + '\'' +
-                ", year='" + year + '\'' +
+                ", courseYear='" + courseYear + '\'' +
                 ", instructoruid='" + instructoruid + '\'' +
-                ", studentsuid=" + studentsuid +
+                ", noOfStudents=" + noOfStudents +
                 '}';
     }
 }

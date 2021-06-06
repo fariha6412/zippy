@@ -4,18 +4,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class StudentHelperClass {
 
-    String image, fullName, email, institution, registrationNo, password;
+    String image, fullName, email, institution, registrationNo;
 
     public StudentHelperClass(){
     }
 
-    public StudentHelperClass(String image, String fullName, String email, String institution, String registrationNo, String password) {
+    public StudentHelperClass(String image, String fullName, String email, String institution, String registrationNo) {
         this.image = image;
         this.fullName = fullName;
         this.email = email;
         this.institution = institution;
         this.registrationNo = registrationNo;
-        this.password = password;
     }
     public String getImage() { return image; }
 
@@ -33,9 +32,6 @@ public class StudentHelperClass {
         return institution;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public String getRegistrationNo() {
         return registrationNo;
@@ -57,9 +53,6 @@ public class StudentHelperClass {
         this.institution = institution;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     @Override
     public @NotNull String toString() {
@@ -69,7 +62,6 @@ public class StudentHelperClass {
                 ", email='" + email + '\'' +
                 ", institution='" + institution + '\'' +
                 ", registrationNo='" + registrationNo + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

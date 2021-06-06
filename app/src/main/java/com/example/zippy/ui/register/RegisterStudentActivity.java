@@ -11,6 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -23,8 +25,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -93,9 +98,15 @@ public class RegisterStudentActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Verification Email has been sent", Toast.LENGTH_SHORT).show();
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("students");
-                            studentHelper = new StudentHelperClass(image, fullName, email, institution, registrationNo, password);
+                            studentHelper = new StudentHelperClass(image, fullName, email, institution, registrationNo);
 
-                            reference.child(user.getUid()).setValue(studentHelper);
+                            reference.child(user.getUid()).setValue(studentHelper,new DatabaseReference.CompletionListener(){
+
+                                @Override
+                                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                    System.err.println("Value was set. Error = "+error);
+                                }
+                            });
                             startActivity(new Intent(RegisterStudentActivity.this, MainActivity.class));
                         }).addOnFailureListener(e -> {
                             loading.setVisibility(View.GONE);

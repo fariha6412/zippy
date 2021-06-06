@@ -1,8 +1,10 @@
 package com.example.zippy.ui.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,9 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zippy.CourseCreationActivity;
+import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.ui.register.RegisterStudentActivity;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +46,7 @@ public class InstructorProfileActivity extends AppCompatActivity {
 
     TextView txtViewFullName, txtViewInstitution, txtViewDesignation, txtViewEmplyeeID;
     ImageView img;
+    MaterialButton createbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +66,19 @@ public class InstructorProfileActivity extends AppCompatActivity {
         txtViewInstitution = findViewById(R.id.txtviewinstitution);
         txtViewDesignation = findViewById(R.id.txtviewdesignation);
         txtViewEmplyeeID = findViewById(R.id.txtviewemployeeid);
-        img = (ImageView)findViewById(R.id.imgview);
+        img = findViewById(R.id.imgview);
+        createbtn = findViewById(R.id.createbtn);
 
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference("instructors/"+ user.getUid());
+
+        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
+
+        setSupportActionBar(mtoolbar);
+
+        createbtn.setOnClickListener(v -> {
+            startActivity(new Intent(InstructorProfileActivity.this, CourseCreationActivity.class));
+        });
 
         reference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
