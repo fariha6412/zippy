@@ -110,49 +110,51 @@ public class CourseCreationActivity extends AppCompatActivity {
             if(ValidationChecker.isFieldEmpty(courseYear, editTXTCourseYear))return;
             if(ValidationChecker.isFieldEmpty(courseCredit, editTXTCourseCredit))return;
             if(coursePassCode.isEmpty()){
-                final boolean[] regenerate = {true};
-                while(regenerate[0]){
-                    coursePassCode = createNewPassCode();
-                    referenceCourse.child(coursePassCode).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
-                            regenerate[0] = snapshot.exists();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                            regenerate[0] = false;
-                        }
-                    });
-                }
+                coursePassCode = createNewPassCode();
                 editTXTCoursePassCode.setText(coursePassCode);
             }
+            String finalCoursePassCode = coursePassCode;
+            referenceCourse.child(coursePassCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        editTXTCoursePassCode.setError("Pass code already exists. Please regenerate");
+                        editTXTCoursePassCode.requestFocus();
+                    }
+                    else{
+                        CourseHelperClass courseHelper = new CourseHelperClass(courseCode, courseTitle, courseYear, courseCredit, finalCoursePassCode, instructoruid);
+                        referenceCourse.child(finalCoursePassCode).setValue(courseHelper, new DatabaseReference.CompletionListener(){
 
-            CourseHelperClass courseHelper = new CourseHelperClass(courseCode, courseTitle, courseYear, courseCredit, coursePassCode, instructoruid);
-            referenceCourse.child(coursePassCode).setValue(courseHelper, new DatabaseReference.CompletionListener(){
+                            @Override
+                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                System.err.println("Value was set. Error = "+error);
+                            }
+                        });
+
+                        referenceInstructorNoOfCourses.setValue((noOfCourses[0]),new DatabaseReference.CompletionListener(){
+
+                            @Override
+                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                System.err.println("Value was set. Error = "+error);
+                            }
+                        });
+                        String strNoOfCourses = String.valueOf(noOfCourses[0]);
+                        referenceInstructorCourses.child(strNoOfCourses).setValue(finalCoursePassCode, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                System.err.println("Value was set. Error = "+error);
+                            }
+                        });
+                        Toast.makeText(getApplicationContext(), "Course Created", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
 
                 @Override
-                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                    System.err.println("Value was set. Error = "+error);
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    Log.w("Error","somethings wrong");
                 }
             });
-
-            referenceInstructorNoOfCourses.setValue((noOfCourses[0]),new DatabaseReference.CompletionListener(){
-
-                @Override
-                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                    System.err.println("Value was set. Error = "+error);
-                }
-            });
-            String strNoOfCourses = String.valueOf(noOfCourses[0]);
-            referenceInstructorCourses.child(strNoOfCourses).setValue(coursePassCode, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                    System.err.println("Value was set. Error = "+error);
-                }
-            });
-            Toast.makeText(getApplicationContext(), "Course Created", Toast.LENGTH_SHORT).show();
-            finish();
         });
 
         cancelbtn.setOnClickListener(v -> {
