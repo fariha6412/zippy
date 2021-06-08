@@ -2,7 +2,9 @@ package com.example.zippy;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -45,10 +47,32 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference referenceStudent, referenceInstructor;
 
+    ////new changes for splash
+    SharedPreferences mPrefs;
+    final String splashScreenPref= "SplashScreenShown";
+    ////done
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ////new changes for splash
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean splashScreenShown= mPrefs.getBoolean(splashScreenPref, false);
+
+        if (!splashScreenShown) {
+            Intent intent=new Intent(MainActivity.this,SplashActivity.class);
+            startActivity(intent);
+
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putBoolean(splashScreenPref, true);
+            editor.apply();
+            finish();
+        }
+        System.out.println(splashScreenShown);
+
+        ////done
+
 
         auth = FirebaseAuth.getInstance();
 

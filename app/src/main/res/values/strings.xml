@@ -56,4 +56,6 @@
     <string name="str_cancel">Cancel</string>
     <string name="str_enroll">Enroll</string>
     <string name="str_add_course">Add Course</string>
+    <string name="str_splash_details">Zippy a dynamic learning environment for students and instructors to make the academic grading system easy. So get started, keep your courses organized, and get to know the constant progress on Zippy.</string>
+    <string name="btn_getstarted">Get Started</string>
 </resources>
