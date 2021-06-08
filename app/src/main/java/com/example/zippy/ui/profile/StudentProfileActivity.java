@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.zippy.CourseCreationActivity;
 import com.example.zippy.CourseEnrollActivity;
+import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.StudentHelperClass;
 import com.google.android.material.button.MaterialButton;
@@ -43,6 +45,23 @@ public class StudentProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_profile);
         showProfile();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menuabout:
+                return true;
+            case R.id.menuexit:
+                this.finishAffinity();
+                return true;
+            case R.id.menulogout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(StudentProfileActivity.this, MainActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
@@ -93,4 +112,5 @@ public class StudentProfileActivity extends AppCompatActivity {
             startActivity(new Intent(StudentProfileActivity.this, CourseEnrollActivity.class));
         });
     }
+
 }
