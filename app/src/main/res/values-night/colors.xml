@@ -8,9 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <!-- Customize color here. -->
-    <color name="buttonColor">#FFFFFFFF</color>
+    <color name="buttonColor">#2D6187</color>
     <color name="textfieldColor">#ededfa</color>
-    <color name="appbarColor">#A8DDA8</color>
+    <color name="appbarColor">#2D6187</color>
     <color name="linkColor">#50C2C9</color>
     <color name="titleColor">#2D6187</color>
+    <color name="nav_icon_default">#666666</color>
+    <color name="button_txt_color">#FFFFFF</color>
 </resources>

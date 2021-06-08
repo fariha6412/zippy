@@ -191,6 +191,7 @@
             android:typeface="normal"
             android:textSize="@dimen/button_txt"
             app:backgroundTint="@color/buttonColor"
+            android:textColor="@color/button_txt_color"
             android:layout_gravity="center_horizontal"/>
 
         <LinearLayout

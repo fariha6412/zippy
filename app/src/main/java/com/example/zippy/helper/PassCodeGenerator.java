@@ -39,53 +39,22 @@ public class PassCodeGenerator {
             this.usePunctuation = false;
         }
 
-        /**
-         * Set true in case you would like to include lower characters
-         * (abc...xyz). Default false.
-         *
-         * @param useLower true in case you would like to include lower
-         * characters (abc...xyz). Default false.
-         * @return the builder for chaining.
-         */
+
         public PassCodeGeneratorBuilder useLower(boolean useLower) {
             this.useLower = useLower;
             return this;
         }
 
-        /**
-         * Set true in case you would like to include upper characters
-         * (ABC...XYZ). Default false.
-         *
-         * @param useUpper true in case you would like to include upper
-         * characters (ABC...XYZ). Default false.
-         * @return the builder for chaining.
-         */
         public PassCodeGeneratorBuilder useUpper(boolean useUpper) {
             this.useUpper = useUpper;
             return this;
         }
 
-        /**
-         * Set true in case you would like to include digit characters (123..).
-         * Default false.
-         *
-         * @param useDigits true in case you would like to include digit
-         * characters (123..). Default false.
-         * @return the builder for chaining.
-         */
         public PassCodeGeneratorBuilder useDigits(boolean useDigits) {
             this.useDigits = useDigits;
             return this;
         }
 
-        /**
-         * Set true in case you would like to include punctuation characters
-         * (!@#..). Default false.
-         *
-         * @param usePunctuation true in case you would like to include
-         * punctuation characters (!^#..). Default false.
-         * @return the builder for chaining.
-         */
         public PassCodeGeneratorBuilder usePunctuation(boolean usePunctuation) {
             this.usePunctuation = usePunctuation;
             return this;
@@ -96,15 +65,6 @@ public class PassCodeGenerator {
         }
     }
 
-    /**
-     * This method will generate a password depending the use* properties you
-     * define. It will use the categories with a probability. It is not sure
-     * that all of the defined categories will be used.
-     *
-     * @param length the length of the password you would like to generate.
-     * @return a password that uses the categories you define when constructing
-     * the object with a probability.
-     */
     public String generate(int length) {
         // Argument Validation.
         if (length <= 0) {
@@ -139,12 +99,3 @@ public class PassCodeGenerator {
         return new String(password);
     }
 }
-
-/*PassCodeGenerator passwordGenerator = new PassCodeGenerator.PassCodeGeneratorBuilder()
-                .useDigits(true)
-                .useLower(true)
-                .useUpper(true)
-                .usePunctuation(true)
-                .build();
-        String password = passwordGenerator.generate(8);
-        System.out.println("pass: "+ password);*/

@@ -44,8 +44,16 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+            <ImageView
+                android:id="@+id/imgview2"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/login"/>
+
             <TextView
-                android:id="@+id/txtviewloginhere"
+                android:id="@+id/txtviewwelcomeback"
                 style="@style/Widget.AppCompat.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -113,6 +121,7 @@
                 android:layout_marginTop="40dp"
                 android:text="@string/btn_login"
                 android:textSize="@dimen/button_txt"
+                android:textColor="@color/button_txt_color"
                 app:backgroundTint="@color/buttonColor" />
 
             <LinearLayout
