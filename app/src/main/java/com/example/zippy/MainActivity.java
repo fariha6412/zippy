@@ -1,5 +1,6 @@
 package com.example.zippy;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,31 +51,40 @@ public class MainActivity extends AppCompatActivity {
     ////new changes for splash
     SharedPreferences mPrefs;
     final String splashScreenPref= "SplashScreenShown";
+    final String loggedStatus = "loggedProfile";
     ////done
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
         ////new changes for splash
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean splashScreenShown= mPrefs.getBoolean(splashScreenPref, false);
-
         if (!splashScreenShown) {
             Intent intent=new Intent(MainActivity.this,SplashActivity.class);
             startActivity(intent);
 
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.putBoolean(splashScreenPref, true);
-            editor.apply();
+            mPrefs.edit().putBoolean(splashScreenPref, true).apply();
             finish();
         }
-        System.out.println(splashScreenShown);
 
+        String loggedProfile=mPrefs.getString(loggedStatus, "nouser");
+        if(user!=null){
+            if(loggedProfile.equals("instructor")){
+                startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
+                finish();
+            }
+            if(loggedProfile.equals("student")){
+                startActivity(new Intent(MainActivity.this, StudentProfileActivity.class));
+                finish();
+            }
+        }
         ////done
-
-
-        auth = FirebaseAuth.getInstance();
 
         TextView txtViewRegister = findViewById(R.id.txtviewregister);
         editTXTemail = findViewById(R.id.edittxtemail);
@@ -195,9 +205,11 @@ public class MainActivity extends AppCompatActivity {
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
                                                 //start the activity of profile of student
+                                                mPrefs.edit().putString(loggedStatus,"student").apply();
+                                                loading.setVisibility(View.GONE);
                                                 startActivity(new Intent(MainActivity.this, StudentProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
-                                                loading.setVisibility(View.GONE);
+                                                finish();
                                             }
                                         }
 
@@ -216,8 +228,11 @@ public class MainActivity extends AppCompatActivity {
                                             InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
                                             if(value!=null){
                                                 //start the activity of profile of instructor
+                                                mPrefs.edit().putString(loggedStatus,"instructor").apply();
+                                                loading.setVisibility(View.GONE);
                                                 startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
+                                                finish();
                                             }
                                         }
 
@@ -256,5 +271,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
+    }
+    public void onBackPressed(){
+        finishAffinity();
     }
 }

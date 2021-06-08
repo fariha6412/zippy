@@ -4,8 +4,8 @@
     tools:ignore="ExtraText">
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/str_about" />
-    <item android:title="@string/str_exit" />
-    <item android:title="@string/str_log_out" />
+    <item android:title="@string/str_about" android:id="@+id/menuabout"/>
+    <item android:title="@string/str_exit" android:id="@+id/menuexit"/>
+    <item android:title="@string/str_log_out" android:id="@+id/menulogout"/>
 
 </menu>
