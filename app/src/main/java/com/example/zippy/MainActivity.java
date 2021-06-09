@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.example.zippy.ui.profile.StudentProfileActivity;
+import com.example.zippy.ui.register.RegisterStudentActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -209,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                                                 loading.setVisibility(View.GONE);
                                                 startActivity(new Intent(MainActivity.this, StudentProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
-                                                finish();
+                                                //finish();
                                             }
                                         }
 
@@ -232,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                                                 loading.setVisibility(View.GONE);
                                                 startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
-                                                finish();
+                                                //finish();
                                             }
                                         }
 
@@ -272,7 +275,31 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-    public void onBackPressed(){
-        finishAffinity();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menuabout:
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                return true;
+            case R.id.menuexit:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Do you want to exit app?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                }).create().show();
     }
 }

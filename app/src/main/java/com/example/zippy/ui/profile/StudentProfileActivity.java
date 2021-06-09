@@ -1,6 +1,7 @@
 package com.example.zippy.ui.profile;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +10,12 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.zippy.AboutActivity;
 import com.example.zippy.CourseCreationActivity;
 import com.example.zippy.CourseEnrollActivity;
 import com.example.zippy.MainActivity;
@@ -51,13 +54,13 @@ public class StudentProfileActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
+                startActivity(new Intent(StudentProfileActivity.this, AboutActivity.class));
                 return true;
             case R.id.menuexit:
-                this.finishAffinity();
+                onBackPressed();
                 return true;
             case R.id.menulogout:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(StudentProfileActivity.this, MainActivity.class));
+                signOut();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,5 +115,30 @@ public class StudentProfileActivity extends AppCompatActivity {
             startActivity(new Intent(StudentProfileActivity.this, CourseEnrollActivity.class));
         });
     }
-
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Do you want to exit app?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                }).create().show();
+    }
+    public void signOut(){
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Do you want to log out?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(StudentProfileActivity.this, MainActivity.class));
+                    }
+                }).create().show();
+    }
 }

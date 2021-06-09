@@ -1,9 +1,11 @@
 package com.example.zippy.ui.profile;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
@@ -16,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zippy.AboutActivity;
 import com.example.zippy.CourseCreationActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.register.RegisterStudentActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,13 +64,13 @@ public class InstructorProfileActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
+                startActivity(new Intent(InstructorProfileActivity.this, AboutActivity.class));
                 return true;
             case R.id.menuexit:
-                this.finishAffinity();
+                onBackPressed();
                 return true;
             case R.id.menulogout:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(InstructorProfileActivity.this, MainActivity.class));
+                signOut();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -122,6 +126,31 @@ public class InstructorProfileActivity extends AppCompatActivity {
                 Log.w("Error", "Failed to read value.", error.toException());
             }
         });
-
+    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirmation")
+                .setMessage("Do you want to exit app?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                }).create().show();
+    }
+    public void signOut(){
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Do you want to log out?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(InstructorProfileActivity.this, MainActivity.class));
+                    }
+                }).create().show();
     }
 }

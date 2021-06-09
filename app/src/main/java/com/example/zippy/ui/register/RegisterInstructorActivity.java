@@ -1,8 +1,10 @@
 package com.example.zippy.ui.register;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,13 +14,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.zippy.AboutActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.ValidationChecker;
+import com.example.zippy.ui.change.ChangeProfilePictureActivity;
+import com.example.zippy.ui.profile.StudentProfileActivity;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -131,7 +137,32 @@ public class RegisterInstructorActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menuabout:
+                startActivity(new Intent(RegisterInstructorActivity.this, AboutActivity.class));
+                return true;
+            case R.id.menuexit:
+                exit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    public void exit(){
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Do you want to exit app?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                }).create().show();
+    }
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);

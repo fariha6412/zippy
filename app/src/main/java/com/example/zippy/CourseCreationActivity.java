@@ -2,14 +2,17 @@ package com.example.zippy;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +23,9 @@ import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.ValidationChecker;
+import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
+import com.example.zippy.ui.profile.StudentProfileActivity;
 import com.example.zippy.ui.register.RegisterInstructorActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseError;
@@ -170,6 +175,48 @@ public class CourseCreationActivity extends AppCompatActivity {
                 .usePunctuation(true)
                 .build();
         return passwordGenerator.generate(8);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menuabout:
+                startActivity(new Intent(CourseCreationActivity.this, AboutActivity.class));
+                return true;
+            case R.id.menuexit:
+                exit();
+                return true;
+            case R.id.menulogout:
+                signOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    public void signOut(){
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Do you want to log out?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(CourseCreationActivity.this, MainActivity.class));
+                    }
+                }).create().show();
+    }
+    public void exit(){
+        new AlertDialog.Builder(this)
+                .setTitle("Message")
+                .setMessage("Do you want to exit app?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                }).create().show();
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
