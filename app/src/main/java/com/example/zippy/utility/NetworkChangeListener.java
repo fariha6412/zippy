@@ -1,10 +1,13 @@
 package com.example.zippy.utility;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -25,6 +28,15 @@ public class NetworkChangeListener extends BroadcastReceiver {
 
             //show dialog
             AlertDialog dialog = builder.create();
+            dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                    if(keyCode == KeyEvent.KEYCODE_BACK){
+                        System.exit(0);
+                    }
+                    return false;
+                }
+            });
             dialog.show();
             dialog.setCancelable(false);
 
