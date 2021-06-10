@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.register.RegisterInstructorActivity;
 import com.example.zippy.ui.register.RegisterStudentActivity;
@@ -40,26 +41,14 @@ public class ChooseAccountTypeActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                startActivity(new Intent(ChooseAccountTypeActivity.this, AboutActivity.class));
+                MenuHelperClass.showAbout(this);
                 return true;
             case R.id.menuexit:
-                exit();
+                MenuHelperClass.exit(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    public void exit(){
-        new AlertDialog.Builder(this)
-                .setTitle("Message")
-                .setMessage("Do you want to exit app?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finishAffinity();
-                    }
-                }).create().show();
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

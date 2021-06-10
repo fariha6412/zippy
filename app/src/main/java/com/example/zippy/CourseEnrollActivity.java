@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.change.ChangeProfilePictureActivity;
@@ -142,42 +143,17 @@ public class CourseEnrollActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                startActivity(new Intent(CourseEnrollActivity.this, AboutActivity.class));
+                MenuHelperClass.showAbout(this);
                 return true;
             case R.id.menuexit:
-                exit();
+                MenuHelperClass.exit(this);
                 return true;
             case R.id.menulogout:
-                signOut();
+                MenuHelperClass.signOut(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    public void signOut(){
-        new AlertDialog.Builder(this)
-                .setTitle("Message")
-                .setMessage("Do you want to log out?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(CourseEnrollActivity.this, MainActivity.class));
-                    }
-                }).create().show();
-    }
-    public void exit(){
-        new AlertDialog.Builder(this)
-                .setTitle("Message")
-                .setMessage("Do you want to exit app?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finishAffinity();
-                    }
-                }).create().show();
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

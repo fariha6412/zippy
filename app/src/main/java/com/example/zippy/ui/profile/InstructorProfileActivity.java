@@ -1,8 +1,11 @@
 package com.example.zippy.ui.profile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +26,10 @@ import com.example.zippy.AboutActivity;
 import com.example.zippy.CourseCreationActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
+import com.example.zippy.helper.CourseCustomAdapter;
+import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.register.RegisterStudentActivity;
@@ -41,17 +48,25 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstructorProfileActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     FirebaseDatabase rootNode;
-    DatabaseReference reference;
+    DatabaseReference reference, referenceCourseList, referenceCourse;
     FirebaseUser user;
 
     TextView txtViewFullName, txtViewInstitution, txtViewDesignation, txtViewEmplyeeID;
     ImageView img;
     MaterialButton createbtn;
+
+    RecyclerView recyclerView;
+    CourseCustomAdapter adapter;
+    LinearLayoutManager layoutManager;
+    List<CourseHelperClass> courseList = new ArrayList<CourseHelperClass>();
+    Long noOfCourses = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +79,13 @@ public class InstructorProfileActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                startActivity(new Intent(InstructorProfileActivity.this, AboutActivity.class));
+                MenuHelperClass.showAbout(this);
                 return true;
             case R.id.menuexit:
-                onBackPressed();
+                MenuHelperClass.exit(this);
                 return true;
             case R.id.menulogout:
-                signOut();
+                MenuHelperClass.signOut(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -116,7 +131,43 @@ public class InstructorProfileActivity extends AppCompatActivity {
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
+                    noOfCourses = value.getNoOfCourses();
                     Log.d("Response", "Value is: " + value.toString());
+
+                    referenceCourseList = rootNode.getReference("instructors/"+user.getUid()+"/courses");
+                    referenceCourseList.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            for(DataSnapshot dsnap:snapshot.getChildren()){
+                                System.out.println(dsnap);
+                                String coursePassCode = (String) dsnap.getValue();
+                                System.out.println(coursePassCode);
+                                referenceCourse = rootNode.getReference("courses/"+coursePassCode);
+                                referenceCourse.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
+                                        if(courseHelper!=null) {
+                                            courseList.add(courseHelper);
+                                            System.out.println(courseList.size());
+                                            System.out.println(courseHelper.toString());
+                                            initRecyclerView();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                        Log.w("Error", "Failed to read value.", error.toException());
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            Log.w("Error", "Failed to read value.", error.toException());
+                        }
+                    });
                 }
             }
 
@@ -127,30 +178,17 @@ public class InstructorProfileActivity extends AppCompatActivity {
             }
         });
     }
+    private void initRecyclerView(){
+        recyclerView = findViewById(R.id.recylerview);
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new CourseCustomAdapter(courseList);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Confirmation")
-                .setMessage("Do you want to exit app?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finishAffinity();
-                    }
-                }).create().show();
-    }
-    public void signOut(){
-        new AlertDialog.Builder(this)
-                .setTitle("Message")
-                .setMessage("Do you want to log out?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(InstructorProfileActivity.this, MainActivity.class));
-                    }
-                }).create().show();
+        MenuHelperClass.exit(this);
     }
 }

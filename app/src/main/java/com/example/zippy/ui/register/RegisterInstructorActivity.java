@@ -22,6 +22,7 @@ import com.example.zippy.AboutActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.profile.StudentProfileActivity;
@@ -142,26 +143,14 @@ public class RegisterInstructorActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                startActivity(new Intent(RegisterInstructorActivity.this, AboutActivity.class));
+                MenuHelperClass.showAbout(this);
                 return true;
             case R.id.menuexit:
-                exit();
+                MenuHelperClass.exit(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    public void exit(){
-        new AlertDialog.Builder(this)
-                .setTitle("Message")
-                .setMessage("Do you want to exit app?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finishAffinity();
-                    }
-                }).create().show();
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

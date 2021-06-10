@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
@@ -280,10 +281,10 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                MenuHelperClass.showAbout(this);
                 return true;
             case R.id.menuexit:
-                onBackPressed();
+                MenuHelperClass.exit(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -291,15 +292,6 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Message")
-                .setMessage("Do you want to exit app?")
-                .setNegativeButton("NO", null)
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finishAffinity();
-                    }
-                }).create().show();
+        MenuHelperClass.exit(this);
     }
 }

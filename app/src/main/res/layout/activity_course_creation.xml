@@ -132,9 +132,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="@color/textfieldColor"
-                android:background="@color/textfieldColor">
+                android:layout_marginTop="15dp">
 
                 <EditText
                     android:id="@+id/edittxtcoursepasscode"
@@ -158,7 +156,7 @@
                     android:id="@+id/generatepass"
                     android:layout_width="59dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/textfieldColor"
+                    android:background="@color/transparent"
                     app:iconTint="@color/black"
                     app:icon="@drawable/ic_baseline_refresh_24" />
 
