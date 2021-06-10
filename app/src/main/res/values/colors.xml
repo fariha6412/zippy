@@ -16,4 +16,6 @@
     <color name="nav_icon_default">#666666</color>
     <color name="button_txt_color">#FFFFFF</color>
     <color name="transparent">#00000000</color>
+
+    <color name="colorNoInternet">#6D6D73</color>
 </resources>

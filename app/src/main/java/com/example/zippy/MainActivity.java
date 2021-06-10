@@ -3,7 +3,9 @@ package com.example.zippy;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -20,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
@@ -28,6 +31,7 @@ import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.example.zippy.ui.profile.StudentProfileActivity;
 import com.example.zippy.ui.register.RegisterStudentActivity;
+import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,6 +48,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private EditText editTXTemail, editTXTpassword;
     private ProgressBar loading;
@@ -290,6 +296,20 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    //internet related stuff
+    @Override
+    protected void onStart() {
+        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener,filter);
+        super.onStart();
+    }
+    @Override
+    protected void onStop(){
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+    //end stuff
+
     @Override
     public void onBackPressed() {
         MenuHelperClass.exit(this);

@@ -2,6 +2,8 @@ package com.example.zippy.ui.register;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.profile.StudentProfileActivity;
+import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -38,6 +41,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.jetbrains.annotations.NotNull;
 
 public class RegisterInstructorActivity extends AppCompatActivity {
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private EditText editTXTFullName, editTXTEmail, editTXTInstitution;
     private EditText editTXTEmployeeID, editTXTPassword, editTXTRePassword;
@@ -157,4 +161,17 @@ public class RegisterInstructorActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+    //internet related stuff
+    @Override
+    protected void onStart() {
+        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener,filter);
+        super.onStart();
+    }
+    @Override
+    protected void onStop(){
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+    //end stuff
 }

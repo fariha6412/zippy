@@ -8,6 +8,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +25,7 @@ import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.profile.StudentProfileActivity;
+import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 public class CourseEnrollActivity extends AppCompatActivity {
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
     FirebaseAuth auth;
     FirebaseDatabase rootNode;
     DatabaseReference referenceStudent, referenceStudentNoOfCourses, referenceStudentCourses;
@@ -155,6 +160,19 @@ public class CourseEnrollActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    //internet related stuff
+    @Override
+    protected void onStart() {
+        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener,filter);
+        super.onStart();
+    }
+    @Override
+    protected void onStop(){
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+    //end stuff
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);

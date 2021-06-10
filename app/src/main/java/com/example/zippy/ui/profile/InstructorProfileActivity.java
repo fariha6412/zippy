@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Image;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +35,7 @@ import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.ui.change.ChangeProfilePictureActivity;
 import com.example.zippy.ui.register.RegisterStudentActivity;
+import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,6 +55,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InstructorProfileActivity extends AppCompatActivity {
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     FirebaseAuth auth;
     FirebaseDatabase rootNode;
@@ -134,14 +139,14 @@ public class InstructorProfileActivity extends AppCompatActivity {
                     noOfCourses = value.getNoOfCourses();
                     Log.d("Response", "Value is: " + value.toString());
 
+                    courseList.clear();
                     referenceCourseList = rootNode.getReference("instructors/"+user.getUid()+"/courses");
                     referenceCourseList.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                             for(DataSnapshot dsnap:snapshot.getChildren()){
-                                System.out.println(dsnap);
                                 String coursePassCode = (String) dsnap.getValue();
-                                System.out.println(coursePassCode);
+                                courseList.clear();
                                 referenceCourse = rootNode.getReference("courses/"+coursePassCode);
                                 referenceCourse.addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -149,8 +154,6 @@ public class InstructorProfileActivity extends AppCompatActivity {
                                         CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
                                         if(courseHelper!=null) {
                                             courseList.add(courseHelper);
-                                            System.out.println(courseList.size());
-                                            System.out.println(courseHelper.toString());
                                             initRecyclerView();
                                         }
                                     }
@@ -191,4 +194,17 @@ public class InstructorProfileActivity extends AppCompatActivity {
     public void onBackPressed() {
         MenuHelperClass.exit(this);
     }
+    //internet related stuff
+    @Override
+    protected void onStart() {
+        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener,filter);
+        super.onStart();
+    }
+    /*@Override
+    protected void onStop(){
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }*/
+    //end stuff
 }

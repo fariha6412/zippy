@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +17,12 @@ import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.ui.profile.StudentProfileActivity;
+import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ChangeProfilePictureActivity extends AppCompatActivity {
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,4 +51,17 @@ public class ChangeProfilePictureActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
+    //internet related stuff
+    @Override
+    protected void onStart() {
+        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener,filter);
+        super.onStart();
+    }
+    @Override
+    protected void onStop(){
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+    //end stuff
 }

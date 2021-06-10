@@ -28,7 +28,7 @@
         android:textStyle="normal"
         android:textSize="@dimen/list_items"
         android:layout_weight="2"
-        android:lines="2"/>
+        android:lines="4"/>
 
     <TextView
         android:id="@+id/txtviewcourseyear"
