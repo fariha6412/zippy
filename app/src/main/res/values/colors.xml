@@ -15,4 +15,11 @@
     <color name="titleColor">#2D6187</color>
     <color name="nav_icon_default">#666666</color>
     <color name="button_txt_color">#FFFFFF</color>
+
+    <!-- Demo colors-->
+    <color name="colorOnPrimaryDemo">#ffffff</color>
+    <color name="colorPrimaryDemo">#554911</color>
+    <color name="colorOnPrimaryLightDemo">#EEE3AB</color>
+    <color name="colorAccentDemo">#FF03DAC5</color>
+
 </resources>
