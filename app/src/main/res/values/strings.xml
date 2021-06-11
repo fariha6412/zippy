@@ -63,4 +63,8 @@
     <string name="str_no_internet_connection">No Internet Connection</string>
     <string name="str_please_check_your_connection">Please check your connection</string>
     <string name="str_retry">Retry</string>
+    <string name="str_student_details">Student Details</string>
+    <string name="str_attendance">Attendance</string>
+    <string name="str_finish">Finish</string>
+    <string name="str_tests">Tests:</string>
 </resources>

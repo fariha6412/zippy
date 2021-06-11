@@ -3,6 +3,7 @@ package com.example.zippy.helper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +16,10 @@ import java.util.List;
 
 public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapter.ViewHolder> {
     private List<CourseHelperClass> courses;
-    public CourseCustomAdapter(List<CourseHelperClass> courses) {
+    private AdapterView.OnClickListener onClickListener;
+    public CourseCustomAdapter(List<CourseHelperClass> courses, AdapterView.OnClickListener onClickListener) {
         this.courses = courses;
+        this.onClickListener = onClickListener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -30,11 +33,20 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
             txtViewCourseYear = view.findViewById(R.id.txtviewcourseyear);
             txtViewCourseCredit = view.findViewById(R.id.txtviewcoursecredit);
         }
-        public void setData(CourseHelperClass course){
+        /*public void setData(CourseHelperClass course){
             txtViewCourseCode.setText(course.getCourseCode());
             txtViewCourseTitle.setText(course.getCourseTitle());
             txtViewCourseYear.setText(course.getCourseYear());
             txtViewCourseCredit.setText(course.getCourseCredit());
+        }*/
+        private void bind(CourseHelperClass course, AdapterView.OnClickListener onClickListener){
+
+            txtViewCourseCode.setText(course.getCourseCode());
+            txtViewCourseTitle.setText(course.getCourseTitle());
+            txtViewCourseYear.setText(course.getCourseYear());
+            txtViewCourseCredit.setText(course.getCourseCredit());
+
+            itemView.setOnClickListener(onClickListener);
         }
     }
 
@@ -55,7 +67,8 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         //viewHolder.getTextView().setText(localDataSet[position]);
-        viewHolder.setData(courses.get(position));
+        //viewHolder.setData(courses.get(position));
+        viewHolder.bind(courses.get(position), onClickListener);
     }
 
 

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.zippy.AboutActivity;
 import com.example.zippy.CourseCreationActivity;
+import com.example.zippy.CourseDetailsActivity;
 import com.example.zippy.CourseEnrollActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
@@ -44,7 +47,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentProfileActivity extends AppCompatActivity {
+public class StudentProfileActivity extends AppCompatActivity implements AdapterView.OnClickListener {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     FirebaseAuth auth;
@@ -171,7 +174,7 @@ public class StudentProfileActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList);
+        adapter = new CourseCustomAdapter(courseList, this::onClick);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -190,6 +193,11 @@ public class StudentProfileActivity extends AppCompatActivity {
     protected void onStop(){
         unregisterReceiver(networkChangeListener);
         super.onStop();
+    }
+
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(StudentProfileActivity.this, CourseDetailsActivity.class));
     }
     //end stuff
 }

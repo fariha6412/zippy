@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zippy.AboutActivity;
 import com.example.zippy.CourseCreationActivity;
+import com.example.zippy.CourseDetailsActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.CourseCustomAdapter;
@@ -54,7 +56,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstructorProfileActivity extends AppCompatActivity {
+public class InstructorProfileActivity extends AppCompatActivity implements AdapterView.OnClickListener {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -186,7 +188,7 @@ public class InstructorProfileActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList);
+        adapter = new CourseCustomAdapter(courseList, this::onClick);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -201,10 +203,14 @@ public class InstructorProfileActivity extends AppCompatActivity {
         registerReceiver(networkChangeListener,filter);
         super.onStart();
     }
-    /*@Override
+    @Override
     protected void onStop(){
         unregisterReceiver(networkChangeListener);
         super.onStop();
-    }*/
+    }
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(InstructorProfileActivity.this, CourseDetailsActivity.class));
+    }
     //end stuff
 }

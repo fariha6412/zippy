@@ -18,4 +18,5 @@
     <color name="transparent">#00000000</color>
 
     <color name="colorNoInternet">#6D6D73</color>
+    <color name="course_details_btn">#CCCCCC</color>
 </resources>

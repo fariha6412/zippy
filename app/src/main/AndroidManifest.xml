@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.zippy" >
+    package="com.example.zippy">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,10 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
-        tools:ignore="AllowBackup" >
-        <activity android:name=".AboutActivity" >
-        </activity>
-        <activity android:name=".MainActivity" >
+        tools:ignore="AllowBackup">
+        <activity android:name=".CourseDetailsActivity" />
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
