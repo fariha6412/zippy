@@ -97,42 +97,64 @@ public class CourseEnrollActivity extends AppCompatActivity {
                         editTXTCoursePassCode.setError("No course found");
                         editTXTCoursePassCode.requestFocus();
                     } else {
+                        final boolean[] isAlreadyEnrolled = {false};
+                        referenceStudentCourses.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot dsnap:dataSnapshot.getChildren()) {
+                                    String dsnapPassCode = (String) dsnap.getValue();
+                                    assert dsnapPassCode != null;
+                                    if (dsnapPassCode.equals(coursePassCode)) {
+                                        isAlreadyEnrolled[0] = true;
+                                    }
+                                }
+                                if(!isAlreadyEnrolled[0]){
+                                    CourseHelperClass value = snapshot.getValue(CourseHelperClass.class);
+                                    assert value != null;
+                                    System.out.println(value.toString());
+                                    System.out.println(value.getNoOfStudents());
+                                    noOfStudents[0] = (value.getNoOfStudents()) + 1L;
+                                    referenceCourseNoOfStudents = rootNode.getReference("courses/"+coursePassCode+"/noOfStudents");
+                                    referenceCourseNoOfStudents.setValue((noOfStudents[0]), new DatabaseReference.CompletionListener() {
 
-                        CourseHelperClass value = snapshot.getValue(CourseHelperClass.class);
-                        assert value != null;
-                        System.out.println(value.toString());
-                        System.out.println(value.getNoOfStudents());
-                        noOfStudents[0] = (value.getNoOfStudents()) + 1L;
-                        referenceCourseNoOfStudents = rootNode.getReference("courses/"+coursePassCode+"/noOfStudents");
-                        referenceCourseNoOfStudents.setValue((noOfStudents[0]), new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                            System.err.println("Value was set. Error = " + error);
+                                        }
+                                    });
+                                    referenceStudentNoOfCourses.setValue((noOfCourses[0]), new DatabaseReference.CompletionListener() {
+
+                                        @Override
+                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                            System.err.println("Value was set. Error = " + error);
+                                        }
+                                    });
+                                    referenceStudentCourses.child(String.valueOf(noOfCourses[0])).setValue(coursePassCode, new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                            System.err.println("Value was set. Error = " + error);
+                                        }
+                                    });
+                                    referenceCourseStudents = rootNode.getReference("courses/"+coursePassCode+"/students");
+                                    referenceCourseStudents.child(String.valueOf(noOfStudents[0])).setValue(user.getUid(), new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                            System.err.println("Value was set. Error = " + error);
+                                        }
+                                    });
+                                    Toast.makeText(getApplicationContext(), "Successfully Enrolled", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Already Enrolled", Toast.LENGTH_SHORT).show();
+                                }
+                            }
 
                             @Override
-                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                System.err.println("Value was set. Error = " + error);
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                Log.w("Error","somethings wrong");
                             }
                         });
-                        referenceStudentNoOfCourses.setValue((noOfCourses[0]), new DatabaseReference.CompletionListener() {
-
-                            @Override
-                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                System.err.println("Value was set. Error = " + error);
-                            }
-                        });
-                        referenceStudentCourses.child(String.valueOf(noOfCourses[0])).setValue(coursePassCode, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                System.err.println("Value was set. Error = " + error);
-                            }
-                        });
-                        referenceCourseStudents = rootNode.getReference("courses/"+coursePassCode+"/students");
-                        referenceCourseStudents.child(String.valueOf(noOfStudents[0])).setValue(user.getUid(), new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                System.err.println("Value was set. Error = " + error);
-                            }
-                        });
-                        Toast.makeText(getApplicationContext(), "Successfully Enrolled", Toast.LENGTH_SHORT).show();
-                        finish();
                     }
                 }
 
