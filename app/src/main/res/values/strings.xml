@@ -66,5 +66,5 @@
     <string name="str_student_details">Student Details</string>
     <string name="str_attendance">Attendance</string>
     <string name="str_finish">Finish</string>
-    <string name="str_tests">Tests:</string>
+    <string name="str_tests">Tests</string>
 </resources>

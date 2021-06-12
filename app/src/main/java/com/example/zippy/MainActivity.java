@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
-                                            Log.w("Error", "Failed to read value.", error.toException());
+                                            //Log.w("Error", "Failed to read value.", error.toException());
                                         }
                                     });
 
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
-                                            Log.w("Error", "Failed to read value.", error.toException());
+                                            //Log.w("Error", "Failed to read value.", error.toException());
                                             loading.setVisibility(View.GONE);
                                         }
                                     });
