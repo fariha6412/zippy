@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     ////new changes for splash
     SharedPreferences mPrefs;
-    final String splashScreenPref= "SplashScreenShown";
+    final String splashScreenPref = "SplashScreenShown";
     final String loggedStatus = "loggedProfile";
     ////done
 
@@ -74,16 +74,16 @@ public class MainActivity extends AppCompatActivity {
 
         ////new changes for splash
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean splashScreenShown= mPrefs.getBoolean(splashScreenPref, false);
+        Boolean splashScreenShown = mPrefs.getBoolean(splashScreenPref, false);
         if (!splashScreenShown) {
-            Intent intent=new Intent(MainActivity.this,SplashActivity.class);
+            Intent intent = new Intent(MainActivity.this,SplashActivity.class);
             startActivity(intent);
 
             mPrefs.edit().putBoolean(splashScreenPref, true).apply();
             finish();
         }
 
-        String loggedProfile=mPrefs.getString(loggedStatus, "nouser");
+        String loggedProfile = mPrefs.getString(loggedStatus, "nouser");
         if(user!=null){
             if(loggedProfile.equals("instructor")){
                 startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));

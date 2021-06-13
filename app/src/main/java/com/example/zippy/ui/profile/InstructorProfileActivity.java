@@ -56,7 +56,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstructorProfileActivity extends AppCompatActivity implements AdapterView.OnClickListener {
+public class InstructorProfileActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -188,7 +188,7 @@ public class InstructorProfileActivity extends AppCompatActivity implements Adap
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList, this::onClick);
+        adapter = new CourseCustomAdapter(courseList, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -207,10 +207,6 @@ public class InstructorProfileActivity extends AppCompatActivity implements Adap
     protected void onStop(){
         unregisterReceiver(networkChangeListener);
         super.onStop();
-    }
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(InstructorProfileActivity.this, CourseDetailsActivity.class));
     }
     //end stuff
 }

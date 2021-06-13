@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentProfileActivity extends AppCompatActivity implements AdapterView.OnClickListener {
+public class StudentProfileActivity extends AppCompatActivity{
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     FirebaseAuth auth;
@@ -174,7 +176,7 @@ public class StudentProfileActivity extends AppCompatActivity implements Adapter
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList, this::onClick);
+        adapter = new CourseCustomAdapter(courseList, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -193,11 +195,6 @@ public class StudentProfileActivity extends AppCompatActivity implements Adapter
     protected void onStop(){
         unregisterReceiver(networkChangeListener);
         super.onStop();
-    }
-
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(StudentProfileActivity.this, CourseDetailsActivity.class));
     }
     //end stuff
 }

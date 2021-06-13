@@ -3,8 +3,10 @@ package com.example.zippy.ui.register;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +45,10 @@ import org.jetbrains.annotations.NotNull;
 public class RegisterInstructorActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
+    //
+    SharedPreferences mPrefs;
+    final String loggedStatus = "loggedProfile";
+
     private EditText editTXTFullName, editTXTEmail, editTXTInstitution;
     private EditText editTXTEmployeeID, editTXTPassword, editTXTRePassword;
     private EditText editTXTDesignation;
@@ -56,6 +62,9 @@ public class RegisterInstructorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_instructor);
+
+        //
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         auth = FirebaseAuth.getInstance();
 
@@ -119,6 +128,9 @@ public class RegisterInstructorActivity extends AppCompatActivity {
                                     System.err.println("Value was set. Error = "+error);
                                 }
                             });
+
+                            //
+                            mPrefs.edit().putString(loggedStatus,"nouser").apply();
                             startActivity(new Intent(RegisterInstructorActivity.this, MainActivity.class));
                         }).addOnFailureListener(e -> {
                             loading.setVisibility(View.GONE);

@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
+        <activity android:name=".TestCreationActivity"></activity>
         <activity android:name=".CourseDetailsActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".MainActivity">
