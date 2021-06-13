@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CourseEvaluationActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mtoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="@color/white"
+            app:titleMarginStart="1in"
+            android:background="@color/appbarColor"
+            tools:ignore="InOrMmUsage">
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="30dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/testsdropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconMode="dropdown_menu"
+                app:endIconTint="@color/appbarColor"
+                android:background="@color/transparent">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_tests"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/button_txt"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:freezesText="true"
+                    android:background="@color/course_details_btn"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewpresent"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_present"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewtotalpresent"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_0"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewabsent"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_absent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewtotalabsent"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_0"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewstrattendanceparcentage"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_presentpercentage"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewattendanceparcentage"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_0percent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewstrfinalgrade"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_final_grade"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewfinalgrade"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_null"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

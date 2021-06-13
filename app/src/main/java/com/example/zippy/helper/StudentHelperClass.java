@@ -4,7 +4,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class StudentHelperClass {
 
-    String image, fullName, email, institution, registrationNo;
+    String image;
+    String fullName;
+    String email;
+    String institution;
+    String registrationNo;
     Long noOfCourses;
 
     public StudentHelperClass(){

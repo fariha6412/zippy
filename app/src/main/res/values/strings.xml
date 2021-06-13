@@ -67,4 +67,14 @@
     <string name="str_attendance">Attendance</string>
     <string name="str_finish">Finish</string>
     <string name="str_tests">Tests</string>
+    <string name="str_present">Present</string>
+    <string name="str_0">0</string>
+    <string name="str_absent">Absent</string>
+    <string name="str_presentpercentage">Attendance Parcentage</string>
+    <string name="str_0percent">0%</string>
+    <string name="str_final_grade">Final Grade</string>
+    <string name="str_null">null</string>
+    <string name="str_student_name">Student\'s name</string>
+    <string name="str_total_student">Total Student</string>
+    <string name="str_student_list">Student List</string>
 </resources>
