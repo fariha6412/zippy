@@ -98,6 +98,7 @@ public class StudentProfileActivity extends AppCompatActivity{
     public void showProfile(){
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        if(user==null)finish();
         txtViewFullName = findViewById(R.id.txtviewfullname);
         txtViewInstitution = findViewById(R.id.txtviewinstitution);
         txtViewRegistrationNo = findViewById(R.id.txtviewregistraionno);
@@ -147,7 +148,7 @@ public class StudentProfileActivity extends AppCompatActivity{
 
                                     @Override
                                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                        Log.w("Error", "Failed to read value.", error.toException());
+                                        //Log.w("Error", "Failed to read value.", error.toException());
                                     }
                                 });
                             }
@@ -155,7 +156,7 @@ public class StudentProfileActivity extends AppCompatActivity{
 
                         @Override
                         public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                            Log.w("Error", "Failed to read value.", error.toException());
+                            //Log.w("Error", "Failed to read value.", error.toException());
                         }
                     });
                 }
@@ -164,7 +165,7 @@ public class StudentProfileActivity extends AppCompatActivity{
             @Override
             public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
-                Log.w("Error", "Failed to read value.", error.toException());
+                //Log.w("Error", "Failed to read value.", error.toException());
             }
         });
         addbtn.setOnClickListener(v -> {
