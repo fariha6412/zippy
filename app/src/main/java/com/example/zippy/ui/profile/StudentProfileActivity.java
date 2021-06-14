@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.zippy.CourseDetailsActivity;
 import com.example.zippy.CourseEnrollActivity;
+import com.example.zippy.CourseEvaluationActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.CourseCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
@@ -186,8 +187,8 @@ public class StudentProfileActivity extends AppCompatActivity{
                 String coursePassCode = courseList.get(position).getCoursePassCode();
                 mPrefs.edit().putString(strClickedCoursePassCode,coursePassCode).apply();
                 System.out.println(clickedCoursePassCode+" "+ coursePassCode);
-                //intent courseDetails
-                startActivity(new Intent(StudentProfileActivity.this, CourseDetailsActivity.class));
+                //intent courseEvaluation
+                startActivity(new Intent(StudentProfileActivity.this, CourseEvaluationActivity.class));
 
             }
         });
