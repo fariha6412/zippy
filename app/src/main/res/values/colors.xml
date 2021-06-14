@@ -13,4 +13,10 @@
     <color name="appbarColor">#2D6187</color>
     <color name="linkColor">#50C2C9</color>
     <color name="titleColor">#2D6187</color>
+    <color name="nav_icon_default">#666666</color>
+    <color name="button_txt_color">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="colorNoInternet">#6D6D73</color>
+    <color name="course_details_btn">#CCCCCC</color>
 </resources>

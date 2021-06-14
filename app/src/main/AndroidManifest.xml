@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.zippy">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="false"
         android:background="@android:color/white"
@@ -12,18 +16,39 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.change.ChangeProfilePictureActivity" />
-        <activity android:name=".ui.register.RegisterStudentActivity" />
-        <activity android:name=".ui.register.RegisterInstructorActivity" />
-        <activity android:name=".ChooseAccountType" />
-        <activity android:name=".MainActivity">
-
+        <activity
+            android:name=".TestCreationActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".CourseEvaluationActivity" />
+        <activity android:name=".StudentDetailsActivity" />
+        <activity android:name=".CourseDetailsActivity" />
+        <activity android:name=".AboutActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CourseEnrollActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".CourseCreationActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.profile.StudentProfileActivity" />
+        <activity android:name=".ui.profile.InstructorProfileActivity" />
+        <activity android:name=".ui.change.ChangeProfilePictureActivity" />
+        <activity
+            android:name=".ui.register.RegisterStudentActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.register.RegisterInstructorActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ChooseAccountTypeActivity" />
+        <activity android:name=".SplashActivity" />
     </application>
 
 </manifest>

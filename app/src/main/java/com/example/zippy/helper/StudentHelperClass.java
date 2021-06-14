@@ -1,18 +1,26 @@
 package com.example.zippy.helper;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StudentHelperClass {
 
-    String image, fullName, email, institution, registrationNo, password;
+    String image;
+    String fullName;
+    String email;
+    String institution;
+    String registrationNo;
+    Long noOfCourses;
 
-    public StudentHelperClass(){}
+    public StudentHelperClass(){
+    }
 
-    public StudentHelperClass(String image, String fullName, String email, String institution, String registrationNo, String password) {
+    public StudentHelperClass(String image, String fullName, String email, String institution, String registrationNo) {
         this.image = image;
         this.fullName = fullName;
         this.email = email;
         this.institution = institution;
         this.registrationNo = registrationNo;
-        this.password = password;
+        this.noOfCourses = 0L;
     }
     public String getImage() { return image; }
 
@@ -30,9 +38,6 @@ public class StudentHelperClass {
         return institution;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public String getRegistrationNo() {
         return registrationNo;
@@ -54,7 +59,23 @@ public class StudentHelperClass {
         this.institution = institution;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public Long getNoOfCourses() {
+        return noOfCourses;
+    }
+
+    public void setNoOfCourses(Long noOfCourses) {
+        this.noOfCourses = noOfCourses;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return "StudentHelperClass{" +
+                "image='" + image + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", institution='" + institution + '\'' +
+                ", registrationNo='" + registrationNo + '\'' +
+                ", noOfCourses= " + noOfCourses +
+                '}';
     }
 }

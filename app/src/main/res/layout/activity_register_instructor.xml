@@ -26,252 +26,209 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/txtviewregister"
-        style="@style/Widget.AppCompat.TextView"
-        android:layout_width="393dp"
-
-        android:layout_height="44dp"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal|left"
-        android:text="@string/str_register"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/titleColor"
-        android:textSize="@dimen/title"
-        android:textStyle="normal"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.04"
-        tools:ignore="RtlHardcoded" />
-
-    <EditText
-        android:id="@+id/edittxtfullname"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="350dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/textfieldColor"
-        android:ems="10"
-        android:hint="@string/str_full_name"
-        android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:paddingStart=".1in"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.442"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtviewregister"
-        app:layout_constraintVertical_bias="0.003"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/edittxtemail"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="350dp"
-        android:layout_height="44dp"
-        android:background="@color/textfieldColor"
-        android:ems="10"
-        android:hint="@string/str_email"
-        android:importantForAutofill="no"
-        android:inputType="textEmailAddress"
-        android:padding="10dp"
-        android:paddingStart=".1in"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.442"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittxtfullname"
-        app:layout_constraintVertical_bias="0.023"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
-
-    <EditText
-        android:id="@+id/edittxtinstitution"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="350dp"
-        android:layout_height="44dp"
-        android:background="@color/textfieldColor"
-        android:ems="10"
-        android:hint="@string/str_institution"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:padding="10dp"
-        android:paddingStart=".1in"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.442"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittxtemail"
-        app:layout_constraintVertical_bias="0.019"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
-
-    <EditText
-        android:id="@+id/edittxtemplyeeid"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="350dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="9dp"
-        android:background="@color/textfieldColor"
-        android:ems="10"
-        android:hint="@string/str_employee_id"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:padding="10dp"
-        android:paddingStart=".1in"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittxtinstitution"
-        app:layout_constraintVertical_bias="0.005"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
-
-
-    <EditText
-        android:id="@+id/edittxtdesignation"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="350dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="13dp"
-        android:background="@color/textfieldColor"
-        android:ems="10"
-        android:hint="@string/str_designation"
-        android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:paddingStart=".1in"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.442"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittxtemplyeeid"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
-
-    <EditText
-        android:id="@+id/edittxtpassword"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="350dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="9dp"
-        android:background="@color/textfieldColor"
-        android:ems="10"
-        android:hint="@string/str_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        android:paddingStart=".1in"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.442"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittxtdesignation"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
-
-    <EditText
-        android:id="@+id/edittxtretypepassword"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="350dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="11dp"
-        android:background="@color/textfieldColor"
-        android:ems="10"
-        android:hint="@string/str_re_type_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        android:paddingStart=".1in"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.442"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittxtpassword"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/registerbtn"
-        android:layout_width="172dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginBottom="80dp"
-        android:text="@string/str_register"
-        android:typeface="normal"
-        android:textSize="@dimen/button_txt"
-        app:backgroundTint="@color/buttonColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittxtretypepassword" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
     <LinearLayout
-        android:layout_width="237dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="200dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.911"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerbtn"
-        app:layout_constraintVertical_bias="0.09">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
-            android:id="@+id/haveAccount"
-            android:layout_width="170dp"
-            android:layout_height="match_parent"
-            android:text="@string/have_account"
-            android:textColor="@color/buttonColor"
-            tools:ignore="MissingConstraints" />
+            android:id="@+id/txtviewregister"
+            style="@style/Widget.AppCompat.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/str_register"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/titleColor"
+            android:textSize="@dimen/title"
+            android:textStyle="normal"
+            tools:ignore="RtlHardcoded" />
 
-        <TextView
-            android:id="@+id/txtviewlogin"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/btn_login"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/linkColor"
-            tools:ignore="MissingConstraints"
-            tools:text="@string/btn_login" />
+        <EditText
+            android:id="@+id/edittxtfullname"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="@dimen/edit_txt_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/textfieldColor"
+            android:ems="10"
+            android:hint="@string/str_full_name"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:paddingStart=".1in"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+             tools:ignore="MissingConstraints,RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/edittxtemail"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="@dimen/edit_txt_width"
+            android:layout_height="wrap_content"
+            android:background="@color/textfieldColor"
+            android:ems="10"
+            android:hint="@string/str_email"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:paddingStart=".1in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/edittxtinstitution"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="@dimen/edit_txt_width"
+            android:layout_height="wrap_content"
+            android:background="@color/textfieldColor"
+            android:ems="10"
+            android:hint="@string/str_institution"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:padding="10dp"
+            android:paddingStart=".1in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/edittxtemplyeeid"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="@dimen/edit_txt_width"
+            android:layout_height="wrap_content"
+            android:background="@color/textfieldColor"
+            android:ems="10"
+            android:hint="@string/str_employee_id"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:padding="10dp"
+            android:paddingStart=".1in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+
+
+        <EditText
+            android:id="@+id/edittxtdesignation"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="@dimen/edit_txt_width"
+            android:layout_height="wrap_content"
+            android:background="@color/textfieldColor"
+            android:ems="10"
+            android:hint="@string/str_designation"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:paddingStart=".1in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/edittxtpassword"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="@dimen/edit_txt_width"
+            android:layout_height="wrap_content"
+            android:background="@color/textfieldColor"
+            android:ems="10"
+            android:hint="@string/str_password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:paddingStart=".1in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/edittxtretypepassword"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="@dimen/edit_txt_width"
+            android:layout_height="wrap_content"
+            android:background="@color/textfieldColor"
+            android:ems="10"
+            android:hint="@string/str_re_type_password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:paddingStart=".1in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+
+        <Button
+            android:id="@+id/registerbtn"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:text="@string/str_register"
+            android:typeface="normal"
+            android:textSize="@dimen/button_txt"
+            app:backgroundTint="@color/buttonColor"
+            android:textColor="@color/button_txt_color"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/haveAccount"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:text="@string/have_account"
+                android:textColor="@color/buttonColor"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/txtviewlogin"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/btn_login"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/linkColor"
+                tools:ignore="MissingConstraints"
+                tools:text="@string/btn_login" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="64dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edittxtemail"
-        app:layout_constraintHorizontal_bias="0.546"
-        app:layout_constraintStart_toStartOf="@+id/edittxtemail"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

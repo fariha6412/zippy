@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.androiod.com/apk/res-auto"
+    xmlns:app2="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textfieldColor"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/no_internet_sign"
+        android:layout_gravity="center"
+        app2:tint="@color/colorNoInternet" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_oops"
+        android:textStyle="bold"
+        android:textSize="@dimen/title"
+        android:gravity="center"
+        android:textColor="@color/colorNoInternet"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_no_internet_connection"
+        android:textStyle="bold"
+        android:textSize="@dimen/title"
+        android:gravity="center"
+        android:textColor="@color/colorNoInternet"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_please_check_your_connection"
+        android:textStyle="bold"
+        android:textSize="@dimen/little_title"
+        android:gravity="center"
+        android:textColor="@color/colorNoInternet"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRetry"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:textAllCaps="true"
+        android:backgroundTint="@color/colorNoInternet"
+        android:textColor="@color/button_txt_color"
+        android:text="@string/str_retry"/>
+</LinearLayout>

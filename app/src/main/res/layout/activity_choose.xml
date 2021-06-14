@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseAccountType">
+    tools:context=".ChooseAccountTypeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"
@@ -26,65 +26,80 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <Button
-        android:id="@+id/instructorbtn"
-        android:layout_width="226dp"
-        android:layout_height="59dp"
-        android:textSize="@dimen/button_txt"
-        android:text="@string/str_instructor"
-        app:backgroundTint="@color/buttonColor"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.258" />
-
-    <Button
-        android:id="@+id/studentbtn"
-        android:layout_width="226dp"
-        android:layout_height="59dp"
-        android:textSize="@dimen/button_txt"
-        android:text="@string/str_student"
-        app:backgroundTint="@color/buttonColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructorbtn"
-        app:layout_constraintVertical_bias="0.155" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
     <LinearLayout
-        android:layout_width="240dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="264dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.911"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studentbtn"
-        app:layout_constraintVertical_bias="0.09">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
-            android:id="@+id/haveAccount"
-            android:layout_width="170dp"
-            android:layout_height="match_parent"
-            android:text="@string/have_account"
-            android:textColor="@color/buttonColor"
-            tools:ignore="MissingConstraints" />
+            android:id="@+id/txtviewchoose"
+            style="@style/Widget.AppCompat.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:text="@string/choose_screen_title"
+            android:textAlignment="center"
+            android:textColor="@color/titleColor"
+            android:textSize="@dimen/title" />
 
-        <TextView
-            android:id="@+id/txtviewlogin"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:text="@string/btn_login"
-            android:textColor="@color/linkColor"
-            tools:ignore="MissingConstraints"
-            android:focusable="true" />
+        <Button
+            android:id="@+id/instructorbtn"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/button_txt"
+            android:layout_marginTop="80dp"
+            android:text="@string/str_instructor"
+            android:layout_gravity="center_horizontal"
+            app:backgroundTint="@color/buttonColor"
+            android:textColor="@color/button_txt_color"/>
+
+        <Button
+            android:id="@+id/studentbtn"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:text="@string/str_student"
+            android:textSize="@dimen/button_txt"
+            app:backgroundTint="@color/buttonColor"
+            android:textColor="@color/button_txt_color"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/haveAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/have_account"
+                android:textColor="@color/buttonColor"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/txtviewlogin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:text="@string/btn_login"
+                android:textColor="@color/linkColor"
+                tools:ignore="MissingConstraints"
+                android:focusable="true" />
+        </LinearLayout>
     </LinearLayout>
-
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

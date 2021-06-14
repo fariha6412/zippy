@@ -26,82 +26,73 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/txtviewtitle"
-        style="@style/Widget.AppCompat.TextView"
-        android:layout_width="385dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:text="@string/cng_profile_pic"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/titleColor"
-        android:textStyle="normal"
-        android:textSize="@dimen/title"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.116" />
-
-
-    <Button
-        android:id="@+id/choosebtn"
-        android:layout_width="265dp"
-        android:layout_height="57dp"
-        android:text="@string/btn_upload"
-        android:textSize="@dimen/button_txt"
-        app:backgroundTint="@color/buttonColor"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtviewtitle"
-        app:layout_constraintVertical_bias="0.179" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-    <ImageView
-        android:id="@+id/imgview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/choosebtn"
-        app:layout_constraintVertical_bias="0.204"
-        tools:srcCompat="@tools:sample/avatars" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-    <Button
-        android:id="@+id/submitbtn"
-        android:layout_width="172dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="152dp"
-        android:text="@string/btn_submit"
-        android:textSize="@dimen/button_txt"
-        app:backgroundTint="@color/buttonColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgview"
-        app:layout_constraintVertical_bias="0.398" />
+            <TextView
+                android:id="@+id/txtviewtitle"
+                style="@style/Widget.AppCompat.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/cng_profile_pic"
+                android:textAlignment="center"
+                android:layout_marginTop="40dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/titleColor"
+                android:textStyle="normal"
+                android:textSize="@dimen/title" />
 
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="64dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edittxtemail"
-        app:layout_constraintHorizontal_bias="0.546"
-        app:layout_constraintStart_toStartOf="@+id/edittxtemail"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+
+            <Button
+                android:id="@+id/uploadbtn"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_upload"
+                android:textSize="@dimen/button_txt"
+                app:backgroundTint="@color/buttonColor"
+                android:textColor="@color/button_txt_color"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"/>
+
+            <ImageView
+                android:id="@+id/imgview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                tools:srcCompat="@tools:sample/avatars"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/submitbtn"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/btn_submit"
+                android:textSize="@dimen/button_txt"
+                app:backgroundTint="@color/buttonColor"
+                android:textColor="@color/button_txt_color"
+                android:layout_gravity="center_horizontal"/>
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
