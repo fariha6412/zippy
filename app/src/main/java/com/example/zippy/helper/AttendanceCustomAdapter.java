@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,7 +54,7 @@ public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCust
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.attendance_list, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.attendance_student_list, parent, false);
         ViewHolder evh = new ViewHolder(v, mListener);
         return evh;
     }
