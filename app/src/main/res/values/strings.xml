@@ -77,4 +77,10 @@
     <string name="str_student_name">Student\'s name</string>
     <string name="str_total_student">Total Student</string>
     <string name="str_student_list">Student List</string>
+    <string name="str_test_title">Test Title</string>
+    <string name="str_total_mark">Total Mark</string>
+    <string name="str_convertto">Convert To</string>
+    <string name="str_upload">Upload Question</string>
+    <string name="str_submit">Submit</string>
+    <string name="str_create_new_test">Create New Test</string>
 </resources>
