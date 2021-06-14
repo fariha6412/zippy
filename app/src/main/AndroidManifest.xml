@@ -16,22 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity
-            android:name=".TestCreationActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <activity android:name=".CourseEvaluationActivity" />
-        <activity android:name=".StudentDetailsActivity" />
-        <activity android:name=".CourseDetailsActivity" />
-        <activity android:name=".AboutActivity" />
+        <activity android:name=".AttendanceTakingActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize">
-        <activity android:name=".CourseEvaluationActivity" />
-        <activity android:name=".StudentDetailsActivity" />
-        <activity android:name=".TestCreationActivity" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".CourseDetailsActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,15 +41,15 @@
         <activity
             android:name=".ui.register.RegisterInstructorActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".CourseEnrollActivity" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".CourseCreationActivity" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.profile.StudentProfileActivity" />
-        <activity android:name=".ui.profile.InstructorProfileActivity" />
-        <activity android:name=".ui.change.ChangeProfilePictureActivity" />
-        <activity android:name=".ui.register.RegisterStudentActivity" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.register.RegisterInstructorActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ChooseAccountTypeActivity" />
         <activity android:name=".SplashActivity" />
+        <activity android:name=".CourseEvaluationActivity" />
+        <activity android:name=".StudentDetailsActivity" />
+        <activity android:name=".CourseDetailsActivity" />
+        <activity android:name=".AboutActivity" />
+        <activity
+            android:name=".TestCreationActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

@@ -24,7 +24,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     //done
 
-    Button studentDetailsbtn;
+    Button studentDetailsbtn, attendancebtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +39,12 @@ public class CourseDetailsActivity extends AppCompatActivity {
         setSupportActionBar(mtoolbar);
 
         studentDetailsbtn = findViewById(R.id.studentdetailsbtn);
+        attendancebtn = findViewById(R.id.attendance);
         studentDetailsbtn.setOnClickListener(v -> {
             startActivity(new Intent(CourseDetailsActivity.this, StudentDetailsActivity.class));
+        });
+        attendancebtn.setOnClickListener(v -> {
+            startActivity(new Intent(CourseDetailsActivity.this, AttendanceTakingActivity.class));
         });
     }
     @Override

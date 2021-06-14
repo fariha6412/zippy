@@ -83,4 +83,7 @@
     <string name="str_upload">Upload Question</string>
     <string name="str_submit">Submit</string>
     <string name="str_create_new_test">Create New Test</string>
+    <string name="date_today">Date Today</string>
+    <string name="today">2021–6–14</string>
+    <string name="str_today">"Today: "</string>
 </resources>

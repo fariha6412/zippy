@@ -1,6 +1,7 @@
 package com.example.zippy;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,15 +11,16 @@ import android.annotation.SuppressLint;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.zippy.helper.AttendanceCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.AttendanceCustomAdapter;
 import com.example.zippy.helper.StudentCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.utility.NetworkChangeListener;
@@ -30,9 +32,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class StudentDetailsActivity extends AppCompatActivity {
+@RequiresApi(api = Build.VERSION_CODES.O)
+public class AttendanceTakingActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     SharedPreferences mPrefs;
@@ -42,27 +46,28 @@ public class StudentDetailsActivity extends AppCompatActivity {
     private ArrayList<String> studentUids;
     private ArrayList<String> studentNames;
 
-    private TextView txtViewTotalStudent;
+    private TextView txtViewDateToday;
 
     FirebaseDatabase rootNode;
     DatabaseReference referenceEnrolledStudents, referenceCourse, referenceStudent;
 
     RecyclerView recyclerView;
-    StudentCustomAdapter adapter;
+    AttendanceCustomAdapter adapter;
     LinearLayoutManager layoutManager;
-    Long noOfStudents = 0L;
+    LocalDate datetoday = LocalDate.now();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_details);
+        setContentView(R.layout.activity_attendance_taking);
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
 
+        txtViewDateToday = findViewById(R.id.txtviewdatetoday);
+        txtViewDateToday.setText(datetoday.toString());
+
         studentUids = new ArrayList<>();
         studentNames = new ArrayList<String>();
-        txtViewTotalStudent = findViewById(R.id.txtviewtotalstudent);
-
         //new for saving logged user type and clicked course
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
@@ -70,34 +75,33 @@ public class StudentDetailsActivity extends AppCompatActivity {
         System.out.println(clickedCoursePassCode);
         showlist();
     }
-    private void showlist(){
+
+    private void showlist() {
         rootNode = FirebaseDatabase.getInstance();
-        referenceCourse = rootNode.getReference("courses/"+clickedCoursePassCode);
+        referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
         referenceCourse.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
-                if(courseHelper!=null){
+                if (courseHelper != null) {
                     studentNames.clear();
                     studentUids.clear();
-                    noOfStudents = courseHelper.getNoOfStudents();
-                    txtViewTotalStudent.setText(noOfStudents.toString());
 
-                    referenceEnrolledStudents = rootNode.getReference("courses/"+clickedCoursePassCode+"/students");
+                    referenceEnrolledStudents = rootNode.getReference("courses/" + clickedCoursePassCode + "/students");
                     referenceEnrolledStudents.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot dsnap:dataSnapshot.getChildren()){
+                            for (DataSnapshot dsnap : dataSnapshot.getChildren()) {
                                 System.out.println(dsnap.getValue());
 
                                 String studentUid = (String) dsnap.getValue();
-                                referenceStudent = rootNode.getReference("students/"+studentUid);
+                                referenceStudent = rootNode.getReference("students/" + studentUid);
                                 referenceStudent.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
                                         StudentHelperClass studentHelper = dsnapshot.getValue(StudentHelperClass.class);
-                                        if(studentHelper!=null){
+                                        if (studentHelper != null) {
                                             studentUids.add(studentUid);
                                             studentNames.add(studentHelper.getFullName());
                                             initRecyclerView();
@@ -126,27 +130,22 @@ public class StudentDetailsActivity extends AppCompatActivity {
             }
         });
     }
-    private void initRecyclerView(){
+
+    private void initRecyclerView() {
         recyclerView = findViewById(R.id.recylerview);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new StudentCustomAdapter(studentNames);
+        adapter = new AttendanceCustomAdapter(studentNames);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        adapter.setOnItemClickListener(new StudentCustomAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                //show profile of the student
-            }
-            @Override
-            public void onDeleteClick(int position) {
-                //delete showing a alert dialog
-                //removeItem(position);
-            }
+        adapter.setOnItemClickListener(position -> {
+            //record as present
+            //givePresent(position);
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -164,22 +163,25 @@ public class StudentDetailsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    public boolean onCreateOptionsMenu(Menu menu){
+
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
+
     //internet related stuff
     @Override
     protected void onStart() {
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeListener,filter);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
         super.onStart();
     }
+
     @Override
-    protected void onStop(){
+    protected void onStop() {
         unregisterReceiver(networkChangeListener);
         super.onStop();
     }
-    //end stuff
+//end stuff
 }
