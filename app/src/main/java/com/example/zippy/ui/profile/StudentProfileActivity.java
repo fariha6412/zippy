@@ -1,7 +1,6 @@
 package com.example.zippy.ui.profile;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -11,24 +10,19 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.zippy.AboutActivity;
-import com.example.zippy.CourseCreationActivity;
 import com.example.zippy.CourseDetailsActivity;
 import com.example.zippy.CourseEnrollActivity;
-import com.example.zippy.MainActivity;
+import com.example.zippy.CourseEvaluationActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.CourseCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
@@ -47,10 +41,12 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class StudentProfileActivity extends AppCompatActivity{
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
+    SharedPreferences mPrefs;
+    final String strClickedCoursePassCode = "clickedCoursePassCode";
 
     FirebaseAuth auth;
     FirebaseDatabase rootNode;
@@ -64,7 +60,7 @@ public class StudentProfileActivity extends AppCompatActivity{
     RecyclerView recyclerView;
     CourseCustomAdapter adapter;
     LinearLayoutManager layoutManager;
-    List<CourseHelperClass> courseList = new ArrayList<CourseHelperClass>();
+    ArrayList<CourseHelperClass> courseList = new ArrayList<CourseHelperClass>();
     Long noOfCourses = 0L;
 
     @Override
@@ -104,6 +100,8 @@ public class StudentProfileActivity extends AppCompatActivity{
         txtViewRegistrationNo = findViewById(R.id.txtviewregistraionno);
         img = findViewById(R.id.imgview);
         addbtn = findViewById(R.id.addbtn);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         rootNode = FirebaseDatabase.getInstance();
         referenceStudent = rootNode.getReference("students/"+ user.getUid());
@@ -177,9 +175,23 @@ public class StudentProfileActivity extends AppCompatActivity{
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList, this);
+        adapter = new CourseCustomAdapter(courseList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        adapter.setOnItemClickListener(new CourseCustomAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //intent courseEvaluation
+                String clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
+                String coursePassCode = courseList.get(position).getCoursePassCode();
+                mPrefs.edit().putString(strClickedCoursePassCode,coursePassCode).apply();
+                System.out.println(clickedCoursePassCode+" "+ coursePassCode);
+                //intent courseEvaluation
+                startActivity(new Intent(StudentProfileActivity.this, CourseEvaluationActivity.class));
+
+            }
+        });
     }
     @Override
     public void onBackPressed() {

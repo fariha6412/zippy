@@ -21,7 +21,7 @@ public class MenuHelperClass {
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        System.exit(0);
+                        context.finishAffinity();
                     }
                 }).create().show();
     }

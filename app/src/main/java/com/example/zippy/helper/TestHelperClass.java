@@ -1,11 +1,11 @@
 package com.example.zippy.helper;
 
 public class TestHelperClass {
-    private String testTitle, question;
-    private Long totalMarks;
-    private Long convertTo;
+    String testTitle, question;
+    Long totalMarks;
+    Double convertTo;
 
-    public TestHelperClass(String testTitle, String question, Long totalMarks, Long convertTo) {
+    public TestHelperClass(String testTitle, String question, Long totalMarks, Double convertTo) {
         this.testTitle = testTitle;
         this.question = question;
         this.totalMarks = totalMarks;
@@ -36,11 +36,11 @@ public class TestHelperClass {
         this.totalMarks = totalMarks;
     }
 
-    public Long getConvertTo() {
+    public Double getConvertTo() {
         return convertTo;
     }
 
-    public void setConvertTo(Long convertTo) {
+    public void setConvertTo(Double convertTo) {
         this.convertTo = convertTo;
     }
 

@@ -67,4 +67,23 @@
     <string name="str_attendance">Attendance</string>
     <string name="str_finish">Finish</string>
     <string name="str_tests">Tests</string>
+    <string name="str_present">Present</string>
+    <string name="str_0">0</string>
+    <string name="str_absent">Absent</string>
+    <string name="str_presentpercentage">Attendance Parcentage</string>
+    <string name="str_0percent">0%</string>
+    <string name="str_final_grade">Final Grade</string>
+    <string name="str_null">null</string>
+    <string name="str_student_name">Student\'s name</string>
+    <string name="str_total_student">Total Student</string>
+    <string name="str_student_list">Student List</string>
+    <string name="str_test_title">Test Title</string>
+    <string name="str_total_mark">Total Mark</string>
+    <string name="str_convertto">Convert To</string>
+    <string name="str_upload">Upload Question</string>
+    <string name="str_submit">Submit</string>
+    <string name="str_create_new_test">Create New Test</string>
+    <string name="date_today">Date Today</string>
+    <string name="today">2021–6–14</string>
+    <string name="str_today">"Today: "</string>
 </resources>

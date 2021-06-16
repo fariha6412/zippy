@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,78 +14,75 @@ import com.example.zippy.AboutActivity;
 import com.example.zippy.CourseDetailsActivity;
 import com.example.zippy.R;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
 
-import java.util.List;
 
 public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapter.ViewHolder> {
-    private List<CourseHelperClass> courses;
-    private Activity context;
-    public CourseCustomAdapter(List<CourseHelperClass> courses, Activity context) {
-        this.courses = courses;
-        this.context = context;
+    private final ArrayList<CourseHelperClass> courseList;
+    private OnItemClickListener mListener;
+  
+    public CourseCustomAdapter(ArrayList<CourseHelperClass> courseList) {
+        this.courseList = courseList;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtViewCourseCode, txtViewCourseTitle, txtViewCourseYear, txtViewCourseCredit;
+        private final TextView txtViewCourseCode;
+        private final TextView txtViewCourseTitle;
+        private final TextView txtViewCourseYear;
+        private final TextView txtViewCourseCredit;
 
-        public ViewHolder(View view) {
-            super(view);
+        public ViewHolder(View itemView, final OnItemClickListener listener) {
+            super(itemView);
 
-            txtViewCourseCode = view.findViewById(R.id.txtviewcoursecode);
-            txtViewCourseTitle = view.findViewById(R.id.txtviewcoursetitle);
-            txtViewCourseYear = view.findViewById(R.id.txtviewcourseyear);
-            txtViewCourseCredit = view.findViewById(R.id.txtviewcoursecredit);
+            txtViewCourseCode = itemView.findViewById(R.id.txtviewcoursecode);
+            txtViewCourseTitle = itemView.findViewById(R.id.txtviewcoursetitle);
+            txtViewCourseYear = itemView.findViewById(R.id.txtviewcourseyear);
+            txtViewCourseCredit = itemView.findViewById(R.id.txtviewcoursecredit);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
-        private void bind(CourseHelperClass course, Activity context){
+
+        private void bind(CourseHelperClass course){
 
             txtViewCourseCode.setText(course.getCourseCode());
             txtViewCourseTitle.setText(course.getCourseTitle());
             txtViewCourseYear.setText(course.getCourseYear());
             txtViewCourseCredit.setText(course.getCourseCredit());
-
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    // get position
-                    int pos = getAdapterPosition();
-
-                    // check if item still exists
-                    if(pos != RecyclerView.NO_POSITION){
-                        String clickedCoursePassCode = course.getCoursePassCode();
-                        context.startActivity(new Intent(context, CourseDetailsActivity.class));
-                        Toast.makeText(v.getContext(), "You clicked " + clickedCoursePassCode, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
         }
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
-    public @NotNull ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view, which defines the UI of the list item
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.course_list, viewGroup, false);
-
-        return new ViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_list, parent, false);
+        ViewHolder evh = new ViewHolder(v, mListener);
+        return evh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
-        //viewHolder.getTextView().setText(localDataSet[position]);
-        //viewHolder.setData(courses.get(position));
-        viewHolder.bind(courses.get(position), context);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.bind(courseList.get(position));
     }
 
-
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-       return courses.size();
+        return courseList.size();
     }
 }
