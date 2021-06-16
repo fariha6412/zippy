@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity android:name=".AttendanceTakingActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize">
@@ -32,6 +31,7 @@
         <activity
             android:name=".CourseCreationActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".AttendanceTakingActivity" />
         <activity android:name=".ui.profile.StudentProfileActivity" />
         <activity android:name=".ui.profile.InstructorProfileActivity" />
         <activity android:name=".ui.change.ChangeProfilePictureActivity" />

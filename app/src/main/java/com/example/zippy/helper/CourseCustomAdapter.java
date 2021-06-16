@@ -1,12 +1,17 @@
 package com.example.zippy.helper;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.zippy.AboutActivity;
+import com.example.zippy.CourseDetailsActivity;
 import com.example.zippy.R;
 
 import java.util.ArrayList;
@@ -15,6 +20,10 @@ import java.util.ArrayList;
 public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapter.ViewHolder> {
     private final ArrayList<CourseHelperClass> courseList;
     private OnItemClickListener mListener;
+  
+    public CourseCustomAdapter(ArrayList<CourseHelperClass> courseList) {
+        this.courseList = courseList;
+    }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -50,16 +59,14 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
                 }
             });
         }
+
         private void bind(CourseHelperClass course){
+
             txtViewCourseCode.setText(course.getCourseCode());
             txtViewCourseTitle.setText(course.getCourseTitle());
             txtViewCourseYear.setText(course.getCourseYear());
             txtViewCourseCredit.setText(course.getCourseCredit());
         }
-    }
-
-    public CourseCustomAdapter(ArrayList<CourseHelperClass> exampleList) {
-        courseList = exampleList;
     }
 
     @Override

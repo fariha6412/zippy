@@ -2,7 +2,6 @@ package com.example.zippy;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -28,47 +27,13 @@ import com.google.firebase.database.FirebaseDatabase;
 public class TestCreationActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    SharedPreferences mPrefs;
-    private EditText editTXTcoursetitle, editTXTtotalmark, editTXTconvertto;
-    private ProgressBar loading;
-    FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference reference;
-    TestHelperClass testhelperclass;
 
+public class TestCreationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_creation);
-
-        //
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        auth = FirebaseAuth.getInstance();
-
-        editTXTcoursetitle = findViewById(R.id.edittxtcoursetitle);
-        editTXTtotalmark = findViewById(R.id.edittxttotalmark);
-        editTXTconvertto = findViewById(R.id.edittxtconvertto);
-        loading = findViewById(R.id.loading);
-        // TextView txtViewLogin = findViewById(R.id.txtviewlogin);
-        Button submitbtn = findViewById(R.id.submitbtn);
-
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-
-        submitbtn.setOnClickListener(v -> {
-                    String courseTitle = editTXTcoursetitle.getText().toString().trim();
-                    String totalMark = editTXTtotalmark.getText().toString().trim();
-                    String convertTo = editTXTconvertto.getText().toString().trim();
-
-                    if (ValidationChecker.isFieldEmpty(courseTitle, editTXTcoursetitle)) return;
-                    if (!ValidationChecker.isValidEmail(totalMark, editTXTtotalmark)) return;
-                    if (ValidationChecker.isFieldEmpty(convertTo, editTXTconvertto)) return;
-                }
-        );
-
-
     }
 
     @Override

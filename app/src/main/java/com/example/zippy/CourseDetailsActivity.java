@@ -22,9 +22,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
     //new for course details purpose
     SharedPreferences mPrefs;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
-    //done
 
     Button studentDetailsbtn, attendancebtn;
+    //done
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

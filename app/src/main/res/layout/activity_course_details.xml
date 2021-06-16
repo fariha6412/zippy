@@ -59,9 +59,12 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/testsdropdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:endIconMode="dropdown_menu"
+                    app:endIconTint="@color/appbarColor"
+                    android:background="@color/transparent"
                     android:layout_weight="4">
 
                     <AutoCompleteTextView
@@ -71,10 +74,14 @@
                         android:textAlignment="center"
                         android:textSize="@dimen/button_txt"
                         android:textColor="@color/black"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:freezesText="true"
                         android:background="@color/course_details_btn"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/testcreationbtn"
                     android:layout_width="5dp"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_baseline_add_24"
@@ -97,7 +104,7 @@
                 android:textColor="@color/black"/>
 
             <Button
-                android:id="@+id/studentbtn"
+                android:id="@+id/finishbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

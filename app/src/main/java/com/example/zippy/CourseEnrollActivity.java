@@ -136,11 +136,11 @@ public class CourseEnrollActivity extends AppCompatActivity {
                                             System.err.println("Value was set. Error = " + error);
                                         }
                                     });
-                                    Toast.makeText(getApplicationContext(), "Successfully Enrolled", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getApplicationContext(), "Successfully Enrolled", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext(), "Already Enrolled", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Enrolled", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
