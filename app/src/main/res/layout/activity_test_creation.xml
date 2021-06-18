@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TestCreationActivity">
+    tools:context=".ui.test.TestCreationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"

@@ -12,12 +12,12 @@ import com.example.zippy.R;
 import java.util.ArrayList;
 
 
-public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapter.ViewHolder> {
-    private final ArrayList<CourseHelperClass> courseList;
+public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapter.ViewHolder> {
+    private final ArrayList<String> userList;
     private OnItemClickListener mListener;
-  
-    public CourseCustomAdapter(ArrayList<CourseHelperClass> courseList) {
-        this.courseList = courseList;
+
+    public SearchCustomAdapter(ArrayList<String> userList) {
+        this.userList = userList;
     }
 
     public interface OnItemClickListener {
@@ -29,18 +29,12 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView txtViewCourseCode;
-        private final TextView txtViewCourseTitle;
-        private final TextView txtViewCourseYear;
-        private final TextView txtViewCourseCredit;
+        private final TextView txtViewFullName;
 
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
-            txtViewCourseCode = itemView.findViewById(R.id.txtviewcoursecode);
-            txtViewCourseTitle = itemView.findViewById(R.id.txtviewcoursetitle);
-            txtViewCourseYear = itemView.findViewById(R.id.txtviewcourseyear);
-            txtViewCourseCredit = itemView.findViewById(R.id.txtviewcoursecredit);
+            txtViewFullName = itemView.findViewById(R.id.txtviewfullname);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,12 +49,8 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
             });
         }
 
-        private void bind(CourseHelperClass course){
-
-            txtViewCourseCode.setText(course.getCourseCode());
-            txtViewCourseTitle.setText(course.getCourseTitle());
-            txtViewCourseYear.setText(course.getCourseYear());
-            txtViewCourseCredit.setText(course.getCourseCredit());
+        private void bind(String fullName){
+            txtViewFullName.setText(fullName);
         }
     }
 
@@ -73,11 +63,11 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(courseList.get(position));
+        holder.bind(userList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return courseList.size();
+        return userList.size();
     }
 }

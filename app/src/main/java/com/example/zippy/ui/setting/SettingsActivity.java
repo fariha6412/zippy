@@ -1,4 +1,4 @@
-package com.example.zippy;
+package com.example.zippy.ui.setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,42 +9,39 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.zippy.R;
+import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class CourseEvaluationActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_evaluation);
+        setContentView(R.layout.activity_settings);
+
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
-                return true;
-            case R.id.menuexit:
-                MenuHelperClass.exit(this);
-                return true;
-            case R.id.menulogout:
-                MenuHelperClass.signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        menuHelperClass.handle();
+
+        bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
+        BottomNavigationHelper bottomNavigationHelper = new BottomNavigationHelper(bottomNavigationView, this);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(3);
+        menuItem.setChecked(true);
+        bottomNavigationHelper.handle();
+        //bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
-    //internet related stuff
     @Override
     protected void onStart() {
         IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -56,5 +53,8 @@ public class CourseEvaluationActivity extends AppCompatActivity {
         unregisterReceiver(networkChangeListener);
         super.onStop();
     }
-    //end stuff
+    @Override
+    public void onBackPressed() {
+        BottomNavigationHelper.backToProfile(bottomNavigationView, this);
+    }
 }

@@ -1,5 +1,7 @@
-package com.example.zippy;
+package com.example.zippy.ui.course;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -7,24 +9,42 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.zippy.ui.attendance.AttendanceTakingActivity;
+import com.example.zippy.R;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDate;
+
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class CourseDetailsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    //new for course details purpose
+    FirebaseDatabase rootNode;
+    DatabaseReference referenceAttendance;
+
     SharedPreferences mPrefs;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
 
+    TextView txtViewCoursePassCode;
     Button studentDetailsbtn, attendancebtn;
-    //done
+
+    LocalDate datetoday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,32 +57,40 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        menuHelperClass.handle();
 
+        datetoday = LocalDate.now();
+
+        txtViewCoursePassCode = findViewById(R.id.txtviewcoursepasscode);
         studentDetailsbtn = findViewById(R.id.studentdetailsbtn);
         attendancebtn = findViewById(R.id.attendance);
+
+        txtViewCoursePassCode.setText(clickedCoursePassCode);
+
         studentDetailsbtn.setOnClickListener(v -> {
             startActivity(new Intent(CourseDetailsActivity.this, StudentDetailsActivity.class));
         });
         attendancebtn.setOnClickListener(v -> {
-            startActivity(new Intent(CourseDetailsActivity.this, AttendanceTakingActivity.class));
+            rootNode = FirebaseDatabase.getInstance();
+            referenceAttendance = rootNode.getReference("attendanceRecord/perDay/"+clickedCoursePassCode+"/"+datetoday);
+            referenceAttendance.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        Toast.makeText(getApplicationContext(), "Attendance already taken for today.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        startActivity(new Intent(CourseDetailsActivity.this, AttendanceTakingActivity.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
         });
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
-                return true;
-            case R.id.menuexit:
-                MenuHelperClass.exit(this);
-                return true;
-            case R.id.menulogout:
-                MenuHelperClass.signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

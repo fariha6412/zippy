@@ -1,4 +1,4 @@
-package com.example.zippy;
+package com.example.zippy.ui.course;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.zippy.R;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
@@ -48,6 +49,8 @@ public class CourseEnrollActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_enroll);
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        menuHelperClass.handle();
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -158,23 +161,6 @@ public class CourseEnrollActivity extends AppCompatActivity {
                 }
             });
         });
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
-                return true;
-            case R.id.menuexit:
-                MenuHelperClass.exit(this);
-                return true;
-            case R.id.menulogout:
-                MenuHelperClass.signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
     //internet related stuff
     @Override

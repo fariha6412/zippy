@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
+        <activity android:name=".ui.attendance.AttendanceDetailsActivity"></activity>
+        <activity android:name=".ui.setting.SettingsActivity" />
+        <activity android:name=".ui.chat.ChatActivity" />
+        <activity android:name=".ui.search.SearchActivity" />
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize">
@@ -26,12 +30,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CourseEnrollActivity"
+            android:name=".ui.course.CourseEnrollActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".CourseCreationActivity"
+            android:name=".ui.course.CourseCreationActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".AttendanceTakingActivity" />
+        <activity android:name=".ui.attendance.AttendanceTakingActivity" />
         <activity android:name=".ui.profile.StudentProfileActivity" />
         <activity android:name=".ui.profile.InstructorProfileActivity" />
         <activity android:name=".ui.change.ChangeProfilePictureActivity" />
@@ -41,14 +45,14 @@
         <activity
             android:name=".ui.register.RegisterInstructorActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".ChooseAccountTypeActivity" />
-        <activity android:name=".SplashActivity" />
-        <activity android:name=".CourseEvaluationActivity" />
-        <activity android:name=".StudentDetailsActivity" />
-        <activity android:name=".CourseDetailsActivity" />
-        <activity android:name=".AboutActivity" />
+        <activity android:name=".ui.register.ChooseAccountTypeActivity" />
+        <activity android:name=".ui.extras.SplashActivity" />
+        <activity android:name=".ui.course.CourseEvaluationActivity" />
+        <activity android:name=".ui.course.StudentDetailsActivity" />
+        <activity android:name=".ui.course.CourseDetailsActivity" />
+        <activity android:name=".ui.extras.AboutActivity" />
         <activity
-            android:name=".TestCreationActivity"
+            android:name=".ui.test.TestCreationActivity"
             android:windowSoftInputMode="adjustResize" />
     </application>
 

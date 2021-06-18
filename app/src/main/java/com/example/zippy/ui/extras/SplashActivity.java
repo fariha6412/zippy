@@ -1,13 +1,13 @@
-package com.example.zippy;
+package com.example.zippy.ui.extras;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Button;
 
-import kotlinx.coroutines.Delay;
+import com.example.zippy.R;
+import com.example.zippy.ui.register.ChooseAccountTypeActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
 
         getStarted = findViewById(R.id.getstartedbtn);
         getStarted.setOnClickListener(v -> {
-            Intent intent=new Intent(SplashActivity.this,ChooseAccountTypeActivity.class);
+            Intent intent=new Intent(SplashActivity.this, ChooseAccountTypeActivity.class);
             startActivity(intent);
             finish();
         });

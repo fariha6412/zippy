@@ -20,15 +20,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.zippy.CourseDetailsActivity;
-import com.example.zippy.CourseEnrollActivity;
-import com.example.zippy.CourseEvaluationActivity;
+import com.example.zippy.ui.course.CourseEnrollActivity;
+import com.example.zippy.ui.course.CourseEvaluationActivity;
 import com.example.zippy.R;
+import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.CourseCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -69,23 +70,6 @@ public class StudentProfileActivity extends AppCompatActivity{
         setContentView(R.layout.activity_student_profile);
         showProfile();
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
-                return true;
-            case R.id.menuexit:
-                MenuHelperClass.exit(this);
-                return true;
-            case R.id.menulogout:
-                MenuHelperClass.signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
@@ -107,10 +91,20 @@ public class StudentProfileActivity extends AppCompatActivity{
         referenceStudent = rootNode.getReference("students/"+ user.getUid());
 
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-
         setSupportActionBar(mtoolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        menuHelperClass.handle();
 
-        referenceStudent.addValueEventListener(new ValueEventListener() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
+        //bottomNavigationView.performClick();
+        BottomNavigationHelper bottomNavigationHelper = new BottomNavigationHelper(bottomNavigationView, this);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+        bottomNavigationHelper.handle();
+        //bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
+
+        referenceStudent.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
@@ -133,8 +127,9 @@ public class StudentProfileActivity extends AppCompatActivity{
                             for(DataSnapshot dsnap:snapshot.getChildren()){
                                 String coursePassCode = (String) dsnap.getValue();
                                 courseList.clear();
+                                //initRecyclerView();
                                 referenceCourse = rootNode.getReference("courses/"+coursePassCode);
-                                referenceCourse.addValueEventListener(new ValueEventListener() {
+                                referenceCourse.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                         CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);

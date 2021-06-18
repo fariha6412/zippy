@@ -1,12 +1,14 @@
-package com.example.zippy;
+package com.example.zippy.ui.course;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.zippy.R;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.AttendanceCustomAdapter;
@@ -41,6 +44,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
     private ArrayList<String> studentUids;
     private ArrayList<String> studentNames;
+    private ArrayList<String> studentRegistrationNos;
 
     private TextView txtViewTotalStudent;
 
@@ -58,9 +62,12 @@ public class StudentDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_details);
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        menuHelperClass.handle();
 
         studentUids = new ArrayList<>();
-        studentNames = new ArrayList<String>();
+        studentNames = new ArrayList<>();
+        studentRegistrationNos = new ArrayList<>();
         txtViewTotalStudent = findViewById(R.id.txtviewtotalstudent);
 
         //new for saving logged user type and clicked course
@@ -100,6 +107,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                                         if(studentHelper!=null){
                                             studentUids.add(studentUid);
                                             studentNames.add(studentHelper.getFullName());
+                                            studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
                                             initRecyclerView();
                                         }
                                     }
@@ -131,7 +139,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new StudentCustomAdapter(studentNames);
+        adapter = new StudentCustomAdapter(studentNames, studentRegistrationNos);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -143,26 +151,21 @@ public class StudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDeleteClick(int position) {
                 //delete showing a alert dialog
-                //removeItem(position);
+                new AlertDialog.Builder(StudentDetailsActivity.this)
+                        .setTitle("Message")
+                        .setMessage("Do you want to remove " + studentNames.get(position) + "?")
+                        .setNegativeButton("NO", null)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                unrollStudent(position);
+                            }
+                        }).create().show();
             }
         });
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
-                return true;
-            case R.id.menuexit:
-                MenuHelperClass.exit(this);
-                return true;
-            case R.id.menulogout:
-                MenuHelperClass.signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    private void unrollStudent(int position){
+        //
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

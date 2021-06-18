@@ -1,4 +1,4 @@
-package com.example.zippy;
+package com.example.zippy.ui.course;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.zippy.R;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
@@ -50,6 +51,8 @@ public class CourseCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_creation);
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        menuHelperClass.handle();
 
         edtTXTCourseCode = findViewById(R.id.edittxtcoursecode);
         edtTXTCourseTitle = findViewById(R.id.edittxtcoursetitle);
@@ -106,6 +109,19 @@ public class CourseCreationActivity extends AppCompatActivity {
             if(ValidationChecker.isFieldEmpty(courseTitle, edtTXTCourseTitle))return;
             if(ValidationChecker.isFieldEmpty(courseYear, editTXTCourseYear))return;
             if(ValidationChecker.isFieldEmpty(courseCredit, editTXTCourseCredit))return;
+            try {
+                double courseCreditDbl = Double.parseDouble(courseCredit);
+                if(courseCreditDbl>4 || courseCreditDbl<0.5){
+                    editTXTCourseCredit.setError("Enter a valid courseCredit");
+                    editTXTCourseCredit.requestFocus();
+                    return;
+                }
+            }
+            catch (Exception e){
+                editTXTCourseCredit.setError("Enter a Floating point number");
+                editTXTCourseCredit.requestFocus();
+                return;
+            }
             if(coursePassCode.isEmpty()){
                 coursePassCode = createNewPassCode();
                 editTXTCoursePassCode.setText(coursePassCode);
@@ -167,23 +183,6 @@ public class CourseCreationActivity extends AppCompatActivity {
                 .usePunctuation(true)
                 .build();
         return passwordGenerator.generate(8);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
-                return true;
-            case R.id.menuexit:
-                MenuHelperClass.exit(this);
-                return true;
-            case R.id.menulogout:
-                MenuHelperClass.signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
     //internet related stuff
     @Override

@@ -86,4 +86,8 @@
     <string name="date_today">Date Today</string>
     <string name="today">2021–6–14</string>
     <string name="str_today">"Today: "</string>
+    <string name="str_done">Done</string>
+    <string name="str_total_day">Total Day</string>
+    <string name="str_attendance_list">Attendance List</string>
+    <string name="str_date">Date</string>
 </resources>

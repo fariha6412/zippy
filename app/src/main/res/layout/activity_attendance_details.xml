@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.course.StudentDetailsActivity">
+    tools:context=".ui.attendance.AttendanceDetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"
@@ -48,11 +48,11 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txtviewheadertotalStudent"
+                    android:id="@+id/txtviewheadertotalday"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_total_student"
+                    android:text="@string/str_total_day"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/black"
                     android:textStyle="normal"
@@ -61,7 +61,7 @@
 
 
                 <TextView
-                    android:id="@+id/txtviewtotalstudent"
+                    android:id="@+id/txtviewtotalday"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -76,12 +76,12 @@
 
 
             <TextView
-                android:id="@+id/txtviewstudentheader"
+                android:id="@+id/txtviewattendanceheader"
                 style="@style/Widget.AppCompat.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/str_student_list"
+                android:text="@string/str_attendance_list"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@color/black"

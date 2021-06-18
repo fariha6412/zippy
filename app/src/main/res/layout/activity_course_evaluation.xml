@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CourseEvaluationActivity">
+    tools:context=".ui.course.CourseEvaluationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"
@@ -85,10 +85,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_0"
+                    android:inputType="text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/black"
                     android:textStyle="normal"
-                    android:textSize="@dimen/little_title"/>
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
 
             </LinearLayout>
 
@@ -115,10 +117,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_0"
+                    android:inputType="text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/black"
                     android:textStyle="normal"
-                    android:textSize="@dimen/little_title"/>
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
 
             </LinearLayout>
 
@@ -126,10 +130,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:background="@color/browser_actions_bg_grey"
+                android:layout_marginTop="10dp"
+                android:id="@+id/attendanceLayout"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:id="@+id/txtviewstrattendanceparcentage"
+                    android:id="@+id/txtviewstrattendancepercentage"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
@@ -140,15 +148,17 @@
                     android:textSize="@dimen/little_title"/>
 
                 <TextView
-                    android:id="@+id/txtviewattendanceparcentage"
+                    android:id="@+id/txtviewattendancepercentage"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_0percent"
+                    android:inputType="text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/black"
                     android:textStyle="normal"
-                    android:textSize="@dimen/little_title"/>
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
 
             </LinearLayout>
 
@@ -175,10 +185,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_null"
+                    android:inputType="text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/black"
                     android:textStyle="normal"
-                    android:textSize="@dimen/little_title"/>
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
 
             </LinearLayout>
 

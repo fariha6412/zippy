@@ -1,6 +1,5 @@
-package com.example.zippy;
+package com.example.zippy.ui.register;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,15 +7,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.zippy.MainActivity;
+import com.example.zippy.R;
 import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.ui.change.ChangeProfilePictureActivity;
-import com.example.zippy.ui.register.RegisterInstructorActivity;
-import com.example.zippy.ui.register.RegisterStudentActivity;
-import com.google.firebase.auth.FirebaseAuth;
 
 
 public class ChooseAccountTypeActivity extends AppCompatActivity {

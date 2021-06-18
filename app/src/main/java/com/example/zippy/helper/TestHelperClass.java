@@ -1,14 +1,16 @@
 package com.example.zippy.helper;
 
 public class TestHelperClass {
-    String testTitle, question;
-    Long totalMarks;
+    String testTitle, question, gradingScale, markSheet;
+    Long totalMark;
     Double convertTo;
 
-    public TestHelperClass(String testTitle, String question, Long totalMarks, Double convertTo) {
+    public TestHelperClass(String testTitle, Long totalMarks, Double convertTo, String question) {
         this.testTitle = testTitle;
         this.question = question;
-        this.totalMarks = totalMarks;
+        this.gradingScale = "";
+        this.markSheet = "";
+        this.totalMark = totalMarks;
         this.convertTo = convertTo;
     }
 
@@ -28,12 +30,28 @@ public class TestHelperClass {
         this.question = question;
     }
 
-    public Long getTotalMarks() {
-        return totalMarks;
+    public String getGradingScale() {
+        return gradingScale;
     }
 
-    public void setTotalMarks(Long totalMarks) {
-        this.totalMarks = totalMarks;
+    public void setGradingScale(String gradingScale) {
+        this.gradingScale = gradingScale;
+    }
+
+    public String getMarkSheet() {
+        return markSheet;
+    }
+
+    public void setMarkSheet(String markSheet) {
+        this.markSheet = markSheet;
+    }
+
+    public Long getTotalMark() {
+        return totalMark;
+    }
+
+    public void setTotalMark(Long totalMark) {
+        this.totalMark = totalMark;
     }
 
     public Double getConvertTo() {
@@ -49,7 +67,9 @@ public class TestHelperClass {
         return "TestHelperClass{" +
                 "testTitle='" + testTitle + '\'' +
                 ", question='" + question + '\'' +
-                ", totalMarks=" + totalMarks +
+                ", gradingScale='" + gradingScale + '\'' +
+                ", markSheet='" + markSheet + '\'' +
+                ", totalMarks=" + totalMark +
                 ", convertTo=" + convertTo +
                 '}';
     }

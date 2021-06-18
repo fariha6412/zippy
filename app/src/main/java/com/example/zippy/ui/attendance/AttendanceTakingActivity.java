@@ -1,6 +1,7 @@
-package com.example.zippy;
+package com.example.zippy.ui.attendance;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,12 +17,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.zippy.R;
 import com.example.zippy.helper.AttendanceCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +39,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class AttendanceTakingActivity extends AppCompatActivity {
@@ -44,12 +51,19 @@ public class AttendanceTakingActivity extends AppCompatActivity {
     String clickedCoursePassCode;
 
     private ArrayList<String> studentUids;
+    private ArrayList<Integer> presentCheckedPositions;
+    private Map<String, Boolean> attendance;
+    private Map<String, Long> prePresentTotal;
+    private Map<String, Long> preAbsentTotal;
     private ArrayList<String> studentNames;
+    private ArrayList<String> studentRegistrationNos;
 
     private TextView txtViewDateToday;
+    private Button donebtn;
+    private ProgressBar loading;
 
     FirebaseDatabase rootNode;
-    DatabaseReference referenceEnrolledStudents, referenceCourse, referenceStudent;
+    DatabaseReference referenceEnrolledStudents, referenceCourse, referenceStudent, referenceStudentCourseAttendance, referenceTotal, referenceAttendance;
 
     RecyclerView recyclerView;
     AttendanceCustomAdapter adapter;
@@ -62,18 +76,37 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_attendance_taking);
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        menuHelperClass.handle();
 
+        donebtn = findViewById(R.id.btndone);
+        loading = findViewById(R.id.loading);
         txtViewDateToday = findViewById(R.id.txtviewdatetoday);
         txtViewDateToday.setText(datetoday.toString());
 
         studentUids = new ArrayList<>();
-        studentNames = new ArrayList<String>();
-        //new for saving logged user type and clicked course
+        studentNames = new ArrayList<>();
+        studentRegistrationNos = new ArrayList<>();
+        presentCheckedPositions = new ArrayList<>();
+        attendance = new HashMap<>();
+        prePresentTotal = new HashMap<>();
+        preAbsentTotal = new HashMap<>();
+
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
 
         System.out.println(clickedCoursePassCode);
         showlist();
+        extractPreviousAttendanceRecord();
+        donebtn.setOnClickListener(v -> {
+            loading.setVisibility(View.VISIBLE);
+            recordAttendance();
+            System.out.println(attendance);
+            writeToDatabase();
+            Toast.makeText(getApplicationContext(), "Done for today.", Toast.LENGTH_SHORT).show();
+            loading.setVisibility(View.INVISIBLE);
+            finish();
+        });
     }
 
     private void showlist() {
@@ -92,6 +125,8 @@ public class AttendanceTakingActivity extends AppCompatActivity {
                     referenceEnrolledStudents.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                            studentUids.clear();
+                            studentNames.clear();
                             for (DataSnapshot dsnap : dataSnapshot.getChildren()) {
                                 System.out.println(dsnap.getValue());
 
@@ -104,6 +139,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
                                         if (studentHelper != null) {
                                             studentUids.add(studentUid);
                                             studentNames.add(studentHelper.getFullName());
+                                            studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
                                             initRecyclerView();
                                         }
                                     }
@@ -130,38 +166,92 @@ public class AttendanceTakingActivity extends AppCompatActivity {
             }
         });
     }
+    private void recordAttendance(){
+        for (int i = 0; i < studentUids.size(); i++){
+            if(presentCheckedPositions.contains(i))attendance.put(studentUids.get(i), true);
+            else attendance.put(studentUids.get(i), false);
+        }
+    }
+    private void extractPreviousAttendanceRecord(){
+        referenceEnrolledStudents = rootNode.getReference("courses/" + clickedCoursePassCode + "/students");
+        referenceEnrolledStudents.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot dsnap:snapshot.getChildren()){
+                    String studentUid = (String) dsnap.getValue();
+                    referenceTotal = rootNode.getReference("attendanceRecord/total/"+clickedCoursePassCode+"/"+studentUid);
+                    referenceTotal.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                Long totalPresent = (Long) dataSnapshot.child("totalPresent").getValue();
+                                Long totalAbsent = (Long) dataSnapshot.child("totalAbsent").getValue();
+                                prePresentTotal.put(studentUid, totalPresent);
+                                preAbsentTotal.put(studentUid, totalAbsent);
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void writeToDatabase(){
+        referenceAttendance = rootNode.getReference("attendanceRecord/perDay/"+clickedCoursePassCode);
+        referenceAttendance.child(String.valueOf(datetoday)).setValue(attendance, (error, ref) -> System.err.println("Value was set. Error = "+error));
+        referenceEnrolledStudents = rootNode.getReference("courses/" + clickedCoursePassCode + "/students");
+        referenceEnrolledStudents.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot dsnap:snapshot.getChildren()){
+                    String studentUid = (String) dsnap.getValue();
+                    referenceTotal = rootNode.getReference("attendanceRecord/total/"+clickedCoursePassCode+"/"+studentUid);
+                    Long presentStatus = 0L;
+                    Long absentStatus = 0L;
+                    if(attendance.get(studentUid))presentStatus = 1L;
+                    else absentStatus = 1L;
+                    System.out.println(presentStatus);
+                    if(prePresentTotal.containsKey(studentUid)){
+                        referenceTotal.child("totalPresent").setValue(prePresentTotal.get(studentUid) + presentStatus);
+                        referenceTotal.child("totalAbsent").setValue(preAbsentTotal.get(studentUid) + absentStatus);
+                    }
+                    else{
+                        referenceTotal.child("totalPresent").setValue(presentStatus);
+                        referenceTotal.child("totalAbsent").setValue(absentStatus);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
     private void initRecyclerView() {
         recyclerView = findViewById(R.id.recylerview);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new AttendanceCustomAdapter(studentNames);
+        adapter = new AttendanceCustomAdapter(studentNames, studentRegistrationNos);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         adapter.setOnItemClickListener(position -> {
             //record as present
             //givePresent(position);
+            if(presentCheckedPositions.contains(position))presentCheckedPositions.remove(Integer.valueOf(position));
+            else presentCheckedPositions.add(position);
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
-                return true;
-            case R.id.menuexit:
-                MenuHelperClass.exit(this);
-                return true;
-            case R.id.menulogout:
-                MenuHelperClass.signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

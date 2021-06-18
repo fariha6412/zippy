@@ -1,8 +1,10 @@
-package com.example.zippy;
+package com.example.zippy.ui.extras;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageButton;
+
+import com.example.zippy.R;
 
 public class AboutActivity extends AppCompatActivity {
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CourseCreationActivity">
+    tools:context=".ui.course.CourseCreationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"
@@ -118,7 +118,7 @@
                 android:ems="10"
                 android:hint="@string/str_course_credit"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="number"
                 android:padding="10dp"
                 android:paddingStart=".1in"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"

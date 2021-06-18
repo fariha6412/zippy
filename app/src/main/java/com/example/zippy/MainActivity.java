@@ -22,13 +22,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
+import com.example.zippy.ui.extras.SplashActivity;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.example.zippy.ui.profile.StudentProfileActivity;
+import com.example.zippy.ui.register.ChooseAccountTypeActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean splashScreenShown = mPrefs.getBoolean(splashScreenPref, false);
         if (!splashScreenShown) {
-            Intent intent = new Intent(MainActivity.this,SplashActivity.class);
+            Intent intent = new Intent(MainActivity.this, SplashActivity.class);
             startActivity(intent);
 
             mPrefs.edit().putBoolean(splashScreenPref, true).apply();

@@ -14,7 +14,8 @@ import java.util.ArrayList;
 
 
 public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCustomAdapter.ViewHolder> {
-    private ArrayList<String> studentlist;
+    private ArrayList<String> studentNamelist;
+    private final ArrayList<String> studentRegistrationNolist;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -27,11 +28,13 @@ public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCust
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtViewStudentName;
+        private final TextView txtViewStudentRegistrationNo;
         public CheckBox chkPresentChecker;
 
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             txtViewStudentName = itemView.findViewById(R.id.txtviewstudentname);
+            txtViewStudentRegistrationNo = itemView.findViewById(R.id.txtviewstudentregistrationno);
             chkPresentChecker = itemView.findViewById(R.id.presentcheckercheckbox);
 
             chkPresentChecker.setOnClickListener(new View.OnClickListener() {
@@ -48,8 +51,9 @@ public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCust
         }
     }
 
-    public AttendanceCustomAdapter(ArrayList<String> exampleList) {
-        studentlist = exampleList;
+    public AttendanceCustomAdapter(ArrayList<String> studentNamelist, ArrayList<String> studentRegistrationNolist) {
+        this.studentNamelist = studentNamelist;
+        this.studentRegistrationNolist = studentRegistrationNolist;
     }
 
     @Override
@@ -61,13 +65,15 @@ public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCust
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String currentName = studentlist.get(position);
+        String currentName = studentNamelist.get(position);
+        String currentRegistrationNo = studentRegistrationNolist.get(position);
 
         holder.txtViewStudentName.setText(currentName);
+        holder.txtViewStudentRegistrationNo.setText(currentRegistrationNo);
     }
 
     @Override
     public int getItemCount() {
-        return studentlist.size();
+        return studentNamelist.size();
     }
 }
