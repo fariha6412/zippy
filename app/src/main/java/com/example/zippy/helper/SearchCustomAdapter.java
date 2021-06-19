@@ -56,7 +56,7 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_list, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list, parent, false);
         ViewHolder evh = new ViewHolder(v, mListener);
         return evh;
     }

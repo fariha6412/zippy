@@ -13,12 +13,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
-import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.CourseCustomAdapter;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.SearchCustomAdapter;
+import com.example.zippy.R;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
@@ -75,40 +76,46 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
-                    String studentUid = (String) dsnap.getValue();
+                    String studentUid = (String) dsnap.getKey();
                     studentsUids.add(studentUid);
 
                     System.out.println(studentUid);
-                    ref = FirebaseDatabase.getInstance().getReference("students/"+studentUid);
-                    ref.addValueEventListener(new ValueEventListener() {
+                    userFullNameList.add(dsnap.getValue(StudentHelperClass.class).getFullName());
+                }
+                System.out.println(userFullNameList.toString());
+                //initRecyclerView();
+                if(searchView != null){
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                userFullNameList.add(dataSnapshot.getValue(StudentHelperClass.class).getFullName());
-                            }
+                        public boolean onQueryTextSubmit(String query) {
+                            Search(query);
+                            return false;
                         }
 
                         @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                        public boolean onQueryTextChange(String newText) {
+                            Search(newText);
+                            return false;
                         }
                     });
                 }
-                System.out.println(userFullNameList.toString());
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
             }
+
         });
+        System.out.println("baire");
     }
-    private void initRecyclerView(){
-        recyclerView = findViewById(R.id.recylerview);
+
+    private void initRecyclerView(ArrayList<String> list){
+        recyclerView = findViewById(R.id.recyclerviewsearch);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new SearchCustomAdapter(userFullNameList);
+        adapter = new SearchCustomAdapter(list);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -116,7 +123,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 //start profile
-                }
+            }
         });
     }
     public boolean onCreateOptionsMenu(Menu menu){
@@ -124,6 +131,21 @@ public class SearchActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
+
+
+    private void Search(String str){
+
+        ArrayList<String> list = new ArrayList<>();
+        for(String element : userFullNameList){
+            if(element.toLowerCase().contains(str.toLowerCase())){
+                list.add(element);
+            }
+        }
+        //SearchCustomAdapter adapter = new SearchCustomAdapter(List);
+        //recyclerView.setAdapter(adapter);
+        initRecyclerView(list);
+    }
+
     @Override
     protected void onStart() {
         IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -139,4 +161,6 @@ public class SearchActivity extends AppCompatActivity {
     public void onBackPressed() {
         BottomNavigationHelper.backToProfile(bottomNavigationView, this);
     }
+
+
 }

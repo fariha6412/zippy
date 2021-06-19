@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.attendance.AttendanceDetailsActivity"></activity>
+        <activity android:name=".ui.attendance.AttendanceDetailsActivity" />
         <activity android:name=".ui.setting.SettingsActivity" />
         <activity android:name=".ui.chat.ChatActivity" />
         <activity android:name=".ui.search.SearchActivity" />
