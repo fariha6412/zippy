@@ -8,22 +8,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.zippy.MainActivity;
 import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.CourseCustomAdapter;
+import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.SearchCustomAdapter;
 import com.example.zippy.R;
 import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.ui.profile.CommonUserProfileActivity;
 import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,15 +45,21 @@ public class SearchActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     BottomNavigationView bottomNavigationView;
 
+    SharedPreferences mPrefs;
+    final String strClickedUid = "clickedUid";
+    String clickedUid;
+
     SearchView searchView;
     RecyclerView recyclerView;
     SearchCustomAdapter adapter;
     LinearLayoutManager layoutManager;
 
+    FirebaseAuth auth;
+    FirebaseUser user;
     FirebaseDatabase rootNode;
     DatabaseReference refStudents, refInstructors, ref;
     ArrayList<String> userFullNameList;
-    ArrayList<String> studentsUids;
+    ArrayList<String> usersUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +76,14 @@ public class SearchActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchview);
         recyclerView = findViewById(R.id.recyclerviewsearch);
         userFullNameList = new ArrayList<>();
-        studentsUids = new ArrayList<>();
+        usersUid = new ArrayList<>();
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        clickedUid = mPrefs.getString(strClickedUid, "");
 
         rootNode = FirebaseDatabase.getInstance();
         refStudents = rootNode.getReference("students");
+        refInstructors = rootNode.getReference("instructors");
 
         getUserList();
     }
@@ -77,28 +94,44 @@ public class SearchActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
                     String studentUid = (String) dsnap.getKey();
-                    studentsUids.add(studentUid);
+                    usersUid.add(studentUid);
 
-                    System.out.println(studentUid);
+                    //System.out.println(studentUid);
                     userFullNameList.add(dsnap.getValue(StudentHelperClass.class).getFullName());
                 }
-                System.out.println(userFullNameList.toString());
-                //initRecyclerView();
-                if(searchView != null){
-                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                        @Override
-                        public boolean onQueryTextSubmit(String query) {
-                            Search(query);
-                            return false;
-                        }
+                refInstructors.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot dsnap: dataSnapshot.getChildren()){
+                            String instructorUid = (String) dsnap.getKey();
+                            usersUid.add(instructorUid);
 
-                        @Override
-                        public boolean onQueryTextChange(String newText) {
-                            Search(newText);
-                            return false;
+                            System.out.println(instructorUid);
+                            userFullNameList.add(dsnap.getValue(InstructorHelperClass.class).getFullName());
+
                         }
-                    });
-                }
+                        if(searchView != null){
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    Search(query);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    Search(newText);
+                                    return false;
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -107,15 +140,15 @@ public class SearchActivity extends AppCompatActivity {
             }
 
         });
-        System.out.println("baire");
+        //System.out.println("baire");
     }
 
-    private void initRecyclerView(ArrayList<String> list){
+    private void initRecyclerView(ArrayList<String> nameList, ArrayList<String> uidList){
         recyclerView = findViewById(R.id.recyclerviewsearch);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new SearchCustomAdapter(list);
+        adapter = new SearchCustomAdapter(nameList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -123,6 +156,14 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 //start profile
+                mPrefs.edit().putString(strClickedUid, uidList.get(position)).apply();
+                auth = FirebaseAuth.getInstance();
+                user = auth.getCurrentUser();
+                assert user != null;
+                if(user.getUid().equals(uidList.get(position))){
+                    startActivity(new Intent(SearchActivity.this, MainActivity.class));
+                }
+                else startActivity(new Intent(SearchActivity.this, CommonUserProfileActivity.class));
             }
         });
     }
@@ -135,15 +176,19 @@ public class SearchActivity extends AppCompatActivity {
 
     private void Search(String str){
 
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> nameList = new ArrayList<>();
+        ArrayList<String> uidList = new ArrayList<>();
+        int i = 0;
         for(String element : userFullNameList){
             if(element.toLowerCase().contains(str.toLowerCase())){
-                list.add(element);
+                nameList.add(element);
+                uidList.add(usersUid.get(i));
             }
+            i++;
         }
         //SearchCustomAdapter adapter = new SearchCustomAdapter(List);
         //recyclerView.setAdapter(adapter);
-        initRecyclerView(list);
+        initRecyclerView(nameList, uidList);
     }
 
     @Override

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.profile.CommonUserProfileActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mtoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/appbarColor"
+            app:titleMarginStart="1in"
+            app:titleTextColor="@color/white"
+            tools:ignore="InOrMmUsage">
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginTop="70dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            android:padding="10dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/profile_img_bg"
+                android:layout_height="@dimen/profile_img_bg"
+                app:cardCornerRadius="250dp"
+                app:cardBackgroundColor="@color/appbarColor"
+                android:layout_gravity="center_horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="@dimen/profile_img"
+                    android:layout_height="@dimen/profile_img"
+                    app:cardCornerRadius="250dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imgview"
+                        android:layout_width="@dimen/profile_img"
+                        android:layout_height="@dimen/profile_img"
+                        android:src="@drawable/ic_baseline_perm_identity_24"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/str_img_des" />
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.cardview.widget.CardView>
+
+            <ScrollView
+                android:id="@+id/ScrollView"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtview"
+                    android:textSize="@dimen/little_title"
+                    android:textColor="@color/black"
+                    android:lineSpacingExtra="5dp"
+                    android:padding="10dp"
+                    android:textIsSelectable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </ScrollView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/chatbtn"
+                android:tint="@color/appbarColor"
+                android:backgroundTint="@color/browser_actions_bg_grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_chat_24"
+                android:layout_gravity="bottom|end"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"/>
+
+        </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -24,6 +25,7 @@ import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.AttendanceCustomAdapter;
 import com.example.zippy.helper.StudentCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.ui.profile.CommonUserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +43,8 @@ public class StudentDetailsActivity extends AppCompatActivity {
     SharedPreferences mPrefs;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     String clickedCoursePassCode;
+    final String strClickedUid = "clickedUid";
+    String clickedUid;
 
     private ArrayList<String> studentUids;
     private ArrayList<String> studentNames;
@@ -73,6 +77,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         //new for saving logged user type and clicked course
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
+        clickedUid = mPrefs.getString(strClickedUid, "");
 
         System.out.println(clickedCoursePassCode);
         showlist();
@@ -147,6 +152,8 @@ public class StudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 //show profile of the student
+                mPrefs.edit().putString(strClickedUid, studentUids.get(position)).apply();
+                startActivity(new Intent(StudentDetailsActivity.this, CommonUserProfileActivity.class));
             }
             @Override
             public void onDeleteClick(int position) {

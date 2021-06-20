@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MyFirebaseMessagingService;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.extras.SplashActivity;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar loading;
     private FirebaseAuth auth;
     FirebaseDatabase rootNode;
-    DatabaseReference referenceStudent, referenceInstructor;
+    DatabaseReference referenceStudent, referenceInstructor, referenceToken;
 
     ////new changes for splash
     SharedPreferences mPrefs;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
+        //MyFirebaseMessagingService.getToken(MainActivity.this);
 
         ////new changes for splash
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -205,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                                     rootNode = FirebaseDatabase.getInstance();
                                     referenceStudent = rootNode.getReference("students/"+ user.getUid());
                                     referenceInstructor = rootNode.getReference("instructors/"+ user.getUid());
+                                    referenceToken = rootNode.getReference("tokens");
 
                                     referenceStudent.addValueEventListener(new ValueEventListener() {
                                         @Override

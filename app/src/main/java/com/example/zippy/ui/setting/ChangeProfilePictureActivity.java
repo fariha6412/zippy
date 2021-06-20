@@ -1,4 +1,4 @@
-package com.example.zippy.ui.change;
+package com.example.zippy.ui.setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 

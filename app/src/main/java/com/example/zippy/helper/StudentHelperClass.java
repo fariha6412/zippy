@@ -78,4 +78,12 @@ public class StudentHelperClass {
                 ", noOfCourses= " + noOfCourses +
                 '}';
     }
+    public @NotNull String showProfileDetails() {
+        return  " Account Type:     Student\n" +
+                " FullName:         " + fullName + '\n' +
+                " Email Address: " + email + '\n' +
+                " Institution:      " + institution + '\n' +
+                " RegistrationNo:   " + registrationNo + '\n' +
+                " NoOfCourses:      " + noOfCourses ;
+    }
 }
