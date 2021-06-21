@@ -58,6 +58,7 @@ public class SearchActivity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseDatabase rootNode;
     DatabaseReference refStudents, refInstructors, ref;
+    ArrayList<String> userImageList;
     ArrayList<String> userFullNameList;
     ArrayList<String> usersUid;
 
@@ -77,6 +78,7 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerviewsearch);
         userFullNameList = new ArrayList<>();
         usersUid = new ArrayList<>();
+        userImageList = new ArrayList<>();
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedUid = mPrefs.getString(strClickedUid, "");
@@ -89,7 +91,7 @@ public class SearchActivity extends AppCompatActivity {
     }
     private void getUserList(){
 
-        refStudents.addValueEventListener(new ValueEventListener() {
+        refStudents.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
@@ -98,8 +100,9 @@ public class SearchActivity extends AppCompatActivity {
 
                     //System.out.println(studentUid);
                     userFullNameList.add(dsnap.getValue(StudentHelperClass.class).getFullName());
+                    userImageList.add(dsnap.getValue(StudentHelperClass.class).getImage());
                 }
-                refInstructors.addValueEventListener(new ValueEventListener() {
+                refInstructors.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                         for(DataSnapshot dsnap: dataSnapshot.getChildren()){
@@ -108,7 +111,7 @@ public class SearchActivity extends AppCompatActivity {
 
                             System.out.println(instructorUid);
                             userFullNameList.add(dsnap.getValue(InstructorHelperClass.class).getFullName());
-
+                            userImageList.add(dsnap.getValue(InstructorHelperClass.class).getImage());
                         }
                         if(searchView != null){
                             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -143,12 +146,12 @@ public class SearchActivity extends AppCompatActivity {
         //System.out.println("baire");
     }
 
-    private void initRecyclerView(ArrayList<String> nameList, ArrayList<String> uidList){
+    private void initRecyclerView(ArrayList<String> nameList, ArrayList<String> uidList, ArrayList<String> imgList){
         recyclerView = findViewById(R.id.recyclerviewsearch);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new SearchCustomAdapter(nameList);
+        adapter = new SearchCustomAdapter(nameList, imgList, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -178,17 +181,19 @@ public class SearchActivity extends AppCompatActivity {
 
         ArrayList<String> nameList = new ArrayList<>();
         ArrayList<String> uidList = new ArrayList<>();
+        ArrayList<String> imgList = new ArrayList<>();
         int i = 0;
         for(String element : userFullNameList){
             if(element.toLowerCase().contains(str.toLowerCase())){
                 nameList.add(element);
                 uidList.add(usersUid.get(i));
+                imgList.add(userImageList.get(i));
             }
             i++;
         }
         //SearchCustomAdapter adapter = new SearchCustomAdapter(List);
         //recyclerView.setAdapter(adapter);
-        initRecyclerView(nameList, uidList);
+        initRecyclerView(nameList, uidList, imgList);
     }
 
     @Override

@@ -39,14 +39,103 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_gravity="center"
-            android:padding="10dp">
+            android:padding="30dp"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/changeprofilepicturebtn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="settings part"/>
+                android:textSize="@dimen/button_txt"
+                android:text="@string/str_change_pic"
+                android:layout_gravity="center_horizontal"
+                app:backgroundTint="@color/course_details_btn"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/changeusernamebtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/button_txt"
+                android:text="@string/str_change_user_name"
+                android:layout_gravity="center_horizontal"
+                app:backgroundTint="@color/course_details_btn"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/changeinstitutionbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/button_txt"
+                android:text="@string/str_change_institution"
+                android:layout_gravity="center_horizontal"
+                app:backgroundTint="@color/course_details_btn"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/changedeisgnationbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/button_txt"
+                android:text="@string/str_chagne_designation"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                app:backgroundTint="@color/course_details_btn"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/changeemployeeidbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/button_txt"
+                android:text="@string/str_chagne_employeeid"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                app:backgroundTint="@color/course_details_btn"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/changeregistrationnobtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/button_txt"
+                android:text="@string/str_chagne_registrationno"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                app:backgroundTint="@color/course_details_btn"
+                android:textColor="@color/black"/>
+
+            <Switch
+                android:id="@+id/profileLockSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:switchMinWidth="56dp"
+                android:text="@string/str_profile_lock"
+                android:checked="false"
+                android:textSize="@dimen/button_txt"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:thumbTint="@color/black"
+                android:trackTint="@color/appbarColor"
+                android:visibility="gone"
+                android:textOff="@string/str_off"
+                android:textOn="@string/str_on"/>
+
+            <Switch
+                android:id="@+id/darkThemeSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:switchMinWidth="56dp"
+                android:text="@string/str_dark_theme"
+                android:checked="false"
+                android:textSize="@dimen/button_txt"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:thumbTint="@color/black"
+                android:trackTint="@color/appbarColor"
+                android:textOff="@string/str_off"
+                android:textOn="@string/str_on"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -62,5 +151,4 @@
         app:itemTextColor="@color/appbarColor"
         app:itemIconTint="@drawable/bottom_navigation_selector"
         app:menu="@menu/bottom_nav_menu" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

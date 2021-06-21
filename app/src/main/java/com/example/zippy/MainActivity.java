@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.helper.InstructorHelperClass;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private EditText editTXTemail, editTXTpassword;
+    private ImageView imgView;
     private ProgressBar loading;
     private FirebaseAuth auth;
     FirebaseDatabase rootNode;
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences mPrefs;
     final String splashScreenPref = "SplashScreenShown";
     final String loggedStatus = "loggedProfile";
+    final String darkThemeStatus = "darkTheme";
     ////done
 
     @Override
@@ -85,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String loggedProfile = mPrefs.getString(loggedStatus, "nouser");
+        Boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
+        if(darkTheme){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         if(user!=null){
             if(loggedProfile.equals("instructor")){
                 startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
@@ -101,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
         editTXTemail = findViewById(R.id.edittxtemail);
         editTXTpassword = findViewById(R.id.edittxtpassword);
         Button loginbtn = findViewById(R.id.btnlogin);
+        imgView = findViewById(R.id.imgview);
+        if(darkTheme){
+            imgView.setVisibility(View.GONE);
+        }
+        else{
+            imgView.setVisibility(View.VISIBLE);
+        }
         TextView txtviewForgotPassword = findViewById(R.id.txtviewforgotpassword);
         loading = findViewById(R.id.loading);
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);

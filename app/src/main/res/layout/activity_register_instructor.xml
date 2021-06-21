@@ -205,7 +205,7 @@
                 android:layout_width="170dp"
                 android:layout_height="match_parent"
                 android:text="@string/have_account"
-                android:textColor="@color/buttonColor"
+                android:textColor="@color/black"
                 tools:ignore="MissingConstraints" />
 
             <TextView

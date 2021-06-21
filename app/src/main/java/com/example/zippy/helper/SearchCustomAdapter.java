@@ -1,12 +1,15 @@
 package com.example.zippy.helper;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.zippy.R;
 
 import java.util.ArrayList;
@@ -14,10 +17,14 @@ import java.util.ArrayList;
 
 public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapter.ViewHolder> {
     private final ArrayList<String> userList;
+    private final ArrayList<String> imgList;
+    private final Activity activity;
     private OnItemClickListener mListener;
 
-    public SearchCustomAdapter(ArrayList<String> userList) {
+    public SearchCustomAdapter(ArrayList<String> userList, ArrayList<String> imgList, Activity activity) {
         this.userList = userList;
+        this.imgList = imgList;
+        this.activity = activity;
     }
 
     public interface OnItemClickListener {
@@ -30,11 +37,13 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtViewFullName;
+        private final ImageView imgView;
 
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             txtViewFullName = itemView.findViewById(R.id.txtviewfullname);
+            imgView = itemView.findViewById(R.id.imgview);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -49,8 +58,9 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
             });
         }
 
-        private void bind(String fullName){
+        private void bind(String fullName, String img, Activity activity){
             txtViewFullName.setText(fullName);
+            Glide.with(activity.getBaseContext()).load(img).into(imgView);
         }
     }
 
@@ -63,7 +73,7 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(userList.get(position));
+        holder.bind(userList.get(position), imgList.get(position), activity);
     }
 
     @Override
