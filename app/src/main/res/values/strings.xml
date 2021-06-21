@@ -90,4 +90,6 @@
     <string name="str_total_day">Total Day</string>
     <string name="str_attendance_list">Attendance List</string>
     <string name="str_date">Date</string>
+    <string name="str_upload_marksheet">Uplaod Mark Sheet</string>
+    <string name="str_upload_question">Upload Question</string>
 </resources>

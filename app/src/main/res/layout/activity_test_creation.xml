@@ -82,10 +82,9 @@
                 android:ems="10"
                 android:hint="@string/str_total_mark"
                 android:importantForAutofill="no"
-                android:inputType="textEmailAddress"
+                android:inputType="number"
                 android:padding="10dp"
                 android:paddingStart=".1in"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 android:layout_gravity="center_horizontal"
@@ -100,7 +99,7 @@
                 android:ems="10"
                 android:hint="@string/str_convertto"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="number"
                 android:padding="10dp"
                 android:paddingStart=".1in"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -118,12 +117,48 @@
                 android:layout_width="@dimen/edit_txt_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/str_upload"
+                android:text="@string/str_upload_question"
                 android:typeface="normal"
                 android:textSize="@dimen/button_txt"
                 app:backgroundTint="@color/buttonColor"
+                android:drawableTint="@color/button_txt_color"
+                android:drawableEnd="@drawable/ic_baseline_attach_file_24"
                 android:textColor="@color/button_txt_color"
                 android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/uploadquestionfilename"
+                android:layout_width="@dimen/edit_txt_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_border"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                app:drawableEndCompat="@drawable/ic_baseline_cancel_24"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/uploadmarksheetbtn"
+                android:layout_width="@dimen/edit_txt_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/str_upload_marksheet"
+                android:typeface="normal"
+                android:textSize="@dimen/button_txt"
+                android:drawableEnd="@drawable/ic_baseline_attach_file_24"
+                app:backgroundTint="@color/buttonColor"
+                android:textColor="@color/button_txt_color"
+                android:drawableTint="@color/button_txt_color"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/uploadmarksheetfilename"
+                android:layout_width="@dimen/edit_txt_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_border"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:visibility="gone"
+                app:drawableEndCompat="@drawable/ic_baseline_cancel_24" />
 
             <Button
                 android:id="@+id/submitbtn"

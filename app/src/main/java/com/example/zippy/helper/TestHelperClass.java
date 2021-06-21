@@ -1,17 +1,30 @@
 package com.example.zippy.helper;
 
+import org.jetbrains.annotations.NotNull;
+
 public class TestHelperClass {
-    String testTitle, question, gradingScale, markSheet;
+    String testTitle;
+    String questionPdfUrl;
+    String markSheet;
     Long totalMark;
     Double convertTo;
 
+    public TestHelperClass(){}
+
     public TestHelperClass(String testTitle, Long totalMarks, Double convertTo, String question) {
         this.testTitle = testTitle;
-        this.question = question;
-        this.gradingScale = "";
+        this.questionPdfUrl = question;
         this.markSheet = "";
         this.totalMark = totalMarks;
         this.convertTo = convertTo;
+    }
+
+    public TestHelperClass(String testTitle, Long totalMark, Double convertTo) {
+        this.testTitle = testTitle;
+        this.totalMark = totalMark;
+        this.convertTo = convertTo;
+        this.questionPdfUrl = "";
+        this.markSheet = "";
     }
 
     public String getTestTitle() {
@@ -23,19 +36,11 @@ public class TestHelperClass {
     }
 
     public String getQuestion() {
-        return question;
+        return questionPdfUrl;
     }
 
     public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getGradingScale() {
-        return gradingScale;
-    }
-
-    public void setGradingScale(String gradingScale) {
-        this.gradingScale = gradingScale;
+        this.questionPdfUrl = question;
     }
 
     public String getMarkSheet() {
@@ -63,11 +68,10 @@ public class TestHelperClass {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "TestHelperClass{" +
                 "testTitle='" + testTitle + '\'' +
-                ", question='" + question + '\'' +
-                ", gradingScale='" + gradingScale + '\'' +
+                ", question='" + questionPdfUrl + '\'' +
                 ", markSheet='" + markSheet + '\'' +
                 ", totalMarks=" + totalMark +
                 ", convertTo=" + convertTo +

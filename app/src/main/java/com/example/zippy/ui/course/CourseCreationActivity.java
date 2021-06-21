@@ -5,12 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -43,8 +46,8 @@ public class CourseCreationActivity extends AppCompatActivity {
 
     EditText edtTXTCourseCode, edtTXTCourseTitle, editTXTCourseYear, editTXTCoursePassCode, editTXTCourseCredit;
     Button createbtn, cancelbtn;
-    MaterialButton regeneratePassCode;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +64,6 @@ public class CourseCreationActivity extends AppCompatActivity {
         editTXTCourseCredit = findViewById(R.id.edittxtcoursecredit);
         createbtn = findViewById(R.id.createbtn);
         cancelbtn = findViewById(R.id.cancelbtn);
-        regeneratePassCode = findViewById(R.id.regeneratepasscode);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -92,8 +94,20 @@ public class CourseCreationActivity extends AppCompatActivity {
             }
         });
 
-        regeneratePassCode.setOnClickListener(v -> {
-            editTXTCoursePassCode.setText(createNewPassCode());
+        editTXTCoursePassCode.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (editTXTCoursePassCode.getRight() - editTXTCoursePassCode.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        editTXTCoursePassCode.setText(createNewPassCode());
+                        return true;
+                    }
+                }
+                return false;
+            }
         });
 
         createbtn.setOnClickListener(v -> {
@@ -176,13 +190,13 @@ public class CourseCreationActivity extends AppCompatActivity {
 
     }
     public String createNewPassCode(){
-        PassCodeGenerator passwordGenerator = new PassCodeGenerator.PassCodeGeneratorBuilder()
+        PassCodeGenerator passCodeGenerator = new PassCodeGenerator.PassCodeGeneratorBuilder()
                 .useDigits(true)
                 .useLower(true)
                 .useUpper(true)
                 .usePunctuation(true)
                 .build();
-        return passwordGenerator.generate(8);
+        return passCodeGenerator.generate(8);
     }
     //internet related stuff
     @Override

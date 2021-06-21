@@ -20,7 +20,9 @@ import android.widget.Toast;
 import com.example.zippy.ui.attendance.AttendanceTakingActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.ui.test.TestCreationActivity;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +45,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     TextView txtViewCoursePassCode;
     Button studentDetailsbtn, attendancebtn;
+    MaterialButton testCreationBtn;
 
     LocalDate datetoday;
 
@@ -65,8 +68,13 @@ public class CourseDetailsActivity extends AppCompatActivity {
         txtViewCoursePassCode = findViewById(R.id.txtviewcoursepasscode);
         studentDetailsbtn = findViewById(R.id.studentdetailsbtn);
         attendancebtn = findViewById(R.id.attendance);
+        testCreationBtn = findViewById(R.id.testcreationbtn);
 
         txtViewCoursePassCode.setText(clickedCoursePassCode);
+
+        testCreationBtn.setOnClickListener(v -> {
+            startActivity(new Intent(CourseDetailsActivity.this, TestCreationActivity.class));
+        });
 
         studentDetailsbtn.setOnClickListener(v -> {
             startActivity(new Intent(CourseDetailsActivity.this, StudentDetailsActivity.class));
