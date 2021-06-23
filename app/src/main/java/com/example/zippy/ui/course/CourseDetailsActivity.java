@@ -1,10 +1,5 @@
 package com.example.zippy.ui.course;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -15,21 +10,24 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.zippy.helper.TestHelperClass;
-import com.example.zippy.ui.attendance.AttendanceTakingActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.zippy.R;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.TestHelperClass;
+import com.example.zippy.ui.attendance.AttendanceTakingActivity;
 import com.example.zippy.ui.test.TestCreationActivity;
 import com.example.zippy.ui.test.TestDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,25 +43,18 @@ import java.util.ArrayList;
 public class CourseDetailsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceAttendance, referenceTests;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceAttendance;
 
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     String clickedCoursePassCode;
     final String strClickedTestId = "clickedTestId";
     String clickedTestId;
 
-    TextView txtViewCoursePassCode;
-    AutoCompleteTextView autoCompleteTextView;
-    Button studentDetailsbtn, attendancebtn;
-    MaterialButton testCreationBtn;
+    private ArrayList<String> testIds;
 
-    ArrayAdapter<String> adapter;
-    ArrayList<String> testTitles;
-    ArrayList<String> testIds;
-
-    LocalDate datetoday;
+    private LocalDate dateToday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +71,16 @@ public class CourseDetailsActivity extends AppCompatActivity {
         MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
         menuHelperClass.handle();
 
-        datetoday = LocalDate.now();
+        dateToday = LocalDate.now();
 
-        txtViewCoursePassCode = findViewById(R.id.txtviewcoursepasscode);
-        studentDetailsbtn = findViewById(R.id.studentdetailsbtn);
-        attendancebtn = findViewById(R.id.attendance);
-        testCreationBtn = findViewById(R.id.testcreationbtn);
-        autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+        TextView txtViewCoursePassCode = findViewById(R.id.txtviewcoursepasscode);
+        Button studentDetailsBtn = findViewById(R.id.studentdetailsbtn);
+        Button attendanceBtn = findViewById(R.id.attendance);
+        MaterialButton testCreationBtn = findViewById(R.id.testcreationbtn);
+        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
 
         testIds = new ArrayList<>();
-        testTitles = new ArrayList<>();
+        ArrayList<String> testTitles = new ArrayList<>();
 
         TestHelperClass.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
         autoCompleteTextView.setThreshold(0);
@@ -108,12 +99,12 @@ public class CourseDetailsActivity extends AppCompatActivity {
             startActivity(new Intent(CourseDetailsActivity.this, TestCreationActivity.class));
         });
 
-        studentDetailsbtn.setOnClickListener(v -> {
+        studentDetailsBtn.setOnClickListener(v -> {
             startActivity(new Intent(CourseDetailsActivity.this, StudentDetailsActivity.class));
         });
-        attendancebtn.setOnClickListener(v -> {
+        attendanceBtn.setOnClickListener(v -> {
             rootNode = FirebaseDatabase.getInstance();
-            referenceAttendance = rootNode.getReference("attendanceRecord/perDay/"+clickedCoursePassCode+"/"+datetoday);
+            referenceAttendance = rootNode.getReference("attendanceRecord/perDay/"+clickedCoursePassCode+"/"+ dateToday);
             referenceAttendance.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {

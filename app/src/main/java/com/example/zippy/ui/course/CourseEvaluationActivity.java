@@ -1,9 +1,5 @@
 package com.example.zippy.ui.course;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -11,16 +7,17 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.zippy.R;
-import com.example.zippy.helper.AttendanceDetailsAdapter;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.TestHelperClass;
 import com.example.zippy.ui.attendance.AttendanceDetailsActivity;
@@ -47,18 +44,9 @@ public class CourseEvaluationActivity extends AppCompatActivity {
     final String strClickedTestId = "clickedTestId";
     String clickedTestId;
 
-    FirebaseAuth auth;
-    FirebaseUser user;
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceAttendance;
-
-    private LinearLayout attendanceLayout;
-    AutoCompleteTextView autoCompleteTextView;
     private TextView txtViewTotalPresent, txtViewTotalAbsent, txtViewAttendancePercentage, txtViewFinalGrade;
 
-    ArrayAdapter<String> adapter;
-    ArrayList<String> testTitles;
-    ArrayList<String> testIds;
+    private ArrayList<String> testIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +61,15 @@ public class CourseEvaluationActivity extends AppCompatActivity {
         txtViewTotalAbsent = findViewById(R.id.txtviewtotalabsent);
         txtViewAttendancePercentage = findViewById(R.id.txtviewattendancepercentage);
         txtViewFinalGrade = findViewById(R.id.txtviewfinalgrade);
-        attendanceLayout = findViewById(R.id.attendanceLayout);
-        autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+        LinearLayout attendanceLayout = findViewById(R.id.attendanceLayout);
+        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         clickedTestId = mPrefs.getString(strClickedTestId, "");
 
         testIds = new ArrayList<>();
-        testTitles = new ArrayList<>();
+        ArrayList<String> testTitles = new ArrayList<>();
 
         TestHelperClass.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
         autoCompleteTextView.setThreshold(0);
@@ -104,10 +92,10 @@ public class CourseEvaluationActivity extends AppCompatActivity {
         extractData();
     }
     private void extractData(){
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        rootNode = FirebaseDatabase.getInstance();
-        referenceAttendance = rootNode.getReference("attendanceRecord/total/"+clickedCoursePassCode +"/" +user.getUid());
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference referenceAttendance = rootNode.getReference("attendanceRecord/total/" + clickedCoursePassCode + "/" + user.getUid());
         referenceAttendance.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {

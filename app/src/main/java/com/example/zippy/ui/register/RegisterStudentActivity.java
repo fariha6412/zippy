@@ -1,5 +1,6 @@
 package com.example.zippy.ui.register;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 public class RegisterStudentActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    //
     SharedPreferences mPrefs;
     final String loggedStatus = "loggedProfile";
 
@@ -47,16 +48,15 @@ public class RegisterStudentActivity extends AppCompatActivity {
     private EditText editTXTRegistrationNo, editTXTPassword, editTXTRePassword;
     private ProgressBar loading;
     private FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference reference;
-    StudentHelperClass studentHelper;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference reference;
+    private StudentHelperClass studentHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_student);
 
-        //
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         auth = FirebaseAuth.getInstance();
@@ -69,14 +69,14 @@ public class RegisterStudentActivity extends AppCompatActivity {
         editTXTRePassword = findViewById(R.id.edittxtretypepassword);
         loading = findViewById(R.id.loading);
         TextView txtViewLogin = findViewById(R.id.txtviewlogin);
-        Button registerbtn = findViewById(R.id.registerbtn);
+        Button registerBtn = findViewById(R.id.registerbtn);
         String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/student.png?alt=media&token=112e1b57-ec64-4992-b24d-8c9aba3c88f7";
 
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
 
         txtViewLogin.setOnClickListener(v -> startActivity(new Intent(RegisterStudentActivity.this, ChooseAccountTypeActivity.class)));
-        registerbtn.setOnClickListener(v -> {
+        registerBtn.setOnClickListener(v -> {
             String email = editTXTEmail.getText().toString().trim();
             String password = editTXTPassword.getText().toString().trim();
             String rePassword = editTXTRePassword.getText().toString().trim();
@@ -111,15 +111,8 @@ public class RegisterStudentActivity extends AppCompatActivity {
                             reference = rootNode.getReference("students");
                             studentHelper = new StudentHelperClass(image, fullName, email, institution, registrationNo);
 
-                            reference.child(user.getUid()).setValue(studentHelper,new DatabaseReference.CompletionListener(){
+                            reference.child(user.getUid()).setValue(studentHelper, (error, ref) -> System.err.println("Value was set. Error = "+error));
 
-                                @Override
-                                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                    System.err.println("Value was set. Error = "+error);
-                                }
-                            });
-
-                            //
                             mPrefs.edit().putString(loggedStatus,"nouser").apply();
                             startActivity(new Intent(RegisterStudentActivity.this, MainActivity.class));
                         }).addOnFailureListener(e -> {
@@ -128,12 +121,9 @@ public class RegisterStudentActivity extends AppCompatActivity {
                             AuthCredential credential = EmailAuthProvider.getCredential(email, password);
 
                             user.reauthenticate(credential)
-                                    .addOnCompleteListener(task1 -> user.delete()
-                                            .addOnCompleteListener(task11 -> {
-                                                if(task11.isSuccessful()) {
-                                                    //Toast.makeText(RegisterStudentActivity.this, "Deleted User Successfully,", Toast.LENGTH_LONG).show();
-                                                }
-                                            }));
+                                    .addOnCompleteListener(task1 -> //Toast.makeText(RegisterStudentActivity.this, "Deleted User Successfully,", Toast.LENGTH_LONG).show();
+                                            user.delete()
+                                            .addOnCompleteListener(Task::isSuccessful));
                         });
                     } else {
                         Toast.makeText(getApplicationContext(), "Could not Register", Toast.LENGTH_SHORT).show();
@@ -146,6 +136,7 @@ public class RegisterStudentActivity extends AppCompatActivity {
             }
         });
     }
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

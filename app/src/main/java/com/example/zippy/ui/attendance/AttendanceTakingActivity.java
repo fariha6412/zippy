@@ -1,7 +1,6 @@
 package com.example.zippy.ui.attendance;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -58,31 +56,28 @@ public class AttendanceTakingActivity extends AppCompatActivity {
     private ArrayList<String> studentNames;
     private ArrayList<String> studentRegistrationNos;
 
-    private TextView txtViewDateToday;
-    private Button donebtn;
     private ProgressBar loading;
 
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceEnrolledStudents, referenceCourse, referenceStudent, referenceStudentCourseAttendance, referenceTotal, referenceAttendance;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceEnrolledStudents;
+    private DatabaseReference referenceStudent;
+    private DatabaseReference referenceTotal;
 
-    RecyclerView recyclerView;
-    AttendanceCustomAdapter adapter;
-    LinearLayoutManager layoutManager;
-    LocalDate datetoday = LocalDate.now();
+    private final LocalDate dateToday = LocalDate.now();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_taking);
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
-        donebtn = findViewById(R.id.btndone);
+        Button doneBtn = findViewById(R.id.btndone);
         loading = findViewById(R.id.loading);
-        txtViewDateToday = findViewById(R.id.txtviewdatetoday);
-        txtViewDateToday.setText(datetoday.toString());
+        TextView txtViewDateToday = findViewById(R.id.txtviewdatetoday);
+        txtViewDateToday.setText(dateToday.toString());
 
         studentUids = new ArrayList<>();
         studentNames = new ArrayList<>();
@@ -98,7 +93,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         System.out.println(clickedCoursePassCode);
         showlist();
         extractPreviousAttendanceRecord();
-        donebtn.setOnClickListener(v -> {
+        doneBtn.setOnClickListener(v -> {
             loading.setVisibility(View.VISIBLE);
             recordAttendance();
             System.out.println(attendance);
@@ -111,7 +106,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
 
     private void showlist() {
         rootNode = FirebaseDatabase.getInstance();
-        referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
+        DatabaseReference referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
         referenceCourse.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -206,8 +201,8 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         });
     }
     private void writeToDatabase(){
-        referenceAttendance = rootNode.getReference("attendanceRecord/perDay/"+clickedCoursePassCode);
-        referenceAttendance.child(String.valueOf(datetoday)).setValue(attendance, (error, ref) -> System.err.println("Value was set. Error = "+error));
+        DatabaseReference referenceAttendance = rootNode.getReference("attendanceRecord/perDay/" + clickedCoursePassCode);
+        referenceAttendance.child(String.valueOf(dateToday)).setValue(attendance, (error, ref) -> System.err.println("Value was set. Error = "+error));
         referenceEnrolledStudents = rootNode.getReference("courses/" + clickedCoursePassCode + "/students");
         referenceEnrolledStudents.addValueEventListener(new ValueEventListener() {
             @Override
@@ -238,11 +233,11 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         });
     }
     private void initRecyclerView() {
-        recyclerView = findViewById(R.id.recylerview);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.recylerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new AttendanceCustomAdapter(studentNames, studentRegistrationNos);
+        AttendanceCustomAdapter adapter = new AttendanceCustomAdapter(studentNames, studentRegistrationNos);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

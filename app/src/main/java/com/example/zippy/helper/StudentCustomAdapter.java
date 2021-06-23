@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 
 public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdapter.ViewHolder> {
-    private ArrayList<String> studentNamelist;
-    private final ArrayList<String> studentRegistrationNolist;
+    private final ArrayList<String> studentNameList;
+    private final ArrayList<String> studentRegistrationNoList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -30,13 +30,13 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtViewStudentName;
         private final TextView txtViewStudentRegistrationNo;
-        public ImageView deletebtn;
+        public ImageView deleteBtn;
 
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             txtViewStudentName = itemView.findViewById(R.id.txtviewstudentname);
             txtViewStudentRegistrationNo = itemView.findViewById(R.id.txtviewstudentregistrationno);
-            deletebtn = itemView.findViewById(R.id.deletebtn);
+            deleteBtn = itemView.findViewById(R.id.deletebtn);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -50,7 +50,7 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
                 }
             });
 
-            deletebtn.setOnClickListener(new View.OnClickListener() {
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
@@ -64,9 +64,9 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
         }
     }
 
-    public StudentCustomAdapter(ArrayList<String> studentNamelist, ArrayList<String> studentRegistrationNolist) {
-        this.studentNamelist = studentNamelist;
-        this.studentRegistrationNolist = studentRegistrationNolist;
+    public StudentCustomAdapter(ArrayList<String> studentNameList, ArrayList<String> studentRegistrationNoList) {
+        this.studentNameList = studentNameList;
+        this.studentRegistrationNoList = studentRegistrationNoList;
     }
 
     @Override
@@ -78,8 +78,8 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String currentName = studentNamelist.get(position);
-        String currentRegistrationNo = studentRegistrationNolist.get(position);
+        String currentName = studentNameList.get(position);
+        String currentRegistrationNo = studentRegistrationNoList.get(position);
 
         holder.txtViewStudentName.setText(currentName);
         holder.txtViewStudentRegistrationNo.setText(currentRegistrationNo);
@@ -87,6 +87,6 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
 
     @Override
     public int getItemCount() {
-        return studentNamelist.size();
+        return studentNameList.size();
     }
 }

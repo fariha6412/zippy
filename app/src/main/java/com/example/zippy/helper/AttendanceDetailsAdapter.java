@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 
 public class AttendanceDetailsAdapter extends RecyclerView.Adapter<AttendanceDetailsAdapter.ViewHolder> {
-    private ArrayList<String> dates;
-    private ArrayList<String> presentStatus;
+    private final ArrayList<String> dates;
+    private final ArrayList<String> presentStatus;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtViewDate;

@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +24,6 @@ import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.utility.NetworkChangeListener;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,22 +37,22 @@ import org.jetbrains.annotations.NotNull;
 public class CourseCreationActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceInstructor, referenceInstructorNoOfCourses, referenceInstructorCourses, referenceCourse;
-    FirebaseUser user;
+    private DatabaseReference referenceInstructorNoOfCourses;
+    private DatabaseReference referenceInstructorCourses;
+    private DatabaseReference referenceCourse;
+    private FirebaseUser user;
 
-    EditText edtTXTCourseCode, edtTXTCourseTitle, editTXTCourseYear, editTXTCoursePassCode, editTXTCourseCredit;
-    Button createbtn, cancelbtn;
+    private EditText edtTXTCourseCode, edtTXTCourseTitle, editTXTCourseYear;
+    protected EditText editTXTCoursePassCode, editTXTCourseCredit;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_creation);
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
         edtTXTCourseCode = findViewById(R.id.edittxtcoursecode);
@@ -62,13 +60,13 @@ public class CourseCreationActivity extends AppCompatActivity {
         editTXTCoursePassCode = findViewById(R.id.edittxtcoursepasscode);
         editTXTCourseYear = findViewById(R.id.edittxtcourseyear);
         editTXTCourseCredit = findViewById(R.id.edittxtcoursecredit);
-        createbtn = findViewById(R.id.createbtn);
-        cancelbtn = findViewById(R.id.cancelbtn);
+        Button createBtn = findViewById(R.id.createbtn);
+        Button cancelBtn = findViewById(R.id.cancelbtn);
 
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        rootNode = FirebaseDatabase.getInstance();
-        referenceInstructor = rootNode.getReference("instructors/"+ user.getUid());
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference referenceInstructor = rootNode.getReference("instructors/" + user.getUid());
         referenceInstructorNoOfCourses = rootNode.getReference("instructors/"+ user.getUid()+"/noOfCourses");
         referenceInstructorCourses = rootNode.getReference("instructors/"+ user.getUid()+"/courses");
         referenceCourse = rootNode.getReference("courses");
@@ -110,7 +108,7 @@ public class CourseCreationActivity extends AppCompatActivity {
             }
         });
 
-        createbtn.setOnClickListener(v -> {
+        createBtn.setOnClickListener(v -> {
 
             String courseCode = edtTXTCourseCode.getText().toString().trim();
             String courseTitle = edtTXTCourseTitle.getText().toString().trim();
@@ -184,7 +182,7 @@ public class CourseCreationActivity extends AppCompatActivity {
             });
         });
 
-        cancelbtn.setOnClickListener(v -> {
+        cancelBtn.setOnClickListener(v -> {
             finish();
         });
 

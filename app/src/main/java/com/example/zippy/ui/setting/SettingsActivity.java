@@ -1,11 +1,5 @@
 package com.example.zippy.ui.setting;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,35 +13,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
-import com.example.zippy.MainActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.ui.profile.InstructorProfileActivity;
-import com.example.zippy.ui.profile.StudentProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.jetbrains.annotations.NotNull;
-
 public class SettingsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
 
-    Button changeProfilePicBtn, changeUserNameBtn, changeDesignationBtn, changeInstitutionBtn, changeEmployeeIDBtn, changeRegistrationNoBtn;
-    Switch darkThemeSwitch, profileLockSwitch;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    private Switch darkThemeSwitch, profileLockSwitch;
 
-    FirebaseAuth auth;
-    FirebaseUser user;
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceStudent;
-
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     final String loggedStatus = "loggedProfile";
     final String lockedStatus = "lockedProfile";
     final String darkThemeStatus = "darkTheme";
@@ -58,24 +45,24 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
-        changeProfilePicBtn = findViewById(R.id.changeprofilepicturebtn);
-        changeUserNameBtn = findViewById(R.id.changeusernamebtn);
-        changeInstitutionBtn = findViewById(R.id.changeinstitutionbtn);
-        changeDesignationBtn = findViewById(R.id.changedeisgnationbtn);
-        changeRegistrationNoBtn = findViewById(R.id.changeregistrationnobtn);
-        changeEmployeeIDBtn = findViewById(R.id.changeemployeeidbtn);
+        Button changeProfilePicBtn = findViewById(R.id.changeprofilepicturebtn);
+        Button changeUserNameBtn = findViewById(R.id.changeusernamebtn);
+        Button changeInstitutionBtn = findViewById(R.id.changeinstitutionbtn);
+        Button changeDesignationBtn = findViewById(R.id.changedeisgnationbtn);
+        Button changeRegistrationNoBtn = findViewById(R.id.changeregistrationnobtn);
+        Button changeEmployeeIDBtn = findViewById(R.id.changeemployeeidbtn);
         darkThemeSwitch = findViewById(R.id.darkThemeSwitch);
         profileLockSwitch = findViewById(R.id.profileLockSwitch);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String loggedProfile = mPrefs.getString(loggedStatus, "nouser");
-        Boolean lockedProfile = mPrefs.getBoolean(lockedStatus, false);
-        Boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
+        boolean lockedProfile = mPrefs.getBoolean(lockedStatus, false);
+        boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
 
         if(loggedProfile.equals("instructor")){
             changeDesignationBtn.setVisibility(View.VISIBLE);
@@ -102,24 +89,18 @@ public class SettingsActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(3);
         menuItem.setChecked(true);
         bottomNavigationHelper.handle();
-        //bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
 
-        changeProfilePicBtn.setOnClickListener(v -> {
-            startActivity(new Intent(this, ChangeProfilePictureActivity.class));
-        });
+        changeProfilePicBtn.setOnClickListener(v -> startActivity(new Intent(this, ChangeProfilePictureActivity.class)));
 
-        profileLockSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println();
-                if(profileLockSwitch.isChecked()){
-                    mPrefs.edit().putBoolean(lockedStatus, true).apply();
-                    writeLocked(true);
-                }
-                else {
-                    writeLocked(false);
-                    mPrefs.edit().putBoolean(lockedStatus, false).apply();
-                }
+        profileLockSwitch.setOnClickListener(v -> {
+            System.out.println();
+            if(profileLockSwitch.isChecked()){
+                mPrefs.edit().putBoolean(lockedStatus, true).apply();
+                writeLocked(true);
+            }
+            else {
+                writeLocked(false);
+                mPrefs.edit().putBoolean(lockedStatus, false).apply();
             }
         });
 
@@ -132,21 +113,18 @@ public class SettingsActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 mPrefs.edit().putBoolean(darkThemeStatus, false).apply();
             }
-            System.out.println("dark: "+darkThemeSwitch.isChecked());
         });
 
     }
     private void writeLocked(Boolean isLocked){
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        rootNode = FirebaseDatabase.getInstance();
-        referenceStudent = rootNode.getReference("students/"+user.getUid());
-        referenceStudent.child("isProfileLocked").setValue(isLocked, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                if(error != null){
-                    System.out.println(error.toString());
-                }
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        assert user != null;
+        DatabaseReference referenceStudent = rootNode.getReference("students/" + user.getUid());
+        referenceStudent.child("isProfileLocked").setValue(isLocked, (error, ref) -> {
+            if(error != null){
+                System.out.println(error.toString());
             }
         });
     }

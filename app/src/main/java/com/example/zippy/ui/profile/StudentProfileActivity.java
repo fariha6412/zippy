@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.zippy.helper.NotificationHelper;
-import com.example.zippy.ui.course.CourseDetailsActivity;
 import com.example.zippy.ui.course.CourseEnrollActivity;
 import com.example.zippy.ui.course.CourseEvaluationActivity;
 import com.example.zippy.R;
@@ -48,23 +47,18 @@ import java.util.ArrayList;
 public class StudentProfileActivity extends AppCompatActivity{
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
 
-    FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceStudent, referenceCourse, referenceCourseList;
-    FirebaseUser user;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceCourse;
+    private DatabaseReference referenceCourseList;
+    private FirebaseUser user;
 
-    TextView txtViewFullName, txtViewInstitution, txtViewRegistrationNo;
-    ImageView img;
-    MaterialButton addbtn;
+    private TextView txtViewFullName, txtViewInstitution, txtViewRegistrationNo;
+    private ImageView img;
 
-    RecyclerView recyclerView;
-    CourseCustomAdapter adapter;
-    LinearLayoutManager layoutManager;
-    ArrayList<CourseHelperClass> courseList = new ArrayList<CourseHelperClass>();
-    Long noOfCourses = 0L;
+    private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +72,19 @@ public class StudentProfileActivity extends AppCompatActivity{
         return true;
     }
     public void showProfile(){
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         if(user==null)finish();
         txtViewFullName = findViewById(R.id.txtviewfullname);
         txtViewInstitution = findViewById(R.id.txtviewinstitution);
         txtViewRegistrationNo = findViewById(R.id.txtviewregistraionno);
         img = findViewById(R.id.imgview);
-        addbtn = findViewById(R.id.addbtn);
+        MaterialButton addBtn = findViewById(R.id.addbtn);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         rootNode = FirebaseDatabase.getInstance();
-        referenceStudent = rootNode.getReference("students/"+ user.getUid());
+        DatabaseReference referenceStudent = rootNode.getReference("students/" + user.getUid());
 
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
@@ -119,7 +113,6 @@ public class StudentProfileActivity extends AppCompatActivity{
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
-                    noOfCourses = value.getNoOfCourses();
                     Log.d("Response", "Value is: " + value.toString());
                     courseList.clear();
                     referenceCourseList = rootNode.getReference("students/"+user.getUid()+"/courses");
@@ -129,7 +122,6 @@ public class StudentProfileActivity extends AppCompatActivity{
                             for(DataSnapshot dsnap:snapshot.getChildren()){
                                 String coursePassCode = (String) dsnap.getValue();
                                 courseList.clear();
-                                //initRecyclerView();
                                 referenceCourse = rootNode.getReference("courses/"+coursePassCode);
                                 referenceCourse.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -163,16 +155,16 @@ public class StudentProfileActivity extends AppCompatActivity{
                 //Log.w("Error", "Failed to read value.", error.toException());
             }
         });
-        addbtn.setOnClickListener(v -> {
+        addBtn.setOnClickListener(v -> {
             startActivity(new Intent(StudentProfileActivity.this, CourseEnrollActivity.class));
         });
     }
     private void initRecyclerView(){
-        recyclerView = findViewById(R.id.recylerview);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.recylerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList);
+        CourseCustomAdapter adapter = new CourseCustomAdapter(courseList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

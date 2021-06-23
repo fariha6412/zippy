@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,34 +33,33 @@ import org.jetbrains.annotations.NotNull;
 public class CourseEnrollActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceStudent, referenceStudentNoOfCourses, referenceStudentCourses;
-    DatabaseReference referenceCourse, referenceCourseNoOfStudents, referenceCourseStudents;
-    FirebaseUser user;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceStudentNoOfCourses;
+    private DatabaseReference referenceStudentCourses;
+    private DatabaseReference referenceCourse, referenceCourseNoOfStudents, referenceCourseStudents;
+    private FirebaseUser user;
 
-    EditText editTXTCoursePassCode;
-    Button enrollbtn, cancelbtn;
+    private EditText editTXTCoursePassCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_enroll);
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         rootNode = FirebaseDatabase.getInstance();
-        referenceStudent = rootNode.getReference("students/"+ user.getUid());
+        DatabaseReference referenceStudent = rootNode.getReference("students/" + user.getUid());
         referenceStudentCourses = rootNode.getReference("students/"+ user.getUid()+"/courses");
         referenceStudentNoOfCourses = rootNode.getReference("students/"+user.getUid()+"/noOfCourses");
         referenceCourse = rootNode.getReference("courses");
         editTXTCoursePassCode = findViewById(R.id.edittxtcoursepasscode);
-        enrollbtn = findViewById(R.id.enrollbtn);
-        cancelbtn = findViewById(R.id.cancelbtn);
+        Button enrollBtn = findViewById(R.id.enrollbtn);
+        Button cancelBtn = findViewById(R.id.cancelbtn);
 
         final Long[] noOfCourses = new Long[1];
         referenceStudent.addValueEventListener(new ValueEventListener() {
@@ -80,10 +78,10 @@ public class CourseEnrollActivity extends AppCompatActivity {
             }
         });
 
-        cancelbtn.setOnClickListener(v -> {
+        cancelBtn.setOnClickListener(v -> {
             finish();
         });
-        enrollbtn.setOnClickListener(v -> {
+        enrollBtn.setOnClickListener(v -> {
             final Long[] noOfStudents = new Long[1];
             String coursePassCode = editTXTCoursePassCode.getText().toString().trim();
             if(ValidationChecker.isFieldEmpty(coursePassCode, editTXTCoursePassCode))return;

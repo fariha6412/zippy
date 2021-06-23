@@ -1,5 +1,6 @@
 package com.example.zippy.ui.register;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,16 +23,17 @@ public class ChooseAccountTypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
 
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        TextView txtviewlogin = findViewById(R.id.txtviewlogin);
-        Button instructorbtn = findViewById(R.id.instructorbtn);
-        Button studentbtn = findViewById(R.id.studentbtn);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        TextView txtViewLogIn = findViewById(R.id.txtviewlogin);
+        Button instructorBtn = findViewById(R.id.instructorbtn);
+        Button studentBtn = findViewById(R.id.studentbtn);
 
-        txtviewlogin.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, MainActivity.class)));
-        instructorbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, RegisterInstructorActivity.class)));
-        studentbtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, RegisterStudentActivity.class)));
+        txtViewLogIn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, MainActivity.class)));
+        instructorBtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, RegisterInstructorActivity.class)));
+        studentBtn.setOnClickListener(v -> startActivity(new Intent(ChooseAccountTypeActivity.this, RegisterStudentActivity.class)));
     }
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

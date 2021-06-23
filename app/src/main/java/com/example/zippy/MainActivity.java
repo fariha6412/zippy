@@ -1,5 +1,6 @@
 package com.example.zippy;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -52,19 +53,16 @@ public class MainActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    private EditText editTXTemail, editTXTpassword;
-    private ImageView imgView;
+    private EditText editTXTEmail, editTXTPassword;
     private ProgressBar loading;
     private FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceStudent, referenceInstructor, referenceToken;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceStudent, referenceInstructor, referenceToken;
 
-    ////new changes for splash
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     final String splashScreenPref = "SplashScreenShown";
     final String loggedStatus = "loggedProfile";
     final String darkThemeStatus = "darkTheme";
-    ////done
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
 
-        ////new changes for splash
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean splashScreenShown = mPrefs.getBoolean(splashScreenPref, false);
+        boolean splashScreenShown = mPrefs.getBoolean(splashScreenPref, false);
         if (!splashScreenShown) {
             Intent intent = new Intent(MainActivity.this, SplashActivity.class);
             startActivity(intent);
@@ -87,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String loggedProfile = mPrefs.getString(loggedStatus, "nouser");
-        Boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
+        boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
         if(darkTheme){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
@@ -105,24 +102,23 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
-        ////done
 
         TextView txtViewRegister = findViewById(R.id.txtviewregister);
-        editTXTemail = findViewById(R.id.edittxtemail);
-        editTXTpassword = findViewById(R.id.edittxtpassword);
-        Button loginbtn = findViewById(R.id.btnlogin);
-        imgView = findViewById(R.id.imgview);
+        editTXTEmail = findViewById(R.id.edittxtemail);
+        editTXTPassword = findViewById(R.id.edittxtpassword);
+        Button loginBtn = findViewById(R.id.btnlogin);
+        ImageView imgView = findViewById(R.id.imgview);
         if(darkTheme){
             imgView.setVisibility(View.GONE);
         }
         else{
             imgView.setVisibility(View.VISIBLE);
         }
-        TextView txtviewForgotPassword = findViewById(R.id.txtviewforgotpassword);
+        TextView txtViewForgotPassword = findViewById(R.id.txtviewforgotpassword);
         loading = findViewById(R.id.loading);
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
 
-        setSupportActionBar(mtoolbar);
+        setSupportActionBar(toolbar);
 
         txtViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ChooseAccountTypeActivity.class));
             }
         });
-        txtviewForgotPassword.setOnClickListener(new View.OnClickListener() {
+        txtViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             Boolean wantToCloseDialog = false;
             String email = "";
 
@@ -202,14 +198,14 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-        loginbtn.setOnClickListener(new View.OnClickListener() {
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String email = editTXTemail.getText().toString().trim();
-                String password = editTXTpassword.getText().toString().trim();
-                if(!ValidationChecker.isValidEmail(email, editTXTemail))return;
-                if(!ValidationChecker.isValidPassword(password, editTXTpassword))return;
+                String email = editTXTEmail.getText().toString().trim();
+                String password = editTXTPassword.getText().toString().trim();
+                if(!ValidationChecker.isValidEmail(email, editTXTEmail))return;
+                if(!ValidationChecker.isValidPassword(password, editTXTPassword))return;
 
                 loading.setVisibility(View.VISIBLE);
                 try {
@@ -275,15 +271,15 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 else {
                                     Toast.makeText(getApplicationContext(), "Verify your email and try again", Toast.LENGTH_SHORT).show();
-                                    editTXTemail.setText("");
-                                    editTXTpassword.setText("");
+                                    editTXTEmail.setText("");
+                                    editTXTPassword.setText("");
                                     loading.setVisibility(View.GONE);
                                 }
                             }
                             else{
                                 Toast.makeText(getApplicationContext(), "Could not log in", Toast.LENGTH_SHORT).show();
-                                editTXTemail.setText("");
-                                editTXTpassword.setText("");
+                                editTXTEmail.setText("");
+                                editTXTPassword.setText("");
                                 loading.setVisibility(View.GONE);
                             }
                         }
@@ -301,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

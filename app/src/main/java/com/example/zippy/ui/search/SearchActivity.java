@@ -1,11 +1,5 @@
 package com.example.zippy.ui.search;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -17,16 +11,18 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.zippy.MainActivity;
-import com.example.zippy.helper.BottomNavigationHelper;
-import com.example.zippy.helper.CourseCustomAdapter;
-import com.example.zippy.helper.InstructorHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.SearchCustomAdapter;
 import com.example.zippy.R;
+import com.example.zippy.helper.BottomNavigationHelper;
+import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.helper.SearchCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.ui.profile.CommonUserProfileActivity;
-import com.example.zippy.ui.profile.InstructorProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,27 +36,25 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SearchActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
 
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     final String strClickedUid = "clickedUid";
     String clickedUid;
 
-    SearchView searchView;
-    RecyclerView recyclerView;
-    SearchCustomAdapter adapter;
-    LinearLayoutManager layoutManager;
+    private SearchView searchView;
+    private RecyclerView recyclerView;
 
-    FirebaseAuth auth;
-    FirebaseUser user;
-    FirebaseDatabase rootNode;
-    DatabaseReference refStudents, refInstructors, ref;
-    ArrayList<String> userImageList;
-    ArrayList<String> userFullNameList;
-    ArrayList<String> usersUid;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private DatabaseReference refStudents, refInstructors;
+    private ArrayList<String> userImageList;
+    private ArrayList<String> userFullNameList;
+    private ArrayList<String> usersUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedUid = mPrefs.getString(strClickedUid, "");
 
-        rootNode = FirebaseDatabase.getInstance();
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         refStudents = rootNode.getReference("students");
         refInstructors = rootNode.getReference("instructors");
 
@@ -95,23 +89,22 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
-                    String studentUid = (String) dsnap.getKey();
+                    String studentUid = dsnap.getKey();
                     usersUid.add(studentUid);
 
-                    //System.out.println(studentUid);
-                    userFullNameList.add(dsnap.getValue(StudentHelperClass.class).getFullName());
-                    userImageList.add(dsnap.getValue(StudentHelperClass.class).getImage());
+                    userFullNameList.add(Objects.requireNonNull(dsnap.getValue(StudentHelperClass.class)).getFullName());
+                    userImageList.add(Objects.requireNonNull(dsnap.getValue(StudentHelperClass.class)).getImage());
                 }
                 refInstructors.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                         for(DataSnapshot dsnap: dataSnapshot.getChildren()){
-                            String instructorUid = (String) dsnap.getKey();
+                            String instructorUid = dsnap.getKey();
                             usersUid.add(instructorUid);
 
                             System.out.println(instructorUid);
-                            userFullNameList.add(dsnap.getValue(InstructorHelperClass.class).getFullName());
-                            userImageList.add(dsnap.getValue(InstructorHelperClass.class).getImage());
+                            userFullNameList.add(Objects.requireNonNull(dsnap.getValue(InstructorHelperClass.class)).getFullName());
+                            userImageList.add(Objects.requireNonNull(dsnap.getValue(InstructorHelperClass.class)).getImage());
                         }
                         if(searchView != null){
                             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -143,31 +136,27 @@ public class SearchActivity extends AppCompatActivity {
             }
 
         });
-        //System.out.println("baire");
     }
 
     private void initRecyclerView(ArrayList<String> nameList, ArrayList<String> uidList, ArrayList<String> imgList){
         recyclerView = findViewById(R.id.recyclerviewsearch);
-        layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new SearchCustomAdapter(nameList, imgList, this);
+        SearchCustomAdapter adapter = new SearchCustomAdapter(nameList, imgList, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        adapter.setOnItemClickListener(new SearchCustomAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                //start profile
-                mPrefs.edit().putString(strClickedUid, uidList.get(position)).apply();
-                auth = FirebaseAuth.getInstance();
-                user = auth.getCurrentUser();
-                assert user != null;
-                if(user.getUid().equals(uidList.get(position))){
-                    startActivity(new Intent(SearchActivity.this, MainActivity.class));
-                }
-                else startActivity(new Intent(SearchActivity.this, CommonUserProfileActivity.class));
+        adapter.setOnItemClickListener(position -> {
+            //start profile
+            mPrefs.edit().putString(strClickedUid, uidList.get(position)).apply();
+            auth = FirebaseAuth.getInstance();
+            user = auth.getCurrentUser();
+            assert user != null;
+            if(user.getUid().equals(uidList.get(position))){
+                startActivity(new Intent(SearchActivity.this, MainActivity.class));
             }
+            else startActivity(new Intent(SearchActivity.this, CommonUserProfileActivity.class));
         });
     }
     public boolean onCreateOptionsMenu(Menu menu){
@@ -191,8 +180,6 @@ public class SearchActivity extends AppCompatActivity {
             }
             i++;
         }
-        //SearchCustomAdapter adapter = new SearchCustomAdapter(List);
-        //recyclerView.setAdapter(adapter);
         initRecyclerView(nameList, uidList, imgList);
     }
 
@@ -211,6 +198,4 @@ public class SearchActivity extends AppCompatActivity {
     public void onBackPressed() {
         BottomNavigationHelper.backToProfile(bottomNavigationView, this);
     }
-
-
 }

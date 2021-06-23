@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.CourseCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.NotificationHelper;
 import com.example.zippy.ui.course.CourseCreationActivity;
 import com.example.zippy.ui.course.CourseDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
@@ -47,26 +44,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class InstructorProfileActivity extends AppCompatActivity {
-
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
 
-    FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference reference, referenceCourseList, referenceCourse;
-    FirebaseUser user;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceCourseList;
+    private DatabaseReference referenceCourse;
+    private FirebaseUser user;
 
-    TextView txtViewFullName, txtViewInstitution, txtViewDesignation, txtViewEmplyeeID;
-    ImageView img;
-    MaterialButton createbtn;
+    private TextView txtViewFullName, txtViewInstitution, txtViewDesignation, txtViewEmployeeID;
+    private ImageView img;
 
-    RecyclerView recyclerView;
-    CourseCustomAdapter adapter;
-    LinearLayoutManager layoutManager;
-    ArrayList<CourseHelperClass> courseList = new ArrayList<CourseHelperClass>();
-    Long noOfCourses = 0L;
+    private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,38 +71,34 @@ public class InstructorProfileActivity extends AppCompatActivity {
         return true;
     }
     public void showProfile(){
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         if(user==null)finish();
         txtViewFullName = findViewById(R.id.txtviewfullname);
         txtViewInstitution = findViewById(R.id.txtviewinstitution);
         txtViewDesignation = findViewById(R.id.txtviewdesignation);
-        txtViewEmplyeeID = findViewById(R.id.txtviewemployeeid);
+        txtViewEmployeeID = findViewById(R.id.txtviewemployeeid);
         img = findViewById(R.id.imgview);
-        createbtn = findViewById(R.id.createbtn);
+        MaterialButton createBtn = findViewById(R.id.createbtn);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference("instructors/"+ user.getUid());
+        DatabaseReference reference = rootNode.getReference("instructors/" + user.getUid());
 
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
-        //bottomNavigationView.performClick();
         BottomNavigationHelper bottomNavigationHelper = new BottomNavigationHelper(bottomNavigationView, this);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
         bottomNavigationHelper.handle();
-        //bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
 
-        createbtn.setOnClickListener(v -> {
-            startActivity(new Intent(InstructorProfileActivity.this, CourseCreationActivity.class));
-        });
+        createBtn.setOnClickListener(v -> startActivity(new Intent(InstructorProfileActivity.this, CourseCreationActivity.class)));
 
         reference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -123,11 +110,10 @@ public class InstructorProfileActivity extends AppCompatActivity {
                 if(value!=null){
                     txtViewFullName.setText(value.getFullName());
                     txtViewDesignation.setText(value.getDesignation());
-                    txtViewEmplyeeID.setText("EmployeeID: "+value.getEmployeeID());
+                    txtViewEmployeeID.setText("EmployeeID: "+value.getEmployeeID());
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
-                    noOfCourses = value.getNoOfCourses();
                     Log.d("Response", "Value is: " + value.toString());
 
                     courseList.clear();
@@ -173,24 +159,20 @@ public class InstructorProfileActivity extends AppCompatActivity {
         });
     }
     private void initRecyclerView(){
-        recyclerView = findViewById(R.id.recylerview);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.recylerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList);
+        CourseCustomAdapter adapter = new CourseCustomAdapter(courseList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        adapter.setOnItemClickListener(new CourseCustomAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                String clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
-                String coursePassCode = courseList.get(position).getCoursePassCode();
-                mPrefs.edit().putString(strClickedCoursePassCode,coursePassCode).apply();
-                //System.out.println(clickedCoursePassCode+" "+ coursePassCode);
-                //intent courseDetails
-                startActivity(new Intent(InstructorProfileActivity.this, CourseDetailsActivity.class));
-            }
+        adapter.setOnItemClickListener(position -> {
+            String clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
+            String coursePassCode = courseList.get(position).getCoursePassCode();
+            mPrefs.edit().putString(strClickedCoursePassCode,coursePassCode).apply();
+            //intent courseDetails
+            startActivity(new Intent(InstructorProfileActivity.this, CourseDetailsActivity.class));
         });
     }
     @Override

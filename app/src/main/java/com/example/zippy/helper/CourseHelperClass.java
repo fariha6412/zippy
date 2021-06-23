@@ -2,23 +2,20 @@ package com.example.zippy.helper;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CourseHelperClass {
-    String courseCode, courseTitle, coursePassCode, courseCredit, courseYear, instructoruid;
-    Long noOfStudents;
+    private String courseCode, courseTitle, coursePassCode, courseCredit, courseYear, instructorUID;
+    private Long noOfStudents;
 
     public CourseHelperClass(){
     }
 
-    public CourseHelperClass(String courseCode, String courseTitle, String courseYear, String courseCredit, String coursePassCode, String instructoruid) {
+    public CourseHelperClass(String courseCode, String courseTitle, String courseYear, String courseCredit, String coursePassCode, String instructorUID) {
         this.courseCode = courseCode;
         this.courseTitle = courseTitle;
         this.coursePassCode = coursePassCode;
         this.courseCredit = courseCredit;
         this.courseYear = courseYear;
-        this.instructoruid = instructoruid;
+        this.instructorUID = instructorUID;
         noOfStudents = 0L;
     }
 
@@ -54,12 +51,12 @@ public class CourseHelperClass {
         this.courseYear = courseYear;
     }
 
-    public String getInstructoruid() {
-        return instructoruid;
+    public String getInstructorUID() {
+        return instructorUID;
     }
 
-    public void setInstructoruid(String instructoruid) {
-        this.instructoruid = instructoruid;
+    public void setInstructorUID(String instructorUID) {
+        this.instructorUID = instructorUID;
     }
 
     public Long getNoOfStudents() {
@@ -85,7 +82,7 @@ public class CourseHelperClass {
                 ", coursePassCode='" + coursePassCode + '\'' +
                 ", courseCredit='" + courseCredit + '\'' +
                 ", courseYear='" + courseYear + '\'' +
-                ", instructoruid='" + instructoruid + '\'' +
+                ", instructoruid='" + instructorUID + '\'' +
                 ", noOfStudents=" + noOfStudents +
                 '}';
     }

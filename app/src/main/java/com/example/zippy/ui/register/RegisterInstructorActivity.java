@@ -1,5 +1,6 @@
 package com.example.zippy.ui.register;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -15,14 +16,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
-import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.ValidationChecker;
@@ -32,34 +30,29 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.jetbrains.annotations.NotNull;
 
 public class RegisterInstructorActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    //
-    SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     final String loggedStatus = "loggedProfile";
 
     private EditText editTXTFullName, editTXTEmail, editTXTInstitution;
     private EditText editTXTEmployeeID, editTXTPassword, editTXTRePassword;
     private EditText editTXTDesignation;
     private ProgressBar loading;
-    FirebaseAuth auth;
-    FirebaseDatabase rootNode;
-    DatabaseReference reference;
-    InstructorHelperClass instructorHelper;
+    private FirebaseAuth auth;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference reference;
+    private InstructorHelperClass instructorHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_instructor);
 
-        //
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         auth = FirebaseAuth.getInstance();
@@ -73,14 +66,14 @@ public class RegisterInstructorActivity extends AppCompatActivity {
         editTXTRePassword = findViewById(R.id.edittxtretypepassword);
         loading = findViewById(R.id.loading);
         TextView txtViewLogin = findViewById(R.id.txtviewlogin);
-        Button registerbtn = findViewById(R.id.registerbtn);
+        Button registerBtn = findViewById(R.id.registerbtn);
         String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/instructor.png?alt=media&token=7d594bc1-2490-4a36-b75f-765966a5ce82";
 
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
 
         txtViewLogin.setOnClickListener(v -> startActivity(new Intent(RegisterInstructorActivity.this, MainActivity.class)));
-        registerbtn.setOnClickListener(v -> {
+        registerBtn.setOnClickListener(v -> {
             String email = editTXTEmail.getText().toString().trim();
             String password = editTXTPassword.getText().toString().trim();
             String rePassword = editTXTRePassword.getText().toString().trim();
@@ -117,15 +110,8 @@ public class RegisterInstructorActivity extends AppCompatActivity {
                             reference = rootNode.getReference("instructors");
                             instructorHelper = new InstructorHelperClass(image, fullName, email, institution, employeeId, designation);
 
-                            reference.child(user.getUid()).setValue(instructorHelper,new DatabaseReference.CompletionListener(){
+                            reference.child(user.getUid()).setValue(instructorHelper, (error, ref) -> System.err.println("Value was set. Error = "+error));
 
-                                @Override
-                                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                    System.err.println("Value was set. Error = "+error);
-                                }
-                            });
-
-                            //
                             mPrefs.edit().putString(loggedStatus,"nouser").apply();
                             startActivity(new Intent(RegisterInstructorActivity.this, MainActivity.class));
                         }).addOnFailureListener(e -> {
@@ -150,6 +136,7 @@ public class RegisterInstructorActivity extends AppCompatActivity {
             }
         });
     }
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

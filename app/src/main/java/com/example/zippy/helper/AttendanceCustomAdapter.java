@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 
 public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCustomAdapter.ViewHolder> {
-    private ArrayList<String> studentNamelist;
-    private final ArrayList<String> studentRegistrationNolist;
+    private final ArrayList<String> studentNameList;
+    private final ArrayList<String> studentRegistrationNoList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -51,9 +51,9 @@ public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCust
         }
     }
 
-    public AttendanceCustomAdapter(ArrayList<String> studentNamelist, ArrayList<String> studentRegistrationNolist) {
-        this.studentNamelist = studentNamelist;
-        this.studentRegistrationNolist = studentRegistrationNolist;
+    public AttendanceCustomAdapter(ArrayList<String> studentNameList, ArrayList<String> studentRegistrationNoList) {
+        this.studentNameList = studentNameList;
+        this.studentRegistrationNoList = studentRegistrationNoList;
     }
 
     @Override
@@ -65,8 +65,8 @@ public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCust
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String currentName = studentNamelist.get(position);
-        String currentRegistrationNo = studentRegistrationNolist.get(position);
+        String currentName = studentNameList.get(position);
+        String currentRegistrationNo = studentRegistrationNoList.get(position);
 
         holder.txtViewStudentName.setText(currentName);
         holder.txtViewStudentRegistrationNo.setText(currentRegistrationNo);
@@ -74,6 +74,6 @@ public class AttendanceCustomAdapter extends RecyclerView.Adapter<AttendanceCust
 
     @Override
     public int getItemCount() {
-        return studentNamelist.size();
+        return studentNameList.size();
     }
 }

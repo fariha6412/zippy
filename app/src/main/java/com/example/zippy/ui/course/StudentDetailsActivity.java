@@ -16,13 +16,11 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.zippy.R;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.AttendanceCustomAdapter;
 import com.example.zippy.helper.StudentCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.ui.profile.CommonUserProfileActivity;
@@ -46,30 +44,28 @@ public class StudentDetailsActivity extends AppCompatActivity {
     final String strClickedUid = "clickedUid";
     String clickedUid;
 
-    private ArrayList<String> studentUids;
+    private ArrayList<String> studentUIDs;
     private ArrayList<String> studentNames;
     private ArrayList<String> studentRegistrationNos;
 
     private TextView txtViewTotalStudent;
 
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceEnrolledStudents, referenceCourse, referenceStudent;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceEnrolledStudents;
+    private DatabaseReference referenceStudent;
 
-    RecyclerView recyclerView;
-    StudentCustomAdapter adapter;
-    LinearLayoutManager layoutManager;
-    Long noOfStudents = 0L;
+    private Long noOfStudents = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_details);
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
-        studentUids = new ArrayList<>();
+        studentUIDs = new ArrayList<>();
         studentNames = new ArrayList<>();
         studentRegistrationNos = new ArrayList<>();
         txtViewTotalStudent = findViewById(R.id.txtviewtotalstudent);
@@ -80,11 +76,11 @@ public class StudentDetailsActivity extends AppCompatActivity {
         clickedUid = mPrefs.getString(strClickedUid, "");
 
         System.out.println(clickedCoursePassCode);
-        showlist();
+        showList();
     }
-    private void showlist(){
+    private void showList(){
         rootNode = FirebaseDatabase.getInstance();
-        referenceCourse = rootNode.getReference("courses/"+clickedCoursePassCode);
+        DatabaseReference referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
         referenceCourse.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -92,7 +88,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                 CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
                 if(courseHelper!=null){
                     studentNames.clear();
-                    studentUids.clear();
+                    studentUIDs.clear();
                     noOfStudents = courseHelper.getNoOfStudents();
                     txtViewTotalStudent.setText(noOfStudents.toString());
 
@@ -110,7 +106,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
                                         StudentHelperClass studentHelper = dsnapshot.getValue(StudentHelperClass.class);
                                         if(studentHelper!=null){
-                                            studentUids.add(studentUid);
+                                            studentUIDs.add(studentUid);
                                             studentNames.add(studentHelper.getFullName());
                                             studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
                                             initRecyclerView();
@@ -140,11 +136,11 @@ public class StudentDetailsActivity extends AppCompatActivity {
         });
     }
     private void initRecyclerView(){
-        recyclerView = findViewById(R.id.recylerview);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.recylerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new StudentCustomAdapter(studentNames, studentRegistrationNos);
+        StudentCustomAdapter adapter = new StudentCustomAdapter(studentNames, studentRegistrationNos);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -152,7 +148,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 //show profile of the student
-                mPrefs.edit().putString(strClickedUid, studentUids.get(position)).apply();
+                mPrefs.edit().putString(strClickedUid, studentUIDs.get(position)).apply();
                 startActivity(new Intent(StudentDetailsActivity.this, CommonUserProfileActivity.class));
             }
             @Override

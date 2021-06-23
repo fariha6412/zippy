@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
-import com.example.zippy.ui.test.TestCreationActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -212,6 +209,7 @@ public class TestHelperClass {
                         });
                     }
                     progressDialog.dismiss();
+                    Toast.makeText(activity, "Saved successfully", Toast.LENGTH_SHORT).show();
                 }
             }
 

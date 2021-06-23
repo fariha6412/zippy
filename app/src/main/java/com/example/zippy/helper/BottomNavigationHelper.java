@@ -1,5 +1,6 @@
 package com.example.zippy.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,11 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class BottomNavigationHelper {
-    BottomNavigationView bottomNavigationView;
-    Activity activity;
+    private final BottomNavigationView bottomNavigationView;
+    private final Activity activity;
 
-    private FirebaseAuth auth;
-    private FirebaseUser user;
     private final SharedPreferences mPrefs;
     final String loggedStatus = "loggedProfile";
 
@@ -37,14 +36,15 @@ public class BottomNavigationHelper {
         bottomNavigationView.setOnItemSelectedListener(this::onItemClick);
     }
 
+    @SuppressLint("NonConstantResourceId")
     public boolean onItemClick(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.navigation_profile:
                 String loggedProfile = mPrefs.getString(loggedStatus, "nouser");
-                auth = FirebaseAuth.getInstance();
-                user = auth.getCurrentUser();
-                if(user!=null){
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                FirebaseUser user = auth.getCurrentUser();
+                if(user !=null){
                     if(loggedProfile.equals("instructor")){
                         //bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
                         if(bottomNavigationView.getSelectedItemId()==item.getItemId())return true;

@@ -1,5 +1,6 @@
 package com.example.zippy.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,8 +18,8 @@ public class MenuHelperClass{
     Toolbar mtoolbar;
     Activity activity;
 
-    public MenuHelperClass(Toolbar mtoolbar, Activity activity) {
-        this.mtoolbar = mtoolbar;
+    public MenuHelperClass(Toolbar toolbar, Activity activity) {
+        this.mtoolbar = toolbar;
         this.activity = activity;
     }
 
@@ -26,6 +27,7 @@ public class MenuHelperClass{
         mtoolbar.setOnMenuItemClickListener(this::onMenuItemClick);
     }
 
+    @SuppressLint("NonConstantResourceId")
     public boolean onMenuItemClick(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {

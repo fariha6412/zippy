@@ -1,12 +1,5 @@
 package com.example.zippy.ui.profile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -14,20 +7,23 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.CourseCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
-import com.example.zippy.ui.course.CourseDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,30 +49,25 @@ public class CommonUserProfileActivity extends AppCompatActivity {
     String loggedProfile;
 
     private ImageView imgView;
-    private FloatingActionButton floatingActionButton;
     private TextView txtViewProfileLocked, txtViewFullName, txtViewEmail, txtViewInstitution, txtViewDesignation, txtViewEmployeeID, txtViewRegistrationNo, txtViewCourseHeader;
     private LinearLayout designationLinearLayout, employeeIDLinearLayout, registrationNoLinearLayout;
     private LinearLayout courseListHeaderLinearLayout;
 
-    FirebaseAuth auth;
-    FirebaseUser user;
-    FirebaseDatabase rootNode;
-    DatabaseReference referenceStudent, referenceInstructor, referenceCourse, referenceCourseList;
+    private FirebaseUser user;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference referenceStudent, referenceInstructor, referenceCourse, referenceCourseList;
 
-    RecyclerView recyclerView;
-    CourseCustomAdapter adapter;
-    LinearLayoutManager layoutManager;
-    ArrayList<CourseHelperClass> courseList = new ArrayList<CourseHelperClass>();
-    Long noOfCourses = 0L;
+    private RecyclerView recyclerView;
+    private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_user_profile);
 
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -84,7 +75,7 @@ public class CommonUserProfileActivity extends AppCompatActivity {
         loggedProfile = mPrefs.getString(loggedStatus, "nouser");
 
         imgView = findViewById(R.id.imgview);
-        floatingActionButton = findViewById(R.id.chatbtn);
+        FloatingActionButton floatingActionButton = findViewById(R.id.chatbtn);
 
         txtViewProfileLocked = findViewById(R.id.txtviewprofileloced);
         txtViewFullName = findViewById(R.id.txtviewfullname);
@@ -154,6 +145,7 @@ public class CommonUserProfileActivity extends AppCompatActivity {
                 if(snapshot.exists()){
                     InstructorHelperClass instructorHelper = snapshot.getValue(InstructorHelperClass.class);
 
+                    assert instructorHelper != null;
                     txtViewFullName.setText(instructorHelper.getFullName());
                     txtViewEmail.setText(instructorHelper.getEmail());
                     txtViewInstitution.setText(instructorHelper.getInstitution());
@@ -210,7 +202,7 @@ public class CommonUserProfileActivity extends AppCompatActivity {
         });
     }
     private void showOnlyUsersCourse(){
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         referenceCourseList = referenceStudent.child("courses");
         referenceCourseList.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -224,7 +216,7 @@ public class CommonUserProfileActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                             CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
-                            if(courseHelper!=null && courseHelper.getInstructoruid().equals(user.getUid())) {
+                            if(courseHelper!=null && courseHelper.getInstructorUID().equals(user.getUid())) {
                                 courseList.add(courseHelper);
                                 initRecyclerView();
                             }
@@ -245,10 +237,10 @@ public class CommonUserProfileActivity extends AppCompatActivity {
         });
     }
     private void initRecyclerView(){
-        layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CourseCustomAdapter(courseList);
+        CourseCustomAdapter adapter = new CourseCustomAdapter(courseList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
