@@ -151,6 +151,7 @@ public class TestDetailsActivity extends AppCompatActivity {
     }
     private void downloadFile(String path, String fileName, String extension){
         ProgressDialog progressDialog = new ProgressDialog(TestDetailsActivity.this);
+        progressDialog.setTitle("wait");
         progressDialog.setMessage("Downloading file");
         progressDialog.show();
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(path);
@@ -251,6 +252,7 @@ public class TestDetailsActivity extends AppCompatActivity {
     }
     private void uploadPdfToDatabase(){
         ProgressDialog progressDialog = new ProgressDialog(TestDetailsActivity.this);
+        progressDialog.setTitle("Wait");
         progressDialog.setMessage("Uploading PDF");
         progressDialog.show();
         StorageReference storageReferencePdf = FirebaseStorage.getInstance().getReference(pdfFilePath);
@@ -271,6 +273,7 @@ public class TestDetailsActivity extends AppCompatActivity {
     }
     private void uploadMarkSheetToDatabase(){
         ProgressDialog progressDialog = new ProgressDialog(TestDetailsActivity.this);
+        progressDialog.setTitle("Wait");
         progressDialog.setMessage("Uploading CSV");
         progressDialog.show();
         StorageReference storageReferenceCsv = FirebaseStorage.getInstance().getReference(markSheetPath);

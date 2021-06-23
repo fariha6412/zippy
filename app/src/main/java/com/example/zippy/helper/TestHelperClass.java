@@ -146,9 +146,13 @@ public class TestHelperClass {
         DatabaseReference referenceTests = rootNode.getReference("tests/"+clickedCoursePassCode);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (activity, android.R.layout.select_dialog_item);
-        referenceTests.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        referenceTests.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                testIds.clear();
+                testTitles.clear();
+                adapter.clear();
                 for(DataSnapshot dsnap:snapshot.getChildren()){
                     testIds.add(dsnap.getKey());
                     adapter.add((String) dsnap.child("testTitle").getValue());
@@ -166,6 +170,7 @@ public class TestHelperClass {
     public static void writeResultToDatabase(Activity activity, String clickedCoursePassCode, ArrayList <TestHelperClass.TestMark> testMarks, String testId){
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
+        progressDialog.setTitle("wait");
         progressDialog.setMessage("Saving result");
         progressDialog.show();
 
