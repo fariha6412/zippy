@@ -103,4 +103,8 @@
     <string name="str_off">OFF</string>
     <string name="str_on">ON</string>
     <string name="str_dark_theme">Dark Theme</string>
+    <string name="str_mark_sheet">Mark Sheet</string>
+    <string name="str_question">Question</string>
+    <string name="str_your_total_mark">Your Total Mark</string>
+    <string name="str_after_conversion">After Conversion</string>
 </resources>

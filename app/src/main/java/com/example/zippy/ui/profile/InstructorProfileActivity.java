@@ -1,11 +1,5 @@
 package com.example.zippy.ui.profile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -18,16 +12,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.zippy.ui.course.CourseCreationActivity;
-import com.example.zippy.ui.course.CourseDetailsActivity;
+import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.CourseCustomAdapter;
 import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.NotificationHelper;
+import com.example.zippy.ui.course.CourseCreationActivity;
+import com.example.zippy.ui.course.CourseDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -184,7 +187,7 @@ public class InstructorProfileActivity extends AppCompatActivity {
                 String clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
                 String coursePassCode = courseList.get(position).getCoursePassCode();
                 mPrefs.edit().putString(strClickedCoursePassCode,coursePassCode).apply();
-                System.out.println(clickedCoursePassCode+" "+ coursePassCode);
+                //System.out.println(clickedCoursePassCode+" "+ coursePassCode);
                 //intent courseDetails
                 startActivity(new Intent(InstructorProfileActivity.this, CourseDetailsActivity.class));
             }

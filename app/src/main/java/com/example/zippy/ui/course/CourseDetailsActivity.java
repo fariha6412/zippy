@@ -13,16 +13,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zippy.helper.TestHelperClass;
 import com.example.zippy.ui.attendance.AttendanceTakingActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.ui.test.TestCreationActivity;
+import com.example.zippy.ui.test.TestDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,20 +39,29 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class CourseDetailsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     FirebaseDatabase rootNode;
-    DatabaseReference referenceAttendance;
+    DatabaseReference referenceAttendance, referenceTests;
 
     SharedPreferences mPrefs;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
+    String clickedCoursePassCode;
+    final String strClickedTestId = "clickedTestId";
+    String clickedTestId;
 
     TextView txtViewCoursePassCode;
+    AutoCompleteTextView autoCompleteTextView;
     Button studentDetailsbtn, attendancebtn;
     MaterialButton testCreationBtn;
+
+    ArrayAdapter<String> adapter;
+    ArrayList<String> testTitles;
+    ArrayList<String> testIds;
 
     LocalDate datetoday;
 
@@ -56,7 +72,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         //new for saving logged user type and clicked course
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
+        clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
+        clickedTestId = mPrefs.getString(strClickedTestId, "");
 
         Toolbar mtoolbar = findViewById(R.id.mtoolbar);
         setSupportActionBar(mtoolbar);
@@ -69,6 +86,21 @@ public class CourseDetailsActivity extends AppCompatActivity {
         studentDetailsbtn = findViewById(R.id.studentdetailsbtn);
         attendancebtn = findViewById(R.id.attendance);
         testCreationBtn = findViewById(R.id.testcreationbtn);
+        autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+
+        testIds = new ArrayList<>();
+        testTitles = new ArrayList<>();
+
+        TestHelperClass.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
+        autoCompleteTextView.setThreshold(0);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println(testIds.get(i));
+                mPrefs.edit().putString(strClickedTestId,testIds.get(i)).apply();
+                startActivity(new Intent(CourseDetailsActivity.this, TestDetailsActivity.class));
+            }
+        });
 
         txtViewCoursePassCode.setText(clickedCoursePassCode);
 

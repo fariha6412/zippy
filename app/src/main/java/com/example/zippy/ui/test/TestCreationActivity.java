@@ -1,9 +1,5 @@
 package com.example.zippy.ui.test;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -11,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -24,17 +18,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.helper.FileHelper;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.TestHelperClass;
@@ -43,7 +35,6 @@ import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -70,14 +61,17 @@ public class TestCreationActivity extends AppCompatActivity {
     String clickedCoursePassCode;
 
     FirebaseDatabase rootNode;
-    DatabaseReference referenceTests;
+    DatabaseReference referenceTests, referenceResult, referenceStudentList, referenceStudentRegNo;
 
     EditText editTXTTestTitle, editTXTTotalMarks, editTXTConvertTo;
     TextView txtViewUploadQuestionFileName, txtViewUploadMarkSheetFileName;
     Button questionUploadBtn, markSheetUploadBtn, submitBtn;
     private Uri pdfUri;
     private Uri markSheetUri;
+
     ArrayList<String> testIds;
+    ArrayList<TestHelperClass.TestMark> testMarks;
+
     TestHelperClass testHelper;
 
     ProgressDialog progressDialog;
@@ -112,29 +106,21 @@ public class TestCreationActivity extends AppCompatActivity {
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
 
         testIds = new ArrayList<>();
+        testMarks = new ArrayList<>();
 
         rootNode = FirebaseDatabase.getInstance();
         referenceTests = rootNode.getReference("tests/"+clickedCoursePassCode);
 
-        questionUploadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filePickIntent();
+        questionUploadBtn.setOnClickListener(v -> FileHelper.filePickIntent(this, PDF_PICK_CODE));
+        markSheetUploadBtn.setOnClickListener(v -> {
+            if(pdfUri == null || txtViewUploadQuestionFileName.getVisibility() == View.GONE){
+                new AlertDialog.Builder(TestCreationActivity.this)
+                        .setTitle("Message")
+                        .setMessage("You haven't uploaded any question")
+                        .setPositiveButton("OKAY", null).create().show();
             }
-        });
-        markSheetUploadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                if(pdfUri == null || txtViewUploadQuestionFileName.getVisibility() == View.GONE){
-                    new AlertDialog.Builder(TestCreationActivity.this)
-                            .setTitle("Message")
-                            .setMessage("You haven't uploaded any question")
-                            .setPositiveButton("OKAY", null).create().show();
-                }
-                else {
-                    filePickIntent();
-                }
+            else {
+                FileHelper.filePickIntent(this, CSV_PICK_CODE);
             }
         });
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +137,7 @@ public class TestCreationActivity extends AppCompatActivity {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (txtViewUploadQuestionFileName.getRight() - txtViewUploadQuestionFileName.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         txtViewUploadQuestionFileName.setVisibility(View.GONE);
+                        txtViewUploadMarkSheetFileName.setVisibility(View.GONE);
                         return true;
                     }
                 }
@@ -173,65 +160,16 @@ public class TestCreationActivity extends AppCompatActivity {
         });
     }
 
-    private void filePickIntent(){
-        Intent intent = new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-       startActivityForResult(Intent.createChooser(intent, "Select file"), PDF_PICK_CODE);
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            Uri tempUri;
-            if(requestCode == PDF_PICK_CODE || requestCode == CSV_PICK_CODE) {
-                tempUri = data.getData();
-                System.out.println(tempUri);
-                String uriString = tempUri.toString();
-                File myFile = new File(uriString);
-                String path = myFile.getAbsolutePath();
-                String displayName = null;
-
-                if (uriString.startsWith("content://")) {
-                    Cursor cursor = null;
-                    try {
-                        cursor = this.getContentResolver().query(tempUri, null, null, null, null);
-                        if (cursor != null && cursor.moveToFirst()) {
-                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                        }
-                    } finally {
-                        cursor.close();
-                    }
-                } else if (uriString.startsWith("file://")) {
-                    displayName = myFile.getName();
-                }
-                if (requestCode == PDF_PICK_CODE) {
-                    Pattern csvPattern = Pattern.compile(".+\\.pdf");
-                    if(!csvPattern.matcher(displayName).matches()) {
-                        Toast.makeText(TestCreationActivity.this, "Select a pdf file", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    pdfUri = tempUri;
-                    txtViewUploadQuestionFileName.setText(displayName);
-                    txtViewUploadQuestionFileName.setVisibility(View.VISIBLE);
-                } else {
-                    Pattern csvPattern = Pattern.compile(".+\\.csv");
-                    if(!csvPattern.matcher(displayName).matches()) {
-                        Toast.makeText(TestCreationActivity.this, "Select a csv file", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    markSheetUri = tempUri;
-                    txtViewUploadMarkSheetFileName.setText(displayName);
-                    txtViewUploadMarkSheetFileName.setVisibility(View.VISIBLE);
-                }
-            }
+        if(resultCode == RESULT_OK) {
+            if(requestCode == PDF_PICK_CODE)pdfUri = FileHelper.onActivityResult(this, txtViewUploadQuestionFileName, requestCode, data );
+            else markSheetUri = FileHelper.onActivityResult(this, txtViewUploadMarkSheetFileName, requestCode, data );
         }
         else {
             Toast.makeText(this, "Selection cancelled", Toast.LENGTH_SHORT).show();
         }
-
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void writeToDataBase() {
@@ -281,8 +219,8 @@ public class TestCreationActivity extends AppCompatActivity {
     private void uploadFilesToStorage(TestHelperClass testHelper, String testId){
         progressDialog.setMessage("Uploading Files");
         progressDialog.show();
-        String pdfFilePath = "questionPdfs/"+clickedCoursePassCode+"/"+testId;
-        String markSheetPath = "markSheets/"+clickedCoursePassCode+"/"+testId;
+        String pdfFilePath = "questionPdfs/"+clickedCoursePassCode+"/"+testId+"/question";
+        String markSheetPath = "markSheets/"+clickedCoursePassCode+"/"+testId+"/markSheet";
         if(txtViewUploadMarkSheetFileName.getVisibility() == View.GONE && txtViewUploadQuestionFileName.getVisibility() == View.VISIBLE){
             StorageReference storageReferencePdf = FirebaseStorage.getInstance().getReference(pdfFilePath);
             storageReferencePdf.putFile(pdfUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -293,19 +231,44 @@ public class TestCreationActivity extends AppCompatActivity {
                     String uploadedPdfUrl = ""+uriTask.getResult();
 
                     testHelper.setQuestion(uploadedPdfUrl);
+                    TestHelperClass.createTest(TestCreationActivity.this, referenceTests, testHelper, testId);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    Toast.makeText(TestCreationActivity.this, "pdf upload failed due to "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else if(txtViewUploadQuestionFileName.getVisibility() == View.GONE){
+            TestHelperClass.createTest(this, referenceTests, testHelper, testId);
+        }
+        else{
+            //markSheet and pdf both
+            StorageReference storageReferencePdf = FirebaseStorage.getInstance().getReference(pdfFilePath);
+            storageReferencePdf.putFile(pdfUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isSuccessful());
+                    String uploadedPdfUrl = ""+uriTask.getResult();
 
-                    StorageReference storageReferenceCsv = FirebaseStorage.getInstance().getReference(pdfFilePath);
+                    testHelper.setQuestion(uploadedPdfUrl);
+                    //progressDialog.dismiss();
+
+                    StorageReference storageReferenceCsv = FirebaseStorage.getInstance().getReference(markSheetPath);
                     storageReferenceCsv.putFile(markSheetUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                             while (!uriTask.isSuccessful());
-                            String uploadedCsvUrl = ""+uriTask.getResult();
+                            String uploadedMarkSheetUrl = ""+uriTask.getResult();
 
-                            testHelper.setMarkSheet(uploadedCsvUrl);
+                            testHelper.setMarkSheet(uploadedMarkSheetUrl);
                             progressDialog.dismiss();
-
-                            createTest(testHelper, testId);
+                            testMarks = FileHelper.readCsv(markSheetUri, TestCreationActivity.this);
+                            TestHelperClass.writeResultToDatabase(TestCreationActivity.this, clickedCoursePassCode, testMarks,testId);
+                            TestHelperClass.createTest(TestCreationActivity.this, referenceTests, testHelper, testId);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -321,40 +284,8 @@ public class TestCreationActivity extends AppCompatActivity {
                 }
             });
         }
-        else if(txtViewUploadQuestionFileName.getVisibility() == View.GONE){
-            createTest(testHelper, testId);
-        }
-        else{
-            //markSheet and pdf both
-            StorageReference storageReferencePdf = FirebaseStorage.getInstance().getReference(pdfFilePath);
-            storageReferencePdf.putFile(pdfUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uriTask.isSuccessful());
-                    String uploadedPdfUrl = ""+uriTask.getResult();
-
-                    testHelper.setQuestion(uploadedPdfUrl);
-                    progressDialog.dismiss();
-
-                    createTest(testHelper, testId);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull @NotNull Exception e) {
-                    Toast.makeText(TestCreationActivity.this, "pdf upload failed due to "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
     }
-    private void createTest(TestHelperClass testHelperClass, String testId){
-        referenceTests.child(testId).setValue(testHelper, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                Toast.makeText(TestCreationActivity.this, "Test created successfully", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+
     public String createNewCode(){
         PassCodeGenerator passCodeGenerator = new PassCodeGenerator.PassCodeGeneratorBuilder()
                 .useDigits(true)

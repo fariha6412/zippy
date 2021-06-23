@@ -87,13 +87,4 @@ public class InstructorHelperClass {
                 ", noOfCourses=" + noOfCourses +
                 '}';
     }
-    public @NotNull String showProfileDetails() {
-        return  "Account Type: Instructor\n" +
-                " FullName: " + fullName + '\n' +
-                " Email Address: " + email + '\n' +
-                " Institution: " + institution + '\n' +
-                " employeeID: " + employeeID + '\n' +
-                " Designation: " + designation + '\n' +
-                " NoOfCourses: " + noOfCourses ;
-    }
 }

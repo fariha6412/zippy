@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.zippy.helper.NotificationHelper;
+import com.example.zippy.ui.course.CourseDetailsActivity;
 import com.example.zippy.ui.course.CourseEnrollActivity;
 import com.example.zippy.ui.course.CourseEvaluationActivity;
 import com.example.zippy.R;
@@ -181,7 +183,7 @@ public class StudentProfileActivity extends AppCompatActivity{
                 String clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
                 String coursePassCode = courseList.get(position).getCoursePassCode();
                 mPrefs.edit().putString(strClickedCoursePassCode,coursePassCode).apply();
-                System.out.println(clickedCoursePassCode+" "+ coursePassCode);
+                //System.out.println(clickedCoursePassCode+" "+ coursePassCode);
                 //intent courseEvaluation
                 startActivity(new Intent(StudentProfileActivity.this, CourseEvaluationActivity.class));
 
@@ -203,6 +205,16 @@ public class StudentProfileActivity extends AppCompatActivity{
     protected void onStop(){
         unregisterReceiver(networkChangeListener);
         super.onStop();
+    }
+    @Override
+    protected void onResume() {
+        new Thread( new Runnable(){
+            @Override
+            public void run(){
+                NotificationHelper.testMarkGivenNotification(user, StudentProfileActivity.this);
+            }
+        }).start();
+        super.onResume();
     }
     //end stuff
 }

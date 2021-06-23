@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
+        <activity android:name=".ui.test.TestDetailsActivity"></activity>
         <activity android:name=".ui.profile.CommonUserProfileActivity" />
         <activity android:name=".ui.attendance.AttendanceDetailsActivity" />
         <activity android:name=".ui.setting.SettingsActivity" />
@@ -30,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".helper.MyFirebaseMessagingService"
             android:stopWithTask="false">
@@ -37,6 +39,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".ui.course.CourseEnrollActivity"
             android:windowSoftInputMode="adjustResize" />

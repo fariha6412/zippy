@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.test.TestDetailsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mtoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="@color/white"
+            app:titleMarginStart="1in"
+            android:background="@color/appbarColor"
+            tools:ignore="InOrMmUsage">
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="30dp">
+
+                <TextView
+                    android:id="@+id/txtviewtesttitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_test_title"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/button_txt"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:freezesText="true"
+                    android:background="@color/course_details_btn"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewtotalmarklebel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_total_mark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_weight="2"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewtotalmark"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_0"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/little_title"
+                    android:layout_weight=".5"
+                    tools:ignore="TextViewEdits" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/chgtotalmarksbtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_weight=".5"
+                    app:icon="@drawable/ic_baseline_edit_24"
+                    app:iconTint="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/yourTotalMarkLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewyourtotalmarklebel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_your_total_mark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_weight="2"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewyourtotalmark"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_0"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/little_title"
+                    android:layout_weight=".5"
+                    tools:ignore="TextViewEdits" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewconverttolebel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_convertto"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_weight="2"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewconvertto"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_0"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/little_title"
+                    android:layout_weight=".5"
+                    tools:ignore="TextViewEdits" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/chgconverttobtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_weight=".5"
+                    app:icon="@drawable/ic_baseline_edit_24"
+                    app:iconTint="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/afterConversionLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewafterconvertionlebel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_after_conversion"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_weight="2"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewafterconvertion"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_0"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"
+                    android:layout_weight=".5"
+                    tools:ignore="TextViewEdits" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewquestion"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_question"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uploadquestionbtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_weight=".5"
+                    app:icon="@drawable/ic_baseline_cloud_upload_24"
+                    app:iconTint="@color/black" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/downloadquestionbtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_weight=".5"
+                    app:icon="@drawable/ic_baseline_cloud_download_24"
+                    app:iconTint="@color/black" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/uploadquestionfilename"
+                android:layout_width="@dimen/edit_txt_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_border"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                app:drawableEndCompat="@drawable/ic_baseline_cancel_24"
+                android:visibility="gone"
+                android:focusable="true" />
+
+            <LinearLayout
+                android:id="@+id/markSheetLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtviewmarksheet"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_mark_sheet"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uploadmarksheetbtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_weight=".5"
+                    app:icon="@drawable/ic_baseline_cloud_upload_24"
+                    app:iconTint="@color/black" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/downloadmarksheetbtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_weight=".5"
+                    app:icon="@drawable/ic_baseline_cloud_download_24"
+                    app:iconTint="@color/black" />
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/uploadmarksheetfilename"
+                android:layout_width="@dimen/edit_txt_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_border"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:visibility="gone"
+                app:drawableEndCompat="@drawable/ic_baseline_cancel_24"
+                android:focusable="true" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

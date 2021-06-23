@@ -134,7 +134,8 @@
                 android:layout_gravity="center_horizontal"
                 android:clickable="true"
                 app:drawableEndCompat="@drawable/ic_baseline_cancel_24"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:focusable="true" />
 
             <Button
                 android:id="@+id/uploadmarksheetbtn"
@@ -158,7 +159,8 @@
                 android:layout_gravity="center_horizontal"
                 android:clickable="true"
                 android:visibility="gone"
-                app:drawableEndCompat="@drawable/ic_baseline_cancel_24" />
+                app:drawableEndCompat="@drawable/ic_baseline_cancel_24"
+                android:focusable="true" />
 
             <Button
                 android:id="@+id/submitbtn"

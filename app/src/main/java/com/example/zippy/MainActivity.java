@@ -26,7 +26,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.MyFirebaseMessagingService;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.extras.SplashActivity;
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
-        //MyFirebaseMessagingService.getToken(MainActivity.this);
 
         ////new changes for splash
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -330,7 +328,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
     //end stuff
-
     @Override
     public void onBackPressed() {
         MenuHelperClass.exit(this);
