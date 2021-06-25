@@ -57,8 +57,8 @@
     <string name="str_enroll">Enroll</string>
     <string name="str_add_course">Add Course</string>
     <string name="str_splash_details">Zippy a dynamic learning environment for students and instructors to make the academic grading system easy. So get started, keep your courses organized, and get to know the constant progress on Zippy.</string>
-    <string name="btn_getstarted">Get Started</string>
-    <string name="str_about_details">Zippy a dynamic learning environment for students and instructors to make the academic grading system easy. So get started, keep your courses organized, and get to know the constant progress on Zippy.</string>
+    <string name="btn_get_started">Get Started</string>
+    <string name="str_about_details">Zippy a dynamic learning environment for students and instructors to make the academic grading system easy. So get started, keep your courses organized, and get to know the constant progress on Zippy. In case you are a instructor and are uploading a csv markSheet you need to make sure there is only three columns which must be students regNo, totalMark and convertedMark. You will be able to re-upload markSheet until the course completion. Again, be aware while uploading your gradingScale. You must follow the specific format for your csv like there would be two columns. One for upper limit of mark range for certain grade and the other for letter grade or point grade whichever you prefer. Make sure you have uploaded everything right before exiting the screen as you would not be able to re-upload gradingScale if you made a mistake. If you are a student, you have an extra feature to lock your profile to prevent others from seeing your enrolled courses but the instructors can see their courses in your profile as they have the right to see their courses, you know. If you have mistakenly enrolled in any course or the instructor do not want to have you in his courses anymore [I guess you must have annoyed him that much] he/she can get you out of their courses and remember you can hide your marks from you fellow buddies but can not hide from your instructor so be aware of that. If you have any enquiry to anyone just go search for him and message him it is that easy to communicate. And go play now. I wish people using the app would visit and read this but I am sure even ela and samira would not even bother to see this.</string>
     <string name="str_oops">OOPS!</string>
     <string name="str_no_internet_connection">No Internet Connection</string>
     <string name="str_please_check_your_connection">Please check your connection</string>
@@ -70,7 +70,7 @@
     <string name="str_present">Present</string>
     <string name="str_0">0</string>
     <string name="str_absent">Absent</string>
-    <string name="str_presentpercentage">Attendance Parcentage</string>
+    <string name="str_present_percentage">Attendance Percentage</string>
     <string name="str_0percent">0%</string>
     <string name="str_final_grade">Final Grade</string>
     <string name="str_null">null</string>
@@ -79,7 +79,7 @@
     <string name="str_student_list">Student List</string>
     <string name="str_test_title">Test Title</string>
     <string name="str_total_mark">Total Mark</string>
-    <string name="str_convertto">Convert To</string>
+    <string name="str_convert_to">Convert To</string>
     <string name="str_upload">Upload Question</string>
     <string name="str_submit">Submit</string>
     <string name="str_create_new_test">Create New Test</string>
@@ -90,14 +90,14 @@
     <string name="str_total_day">Total Day</string>
     <string name="str_attendance_list">Attendance List</string>
     <string name="str_date">Date</string>
-    <string name="str_upload_marksheet">Uplaod Mark Sheet</string>
+    <string name="str_upload_mark_sheet">Upload Mark Sheet</string>
     <string name="str_upload_question">Upload Question</string>
     <string name="str_change_pic">Change Profile Picture</string>
     <string name="str_change_user_name">Change User Name</string>
     <string name="str_change_institution">Change Institution</string>
-    <string name="str_chagne_designation">Change Designation</string>
-    <string name="str_chagne_employeeid">Change Employee ID</string>
-    <string name="str_chagne_registrationno">Change Registration No</string>
+    <string name="str_change_designation">Change Designation</string>
+    <string name="str_change_employee_id">Change Employee ID</string>
+    <string name="str_change_registration_no">Change Registration No</string>
     <string name="str_profile_lock">Profile Lock</string>
     <string name="str_profile_locked">Profile is Locked</string>
     <string name="str_off">OFF</string>
@@ -107,4 +107,12 @@
     <string name="str_question">Question</string>
     <string name="str_your_total_mark">Your Total Mark</string>
     <string name="str_after_conversion">After Conversion</string>
+    <string name="str_warning">Warning</string>
+    <string name="str_csv_format">""</string>
+    <string name="str_okay">Okay</string>
+    <string name="str_complete">Complete</string>
+    <string name="str_upload_grading_scale">Upload Grading Scale</string>
+    <string name="str_assign_attendance_mark">Assign Mark on Attendance</string>
+    <string name="str_attendance_mark">Mark on Attendance</string>
+    <string name="str_your_attendance_mark">You mark on Attendance</string>
 </resources>

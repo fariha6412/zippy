@@ -14,7 +14,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mtoolbar"
+            android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="@color/white"
@@ -68,7 +68,7 @@
                 android:layout_marginTop="30dp"/>
 
             <ImageView
-                android:id="@+id/imgview"
+                android:id="@+id/imgView"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="20dp"

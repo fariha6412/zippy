@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <!-- Customize color here. -->
     <color name="buttonColor">#2D6187</color>
-    <color name="textfieldColor">#ededfa</color>
+    <color name="textFieldColor">#ededfa</color>
     <color name="appbarColor">#2D6187</color>
     <color name="linkColor">#50C2C9</color>
     <color name="titleColor">#2D6187</color>
@@ -21,4 +21,5 @@
     <color name="colorNoInternet">#6D6D73</color>
     <color name="course_details_btn">#CCCCCC</color>
     <color name="common_profile_txt_view">#E0E0E0</color>
+    <color name="cyan">#91c9a0</color>
 </resources>

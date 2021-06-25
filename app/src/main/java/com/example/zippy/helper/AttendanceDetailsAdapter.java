@@ -3,7 +3,6 @@ package com.example.zippy.helper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.zippy.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class AttendanceDetailsAdapter extends RecyclerView.Adapter<AttendanceDetailsAdapter.ViewHolder> {
@@ -24,7 +22,7 @@ public class AttendanceDetailsAdapter extends RecyclerView.Adapter<AttendanceDet
 
         public ViewHolder(View itemView) {
             super(itemView);
-            txtViewDate = itemView.findViewById(R.id.txtviewdatetoday);
+            txtViewDate = itemView.findViewById(R.id.txtViewDateToday);
             txtViewPresentStatus = itemView.findViewById(R.id.txtviewpresentstatus);
         }
     }

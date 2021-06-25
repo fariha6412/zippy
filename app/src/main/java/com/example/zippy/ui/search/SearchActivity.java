@@ -22,7 +22,7 @@ import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.SearchCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
-import com.example.zippy.ui.profile.CommonUserProfileActivity;
+import com.example.zippy.ui.profile.ShowCaseUserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigatin_view);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         BottomNavigationHelper bottomNavigationHelper = new BottomNavigationHelper(bottomNavigationView, this);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(2);
@@ -156,7 +156,7 @@ public class SearchActivity extends AppCompatActivity {
             if(user.getUid().equals(uidList.get(position))){
                 startActivity(new Intent(SearchActivity.this, MainActivity.class));
             }
-            else startActivity(new Intent(SearchActivity.this, CommonUserProfileActivity.class));
+            else startActivity(new Intent(SearchActivity.this, ShowCaseUserProfileActivity.class));
         });
     }
     public boolean onCreateOptionsMenu(Menu menu){

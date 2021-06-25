@@ -1,7 +1,6 @@
 package com.example.zippy.helper;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
@@ -18,21 +17,20 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TestHelperClass {
     String testTitle;
     String questionPdfUrl;
-    String markSheet;
+    String markSheetCsvUrl;
     Long totalMark;
     Double convertTo;
 
     public TestHelperClass(){}
 
-    public TestHelperClass(String testTitle, Long totalMarks, Double convertTo, String question) {
+    public TestHelperClass(String testTitle, Long totalMarks, Double convertTo, String questionPdfUrl) {
         this.testTitle = testTitle;
-        this.questionPdfUrl = question;
-        this.markSheet = "";
+        this.questionPdfUrl = questionPdfUrl;
+        this.markSheetCsvUrl = "";
         this.totalMark = totalMarks;
         this.convertTo = convertTo;
     }
@@ -42,7 +40,7 @@ public class TestHelperClass {
         this.totalMark = totalMark;
         this.convertTo = convertTo;
         this.questionPdfUrl = "";
-        this.markSheet = "";
+        this.markSheetCsvUrl = "";
     }
 
     public String getTestTitle() {
@@ -53,20 +51,20 @@ public class TestHelperClass {
         this.testTitle = testTitle;
     }
 
-    public String getQuestion() {
+    public String getQuestionPdfUrl() {
         return questionPdfUrl;
     }
 
-    public void setQuestion(String question) {
-        this.questionPdfUrl = question;
+    public void setQuestionPdfUrl(String questionPdfUrl) {
+        this.questionPdfUrl = questionPdfUrl;
     }
 
-    public String getMarkSheet() {
-        return markSheet;
+    public String getMarkSheetCsvUrl() {
+        return markSheetCsvUrl;
     }
 
-    public void setMarkSheet(String markSheet) {
-        this.markSheet = markSheet;
+    public void setMarkSheetCsvUrl(String markSheetCsvUrl) {
+        this.markSheetCsvUrl = markSheetCsvUrl;
     }
 
     public Long getTotalMark() {
@@ -90,7 +88,7 @@ public class TestHelperClass {
         return "TestHelperClass{" +
                 "testTitle='" + testTitle + '\'' +
                 ", question='" + questionPdfUrl + '\'' +
-                ", markSheet='" + markSheet + '\'' +
+                ", markSheet='" + markSheetCsvUrl + '\'' +
                 ", totalMarks=" + totalMark +
                 ", convertTo=" + convertTo +
                 '}';
@@ -167,63 +165,7 @@ public class TestHelperClass {
             }
         });
     }
-    public static void writeResultToDatabase(Activity activity, String clickedCoursePassCode, ArrayList <TestHelperClass.TestMark> testMarks, String testId){
-        ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(activity);
-        progressDialog.setTitle("wait");
-        progressDialog.setMessage("Saving result");
-        progressDialog.show();
 
-        assert testMarks != null;
-        HashMap<String, Long> totalMarks;
-        HashMap<String, Double> convertedMarks;
-        totalMarks = new HashMap<>();
-        convertedMarks = new HashMap<>();
-        for(TestHelperClass.TestMark tsm:testMarks){
-            totalMarks.put(tsm.getRegNo(), tsm.getTotalMark());
-            convertedMarks.put(tsm.getRegNo(), tsm.getConvertedMark());
-        }
-        DatabaseReference referenceStudentList = FirebaseDatabase.getInstance().getReference("courses/"+clickedCoursePassCode+"/students");
-
-        referenceStudentList.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for(DataSnapshot dsnap:snapshot.getChildren()){
-                        String studentUid = (String) dsnap.getValue();
-
-                        DatabaseReference referenceStudentRegNo = FirebaseDatabase.getInstance().getReference("students/"+studentUid+"/registrationNo");
-
-                        referenceStudentRegNo.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    String registrationNo = (String) dataSnapshot.getValue();
-                                    Long totalMark = totalMarks.get(registrationNo);
-                                    Double convertedMark = convertedMarks.get(registrationNo);
-                                    DatabaseReference referenceResult = FirebaseDatabase.getInstance().getReference("result/"+studentUid+"/"+clickedCoursePassCode+"/"+testId);
-                                    referenceResult.child("totalMark").setValue(totalMark);
-                                    referenceResult.child("convertedMark").setValue(convertedMark);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                            }
-                        });
-                    }
-                    progressDialog.dismiss();
-                    Toast.makeText(activity, "Saved successfully", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
     public static void createTest(Activity activity, DatabaseReference referenceTests, TestHelperClass testHelper, String testId){
         referenceTests.child(testId).setValue(testHelper, new DatabaseReference.CompletionListener() {
             @Override

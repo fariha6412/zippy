@@ -69,8 +69,8 @@ public class RegisterInstructorActivity extends AppCompatActivity {
         Button registerBtn = findViewById(R.id.registerbtn);
         String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/instructor.png?alt=media&token=7d594bc1-2490-4a36-b75f-765966a5ce82";
 
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
+        setSupportActionBar(toolbar);
 
         txtViewLogin.setOnClickListener(v -> startActivity(new Intent(RegisterInstructorActivity.this, MainActivity.class)));
         registerBtn.setOnClickListener(v -> {

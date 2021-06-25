@@ -23,7 +23,7 @@ public class ChooseAccountTypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
 
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
         TextView txtViewLogIn = findViewById(R.id.txtviewlogin);
         Button instructorBtn = findViewById(R.id.instructorbtn);

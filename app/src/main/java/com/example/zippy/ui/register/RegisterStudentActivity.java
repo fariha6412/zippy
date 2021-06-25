@@ -16,8 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -32,11 +30,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.jetbrains.annotations.NotNull;
 
 public class RegisterStudentActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
@@ -72,7 +67,7 @@ public class RegisterStudentActivity extends AppCompatActivity {
         Button registerBtn = findViewById(R.id.registerbtn);
         String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/student.png?alt=media&token=112e1b57-ec64-4992-b24d-8c9aba3c88f7";
 
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
         txtViewLogin.setOnClickListener(v -> startActivity(new Intent(RegisterStudentActivity.this, ChooseAccountTypeActivity.class)));

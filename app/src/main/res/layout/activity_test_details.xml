@@ -14,7 +14,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mtoolbar"
+            android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="@color/white"
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_test_title"
                     android:textAlignment="center"
-                    android:textSize="@dimen/button_txt"
+                    android:textSize="@dimen/little_title"
                     android:textColor="@color/black"
                     android:focusable="false"
                     android:freezesText="true"
@@ -144,7 +144,7 @@
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_convertto"
+                    android:text="@string/str_convert_to"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/black"
                     android:textStyle="normal"
@@ -253,7 +253,7 @@
 
             <TextView
                 android:id="@+id/uploadquestionfilename"
-                android:layout_width="@dimen/edit_txt_width"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_border"
                 android:layout_gravity="center_horizontal"
@@ -301,7 +301,7 @@
             </LinearLayout>
             <TextView
                 android:id="@+id/uploadmarksheetfilename"
-                android:layout_width="@dimen/edit_txt_width"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_border"
                 android:layout_gravity="center_horizontal"

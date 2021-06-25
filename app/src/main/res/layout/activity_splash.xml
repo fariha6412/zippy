@@ -34,7 +34,7 @@
                 android:textSize="@dimen/title" />
 
             <ImageView
-                android:id="@+id/imgview"
+                android:id="@+id/imgView"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:layout_marginTop="20dp"
@@ -54,7 +54,7 @@
                 android:layout_width="@dimen/button_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="@string/btn_getstarted"
+                android:text="@string/btn_get_started"
                 android:textSize="@dimen/button_txt"
                 app:backgroundTint="@color/buttonColor"
                 android:textColor="@color/button_txt_color"

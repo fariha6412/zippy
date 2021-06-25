@@ -1,8 +1,11 @@
 package com.example.zippy.helper;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +17,12 @@ import java.util.ArrayList;
 
 public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapter.ViewHolder> {
     private final ArrayList<CourseHelperClass> courseList;
+    private final ArrayList<Boolean> courseCompletionStatus;
     private OnItemClickListener mListener;
   
-    public CourseCustomAdapter(ArrayList<CourseHelperClass> courseList) {
+    public CourseCustomAdapter(ArrayList<CourseHelperClass> courseList, ArrayList<Boolean> courseCompletionStatus) {
         this.courseList = courseList;
+        this.courseCompletionStatus = courseCompletionStatus;
     }
 
     public interface OnItemClickListener {
@@ -29,6 +34,7 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final LinearLayout linearLayout;
         private final TextView txtViewCourseCode;
         private final TextView txtViewCourseTitle;
         private final TextView txtViewCourseYear;
@@ -41,6 +47,7 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
             txtViewCourseTitle = itemView.findViewById(R.id.txtviewcoursetitle);
             txtViewCourseYear = itemView.findViewById(R.id.txtviewcourseyear);
             txtViewCourseCredit = itemView.findViewById(R.id.txtviewcoursecredit);
+            linearLayout = itemView.findViewById(R.id.linearLayout);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,12 +62,14 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
             });
         }
 
-        private void bind(CourseHelperClass course){
+        @SuppressLint("ResourceAsColor")
+        private void bind(CourseHelperClass course, Boolean isCompleted){
 
             txtViewCourseCode.setText(course.getCourseCode());
             txtViewCourseTitle.setText(course.getCourseTitle());
             txtViewCourseYear.setText(course.getCourseYear());
             txtViewCourseCredit.setText(course.getCourseCredit());
+            if(isCompleted)linearLayout.setBackgroundColor(Color.parseColor("#ebc1be"));
         }
     }
 
@@ -73,7 +82,7 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(courseList.get(position));
+        holder.bind(courseList.get(position), courseCompletionStatus.get(position));
     }
 
     @Override

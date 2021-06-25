@@ -42,8 +42,8 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
-            txtViewFullName = itemView.findViewById(R.id.txtviewfullname);
-            imgView = itemView.findViewById(R.id.imgview);
+            txtViewFullName = itemView.findViewById(R.id.txtViewFullName);
+            imgView = itemView.findViewById(R.id.imgView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

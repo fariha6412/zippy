@@ -13,8 +13,7 @@ import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.ui.search.SearchActivity;
 import com.example.zippy.ui.setting.SettingsActivity;
-import com.example.zippy.ui.profile.InstructorProfileActivity;
-import com.example.zippy.ui.profile.StudentProfileActivity;
+import com.example.zippy.ui.profile.UserProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,21 +44,11 @@ public class BottomNavigationHelper {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 FirebaseUser user = auth.getCurrentUser();
                 if(user !=null){
-                    if(loggedProfile.equals("instructor")){
-                        //bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
-                        if(bottomNavigationView.getSelectedItemId()==item.getItemId())return true;
+                    if(bottomNavigationView.getSelectedItemId()==item.getItemId())return true;
 
-                        activity.startActivity(new Intent(activity.getApplicationContext(), InstructorProfileActivity.class));
-                        activity.overridePendingTransition(0,0);
-                        return true;
-                    }
-                    if(loggedProfile.equals("student")){
-                        if(bottomNavigationView.getSelectedItemId()==item.getItemId())return true;
-
-                        activity.startActivity(new Intent(activity.getApplicationContext(), StudentProfileActivity.class));
-                        activity.overridePendingTransition(0,0);
-                        return true;
-                    }
+                    activity.startActivity(new Intent(activity.getApplicationContext(), UserProfileActivity.class));
+                    activity.overridePendingTransition(0,0);
+                    return true;
                 }
             case R.id.navigation_chat:
                 if(bottomNavigationView.getSelectedItemId()==item.getItemId())return true;

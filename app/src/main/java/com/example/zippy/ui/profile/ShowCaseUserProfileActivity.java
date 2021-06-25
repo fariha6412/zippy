@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class CommonUserProfileActivity extends AppCompatActivity {
+public class ShowCaseUserProfileActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     SharedPreferences mPrefs;
@@ -59,13 +59,14 @@ public class CommonUserProfileActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
+    private final ArrayList<Boolean> courseCompletionStatus = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common_user_profile);
+        setContentView(R.layout.activity_show_case_user_profile);
 
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
         MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
@@ -74,18 +75,18 @@ public class CommonUserProfileActivity extends AppCompatActivity {
         clickedUid = mPrefs.getString(strClickedUid, "");
         loggedProfile = mPrefs.getString(loggedStatus, "nouser");
 
-        imgView = findViewById(R.id.imgview);
+        imgView = findViewById(R.id.imgView);
         FloatingActionButton floatingActionButton = findViewById(R.id.chatbtn);
 
         txtViewProfileLocked = findViewById(R.id.txtviewprofileloced);
-        txtViewFullName = findViewById(R.id.txtviewfullname);
+        txtViewFullName = findViewById(R.id.txtViewFullName);
         txtViewEmail = findViewById(R.id.txtviewemail);
-        txtViewDesignation = findViewById(R.id.txtviewdesignation);
-        txtViewEmployeeID = findViewById(R.id.txtviewemployeeid);
-        txtViewRegistrationNo = findViewById(R.id.txtviewregistraionno);
-        txtViewInstitution = findViewById(R.id.txtviewinstitution);
-        txtViewCourseHeader = findViewById(R.id.txtviewcourseheader);
-        recyclerView = findViewById(R.id.recylerview);
+        txtViewDesignation = findViewById(R.id.txtViewDesignation);
+        txtViewEmployeeID = findViewById(R.id.txtViewEmployeeId);
+        txtViewRegistrationNo = findViewById(R.id.txtViewRegistrationNo);
+        txtViewInstitution = findViewById(R.id.txtViewInstitution);
+        txtViewCourseHeader = findViewById(R.id.txtViewCourseHeader);
+        recyclerView = findViewById(R.id.recyclerView);
 
         designationLinearLayout = findViewById(R.id.designationlinearlayout);
         registrationNoLinearLayout = findViewById(R.id.registrationnolinearlayout);
@@ -180,6 +181,10 @@ public class CommonUserProfileActivity extends AppCompatActivity {
                     referenceCourse.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            Boolean isCompleted = (Boolean) snapshot.child("isCompleted").getValue();
+
+                            if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
+                            else courseCompletionStatus.add(false);
                             CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
                             if(courseHelper!=null) {
                                 courseList.add(courseHelper);
@@ -215,6 +220,10 @@ public class CommonUserProfileActivity extends AppCompatActivity {
                     referenceCourse.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            Boolean isCompleted = (Boolean) snapshot.child("isCompleted").getValue();
+
+                            if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
+                            else courseCompletionStatus.add(false);
                             CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
                             if(courseHelper!=null && courseHelper.getInstructorUID().equals(user.getUid())) {
                                 courseList.add(courseHelper);
@@ -240,7 +249,7 @@ public class CommonUserProfileActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        CourseCustomAdapter adapter = new CourseCustomAdapter(courseList);
+        CourseCustomAdapter adapter = new CourseCustomAdapter(courseList, courseCompletionStatus);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

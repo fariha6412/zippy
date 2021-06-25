@@ -1,9 +1,7 @@
 package com.example.zippy.ui.test;
 
 import android.annotation.SuppressLint;
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -26,9 +24,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.zippy.R;
 import com.example.zippy.helper.FileHelper;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.ResultHelper;
 import com.example.zippy.helper.TestHelperClass;
 import com.example.zippy.utility.NetworkChangeListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -47,8 +45,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import static android.os.Environment.DIRECTORY_DOWNLOADS;
-
 public class TestDetailsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -58,16 +54,22 @@ public class TestDetailsActivity extends AppCompatActivity {
     private DatabaseReference referenceResult, referenceTest;
 
     final String loggedStatus = "loggedProfile";
+    private String loggedProfile;
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     private String clickedCoursePassCode;
     final String strClickedTestId = "clickedTestId";
     private String clickedTestId;
+    final String strAlertCsvFormat = "alertCsvFormat";
+
     private Uri pdfUri;
     private Uri markSheetUri;
     private String totalMark ="0";
     private String convertTo ="0";
     private String pdfFilePath;
     private String markSheetPath;
+    private String instructorUID;
+    private Boolean hasQuestion;
+    private Boolean hasMarkSheet;
 
     private TextView txtViewUploadQuestionFileName, txtViewUploadMarkSheetFileName;
     private TextView txtViewTestTitle, txtViewTotalMarks, txtViewConvertTo, txtViewYourTotalMarks, txtViewAfterConversion;
@@ -78,19 +80,21 @@ public class TestDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_details);
 
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
         MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String loggedProfile = mPrefs.getString(loggedStatus, "nouser");
+        loggedProfile = mPrefs.getString(loggedStatus, "nouser");
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         clickedTestId = mPrefs.getString(strClickedTestId, "");
+        String strIsCompleted = "isCompleted";
+        boolean isCompleted = mPrefs.getBoolean(strIsCompleted, false);
+        boolean alertCsvFormat = mPrefs.getBoolean(strAlertCsvFormat, false);
+        final boolean[] flag = {alertCsvFormat};
 
         referenceTest = FirebaseDatabase.getInstance().getReference("tests/"+clickedCoursePassCode+"/"+clickedTestId);
-        pdfFilePath = "questionPdfs/"+clickedCoursePassCode+"/"+clickedTestId+"/question";
-        markSheetPath = "markSheets/"+clickedCoursePassCode+"/"+clickedTestId+"/markSheet";
 
         txtViewTotalMarks = findViewById(R.id.txtviewtotalmark);
         txtViewConvertTo = findViewById(R.id.txtviewconvertto);
@@ -114,6 +118,12 @@ public class TestDetailsActivity extends AppCompatActivity {
         MaterialButton downloadMarkSheetBtn = findViewById(R.id.downloadmarksheetbtn);
 
         if(loggedProfile.equals("instructor")){
+            if(isCompleted){
+                editTotalMarkBtn.setVisibility(View.GONE);
+                editConvertToBtn.setVisibility(View.GONE);
+                uploadQuestionBtn.setVisibility(View.GONE);
+                uploadMarkSheetBtn.setVisibility(View.GONE);
+            }
             yourTotalMarkLinearLayout.setVisibility(View.GONE);
             afterConversionLinearLayout.setVisibility(View.GONE);
         }
@@ -124,7 +134,7 @@ public class TestDetailsActivity extends AppCompatActivity {
             uploadQuestionBtn.setVisibility(View.GONE);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             assert user != null;
-            referenceResult = FirebaseDatabase.getInstance().getReference("result/"+ user.getUid()+"/"+clickedCoursePassCode+"/"+clickedTestId);
+            referenceResult = FirebaseDatabase.getInstance().getReference("result/"+ user.getUid()+"/"+clickedCoursePassCode+"/tests/"+clickedTestId);
         }
 
         txtViewTotalMarks.setText(totalMark);
@@ -135,43 +145,30 @@ public class TestDetailsActivity extends AppCompatActivity {
         txtViewAfterConversion.setText(afterConversion);
 
         getTestDetails();
+        getQuestionAndMarkSheetStatus();
         if(loggedProfile.equals("student"))getResult();
         uploadQuestionBtn.setOnClickListener(v -> {
             FileHelper.filePickIntent(this, PDF_PICK_CODE);
         });
         uploadMarkSheetBtn.setOnClickListener(v -> {
-            checkHasQuestion();
+            if(!flag[0]){
+                String warningDetails = "Please upload a csv file with three columns [registrationNo, totalMark, convertedMark]";
+                FileHelper.alertForCsvFormat(TestDetailsActivity.this, warningDetails);
+                flag[0] = true;
+                mPrefs.edit().putBoolean(strAlertCsvFormat,true).apply();
+            }
+            else checkHasQuestion();
         });
         downloadQuestionBtn.setOnClickListener(v -> {
-            downloadFile(pdfFilePath, "question", ".pdf");
+            FileHelper.downloadFile(this, pdfFilePath, "question", ".pdf");
         });
         downloadMarkSheetBtn.setOnClickListener(v -> {
-            downloadFile(markSheetPath, "markSheet", ".csv");
+            FileHelper.downloadFile(this, markSheetPath, "markSheet", ".csv");
         });
     }
-    private void downloadFile(String path, String fileName, String extension){
-        ProgressDialog progressDialog = new ProgressDialog(TestDetailsActivity.this);
-        progressDialog.setTitle("wait");
-        progressDialog.setMessage("Downloading file");
-        progressDialog.show();
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference(path);
-        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                DownloadManager downloadManager = (DownloadManager) TestDetailsActivity.this.getSystemService(Context.DOWNLOAD_SERVICE);
-                DownloadManager.Request request = new DownloadManager.Request(uri);
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                request.setDestinationInExternalFilesDir(TestDetailsActivity.this, DIRECTORY_DOWNLOADS, fileName + extension);
-                downloadManager.enqueue(request);
-                progressDialog.dismiss();
-            }
-        }).addOnFailureListener(e -> {
-            progressDialog.dismiss();
-            Toast.makeText(TestDetailsActivity.this, "file download failed due to "+e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
-    }
+
     public void checkHasQuestion(){
-        referenceTest.child("question").addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceTest.child("questionPdfUrl").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
@@ -200,12 +197,16 @@ public class TestDetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         if(resultCode == RESULT_OK) {
             if(requestCode == PDF_PICK_CODE){
-                pdfUri = FileHelper.onActivityResult(this, txtViewUploadQuestionFileName, requestCode, data );
+                pdfUri = FileHelper.findPickedFileUri(this, txtViewUploadQuestionFileName, requestCode, data );
                 if(pdfUri != null)uploadPdfToDatabase();
             }
             else {
-                markSheetUri = FileHelper.onActivityResult(this, txtViewUploadMarkSheetFileName, requestCode, data );
-                if(markSheetUri != null)uploadMarkSheetToDatabase();
+                markSheetUri = FileHelper.findPickedFileUri(this, txtViewUploadMarkSheetFileName, requestCode, data );
+                if(markSheetUri != null){
+                    ArrayList<TestHelperClass.TestMark> testMarks;
+                    testMarks = FileHelper.readMarkSheetCsv(markSheetUri, TestDetailsActivity.this);
+                    if(testMarks != null) uploadMarkSheetToDatabase(testMarks);
+                }
             }
         }
         else {
@@ -263,7 +264,7 @@ public class TestDetailsActivity extends AppCompatActivity {
                 while (!uriTask.isSuccessful());
                 String uploadedPdfUrl = ""+uriTask.getResult();
                 progressDialog.dismiss();
-                referenceTest.child("question").setValue(uploadedPdfUrl);
+                referenceTest.child("questionPdfUrl").setValue(uploadedPdfUrl);
                 Toast.makeText(TestDetailsActivity.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> {
@@ -271,7 +272,7 @@ public class TestDetailsActivity extends AppCompatActivity {
             Toast.makeText(TestDetailsActivity.this, "pdf upload failed due to "+e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
-    private void uploadMarkSheetToDatabase(){
+    private void uploadMarkSheetToDatabase(ArrayList<TestHelperClass.TestMark> testMarks){
         ProgressDialog progressDialog = new ProgressDialog(TestDetailsActivity.this);
         progressDialog.setTitle("Wait");
         progressDialog.setMessage("Uploading CSV");
@@ -284,19 +285,64 @@ public class TestDetailsActivity extends AppCompatActivity {
 
             progressDialog.dismiss();
             Toast.makeText(TestDetailsActivity.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
-            ArrayList<TestHelperClass.TestMark> testMarks = new ArrayList<>();
-            testMarks = FileHelper.readCsv(markSheetUri, TestDetailsActivity.this);
-            System.out.println(testMarks);
-            assert testMarks != null;
-            TestHelperClass.writeResultToDatabase(TestDetailsActivity.this, clickedCoursePassCode, testMarks,clickedTestId);
 
-            referenceTest.child("markSheet").setValue(uploadedMarkSheetUrl);
+            ResultHelper.writeTestResultToDatabase(TestDetailsActivity.this, clickedCoursePassCode, testMarks,clickedTestId);
+
+            referenceTest.child("markSheetCsvUrl").setValue(uploadedMarkSheetUrl);
         }).addOnFailureListener(e -> {
             progressDialog.dismiss();
             Toast.makeText(TestDetailsActivity.this, "pdf upload failed due to "+e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
+    private void getQuestionAndMarkSheetStatus(){
+        DatabaseReference referenceCourse = FirebaseDatabase.getInstance().getReference("courses/"+clickedCoursePassCode);
+        referenceCourse.child("instructoruid").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                instructorUID = (String) snapshot.getValue();
 
+                pdfFilePath = "questionPdfs/"+instructorUID+"/"+clickedCoursePassCode+"/"+clickedTestId+"/question";
+                markSheetPath = "markSheets/"+instructorUID+"/"+clickedCoursePassCode+"/"+clickedTestId+"/markSheet";
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        referenceTest.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                String question = (String) snapshot.child("questionPdfUrl").getValue();
+                String markSheet = (String) snapshot.child("markSheetCsvUrl").getValue();
+
+                assert question != null;
+                hasQuestion = !question.equals("");
+                assert markSheet != null;
+                hasMarkSheet = !markSheet.equals("");
+
+                System.out.println(hasQuestion);
+                if(hasQuestion){
+                    txtViewUploadQuestionFileName.setText("uploaded");
+                    txtViewUploadQuestionFileName.setVisibility(View.VISIBLE);
+                }else{
+                    txtViewUploadQuestionFileName.setVisibility(View.GONE);
+                }
+                if(hasMarkSheet && loggedProfile.equals("instructor")){
+                    txtViewUploadMarkSheetFileName.setText("uploaded");
+                    txtViewUploadMarkSheetFileName.setVisibility(View.VISIBLE);
+                }else{
+                    txtViewUploadMarkSheetFileName.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);

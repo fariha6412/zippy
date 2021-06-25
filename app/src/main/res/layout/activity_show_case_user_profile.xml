@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.CommonUserProfileActivity">
+    tools:context=".ui.profile.ShowCaseUserProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"
@@ -14,7 +14,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mtoolbar"
+            android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/appbarColor"
@@ -58,7 +58,7 @@
                     android:layout_gravity="center">
 
                     <ImageView
-                        android:id="@+id/imgview"
+                        android:id="@+id/imgView"
                         android:layout_width="@dimen/profile_img"
                         android:layout_height="@dimen/profile_img"
                         android:src="@drawable/ic_baseline_perm_identity_24"
@@ -112,7 +112,7 @@
                     android:textSize="@dimen/little_title"/>
 
                 <TextView
-                    android:id="@+id/txtviewfullname"
+                    android:id="@+id/txtViewFullName"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
                     android:textSize="@dimen/little_title"/>
 
                 <TextView
-                    android:id="@+id/txtviewinstitution"
+                    android:id="@+id/txtViewInstitution"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -226,7 +226,7 @@
                     android:textSize="@dimen/little_title"/>
 
                 <TextView
-                    android:id="@+id/txtviewdesignation"
+                    android:id="@+id/txtViewDesignation"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -262,7 +262,7 @@
                     android:textSize="@dimen/little_title"/>
 
                 <TextView
-                    android:id="@+id/txtviewemployeeid"
+                    android:id="@+id/txtViewEmployeeId"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -299,7 +299,7 @@
                     android:textSize="@dimen/little_title"/>
 
                 <TextView
-                    android:id="@+id/txtviewregistraionno"
+                    android:id="@+id/txtViewRegistrationNo"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -314,7 +314,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/txtviewcourseheader"
+                android:id="@+id/txtViewCourseHeader"
                 style="@style/Widget.AppCompat.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -339,7 +339,7 @@
                 android:background="@drawable/custom_border">
 
                 <TextView
-                    android:id="@+id/txtviewcourseheadercode"
+                    android:id="@+id/txtViewCourseHeaderCode"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -351,7 +351,7 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/txtviewcourseheadertitle"
+                    android:id="@+id/txtViewCourseHeaderTitle"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -363,7 +363,7 @@
                     android:layout_weight="2"/>
 
                 <TextView
-                    android:id="@+id/txtviewcourseheaderyear"
+                    android:id="@+id/txtViewCourseHeaderYear"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -375,7 +375,7 @@
                     android:layout_weight=".5"/>
 
                 <TextView
-                    android:id="@+id/txtviewcourseheadercredit"
+                    android:id="@+id/txtViewCourseHeaderCredit"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -389,7 +389,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recylerview"
+                android:id="@+id/recyclerView"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

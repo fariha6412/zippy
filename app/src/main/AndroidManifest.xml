@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
         <activity android:name=".ui.test.TestDetailsActivity"></activity>
-        <activity android:name=".ui.profile.CommonUserProfileActivity" />
+        <activity android:name=".ui.profile.ShowCaseUserProfileActivity" />
         <activity android:name=".ui.attendance.AttendanceDetailsActivity" />
         <activity android:name=".ui.setting.SettingsActivity" />
         <activity android:name=".ui.chat.ChatActivity" />
@@ -47,8 +47,7 @@
             android:name=".ui.course.CourseCreationActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.attendance.AttendanceTakingActivity" />
-        <activity android:name=".ui.profile.StudentProfileActivity" />
-        <activity android:name=".ui.profile.InstructorProfileActivity" />
+        <activity android:name=".ui.profile.UserProfileActivity" />
         <activity android:name=".ui.setting.ChangeProfilePictureActivity" />
         <activity
             android:name=".ui.register.RegisterStudentActivity"

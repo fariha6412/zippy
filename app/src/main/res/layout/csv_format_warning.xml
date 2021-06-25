@@ -9,42 +9,41 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/no_internet_sign"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_baseline_error_24"
         android:layout_gravity="center"
         app2:tint="@color/colorNoInternet" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_oops"
+        android:text="@string/str_warning"
         android:textStyle="bold"
         android:textSize="@dimen/little_title"
         android:gravity="center"
         android:textColor="@color/colorNoInternet"/>
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_no_internet_connection"
-        android:textStyle="bold"
-        android:textSize="@dimen/little_title"
-        android:gravity="center"
-        android:textColor="@color/colorNoInternet"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_please_check_your_connection"
-        android:textStyle="bold"
-        android:textSize="@dimen/little_title"
-        android:gravity="center"
-        android:textColor="@color/colorNoInternet"/>
+        android:padding="30dp">
+
+        <TextView
+            android:id="@+id/warningDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_csv_format"
+            android:textStyle="bold"
+            android:textSize="@dimen/little_title"
+            android:gravity="center"
+            android:textColor="@color/colorNoInternet"/>
+    </ScrollView>
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnRetry"
+        android:id="@+id/btnOkay"
         android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
+        android:layout_margin="20dp"
         android:textAllCaps="true"
         android:backgroundTint="@color/colorNoInternet"
         android:textColor="@color/button_txt_color"
-        android:text="@string/str_retry"/>
+        android:text="@string/str_okay"/>
 </LinearLayout>

@@ -69,14 +69,14 @@ public class AttendanceTakingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_taking);
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
         MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
-        Button doneBtn = findViewById(R.id.btndone);
+        Button doneBtn = findViewById(R.id.btnDone);
         loading = findViewById(R.id.loading);
-        TextView txtViewDateToday = findViewById(R.id.txtviewdatetoday);
+        TextView txtViewDateToday = findViewById(R.id.txtViewDateToday);
         txtViewDateToday.setText(dateToday.toString());
 
         studentUids = new ArrayList<>();
@@ -233,7 +233,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         });
     }
     private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recylerview);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

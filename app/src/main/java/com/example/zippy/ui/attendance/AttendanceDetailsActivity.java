@@ -55,7 +55,7 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_details);
 
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
         MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
@@ -67,7 +67,7 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-        txtViewTotalDay = findViewById(R.id.txtviewtotalday);
+        txtViewTotalDay = findViewById(R.id.txtViewTotalDay);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
@@ -86,11 +86,13 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
                     try {
                         attendance = (Map<String, Boolean>) dsnap.getValue();
                         dates.add(date);
-                        if(attendance.get(user.getUid())){
-                            presentStatus.add("Present");
-                        }
-                        else {
-                            presentStatus.add("Absent");
+                        if(attendance.get(user.getUid()) != null){
+                            if(attendance.get(user.getUid())){
+                                presentStatus.add("Present");
+                            }
+                            else {
+                                presentStatus.add("Absent");
+                            }
                         }
                     }
                     catch (Exception e){
@@ -109,7 +111,7 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recylerview);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

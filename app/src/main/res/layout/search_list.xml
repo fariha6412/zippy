@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/imgview"
+        android:id="@+id/imgView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/ic_baseline_perm_identity_24"
@@ -16,7 +16,7 @@
         android:contentDescription="@string/str_img_des" />
 
     <TextView
-        android:id="@+id/txtviewfullname"
+        android:id="@+id/txtViewFullName"
         style="@style/Widget.AppCompat.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

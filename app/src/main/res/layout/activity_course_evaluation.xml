@@ -14,7 +14,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mtoolbar"
+            android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="@color/white"
@@ -142,7 +142,7 @@
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_presentpercentage"
+                    android:text="@string/str_present_percentage"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/black"
                     android:textStyle="normal"
@@ -164,13 +164,82 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/resultedMarkOnAttendanceLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/txtviewstrfinalgrade"
+                    android:id="@+id/txtViewResultedMarkOnAttendanceLabel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_your_attendance_mark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtViewResultedMarkOnAttendance"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_null"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/totalMarkLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtViewTotalMarkLabel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_your_total_mark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtViewTotalMark"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_null"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/finalGradeLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtViewFinalGradeLabel"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
@@ -181,7 +250,7 @@
                     android:textSize="@dimen/little_title"/>
 
                 <TextView
-                    android:id="@+id/txtviewfinalgrade"
+                    android:id="@+id/txtViewFinalGrade"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

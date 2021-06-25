@@ -57,45 +57,65 @@ public class NotificationHelper{
         FirebaseDatabase rootNode;
         rootNode = FirebaseDatabase.getInstance();
         referenceCourseList = rootNode.getReference("students/"+user.getUid()+"/courses");
+        System.out.println("baire");
+
         referenceCourseList.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsanp:snapshot.getChildren()){
-                    String coursePassCode = (String) dsanp.getKey();
-                    String courseTitle = (String) dsanp.child(coursePassCode).child("courseTitle").getValue();
-                    DatabaseReference referenceResult;
-                    referenceResult = rootNode.getReference("result/"+user.getUid()+"/"+coursePassCode+"/tests");
-                    referenceResult.addChildEventListener(new ChildEventListener() {
+                    String coursePassCode = dsanp.getKey();
+                    assert coursePassCode != null;
+
+                    final String[] courseTitle = new String[1];
+                    DatabaseReference referenceCourse = rootNode.getReference("courses/"+coursePassCode);
+                    referenceCourse.child("courseTitle").addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            if(dataSnapshot.exists()) {
-                               NotificationHelper.notify(activity, "Notification", "Your test mark is given for "+courseTitle);
+                        public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
+                            if(dsnapshot.exists()) {
+                                courseTitle[0] = (String) dsnapshot.getValue();
+                                DatabaseReference referenceResult;
+                                referenceResult = rootNode.getReference("result/"+user.getUid()+"/"+coursePassCode);
+
+                                referenceResult.addChildEventListener(new ChildEventListener() {
+                                    @Override
+                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                        if(dataSnapshot.exists()) {
+                                            NotificationHelper.notify(activity, "Notification", "Your test mark is given for "+ courseTitle[0]);
+                                        }
+                                    }
+                                    @Override
+                                    public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                                    {
+                                        if(dataSnapshot.exists()) {
+                                            NotificationHelper.notify(activity, "Notification", "Your test mark is updated for "+ courseTitle[0]);
+                                        }
+                                    }
+                                    @Override
+                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                    }
+
+
+                                });
                             }
-                        }
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s)
-                        {
-                            if(dataSnapshot.exists()) {
-                                NotificationHelper.notify(activity, "Notification", "Your test mark is updated for "+courseTitle);
-                            }
-                        }
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-
                         }
 
                         @Override
                         public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
                         }
-
-
                     });
+
                 }
             }
 

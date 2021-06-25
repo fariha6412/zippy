@@ -1,6 +1,7 @@
 package com.example.zippy;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -30,8 +31,7 @@ import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.extras.SplashActivity;
-import com.example.zippy.ui.profile.InstructorProfileActivity;
-import com.example.zippy.ui.profile.StudentProfileActivity;
+import com.example.zippy.ui.profile.UserProfileActivity;
 import com.example.zippy.ui.register.ChooseAccountTypeActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private EditText editTXTEmail, editTXTPassword;
-    private ProgressBar loading;
     private FirebaseAuth auth;
     private FirebaseDatabase rootNode;
     private DatabaseReference referenceStudent, referenceInstructor, referenceToken;
@@ -93,21 +92,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(user!=null){
-            if(loggedProfile.equals("instructor")){
+
+            startActivity(new Intent(this, UserProfileActivity.class));
+            /*if(loggedProfile.equals("instructor")){
                 startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
                 finish();
             }
             if(loggedProfile.equals("student")){
-                startActivity(new Intent(MainActivity.this, StudentProfileActivity.class));
+                startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
                 finish();
-            }
+            }*/
         }
 
         TextView txtViewRegister = findViewById(R.id.txtviewregister);
         editTXTEmail = findViewById(R.id.edittxtemail);
         editTXTPassword = findViewById(R.id.edittxtpassword);
         Button loginBtn = findViewById(R.id.btnlogin);
-        ImageView imgView = findViewById(R.id.imgview);
+        ImageView imgView = findViewById(R.id.imgView);
         if(darkTheme){
             imgView.setVisibility(View.GONE);
         }
@@ -115,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
             imgView.setVisibility(View.VISIBLE);
         }
         TextView txtViewForgotPassword = findViewById(R.id.txtviewforgotpassword);
-        loading = findViewById(R.id.loading);
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
 
         setSupportActionBar(toolbar);
 
@@ -207,13 +207,16 @@ public class MainActivity extends AppCompatActivity {
                 if(!ValidationChecker.isValidEmail(email, editTXTEmail))return;
                 if(!ValidationChecker.isValidPassword(password, editTXTPassword))return;
 
-                loading.setVisibility(View.VISIBLE);
+                ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+                progressDialog.setTitle("Please wait");
+                progressDialog.setMessage("Logging in");
+                progressDialog.show();
                 try {
                     auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                loading.setVisibility(View.GONE);
+                                progressDialog.dismiss();
                                 FirebaseUser user = auth.getCurrentUser();
                                 assert user != null;
                                 if(user.isEmailVerified()){
@@ -231,8 +234,8 @@ public class MainActivity extends AppCompatActivity {
                                             if(value!=null){
                                                 //start the activity of profile of student
                                                 mPrefs.edit().putString(loggedStatus,"student").apply();
-                                                loading.setVisibility(View.GONE);
-                                                startActivity(new Intent(MainActivity.this, StudentProfileActivity.class));
+                                                progressDialog.dismiss();
+                                                startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
                                                 //finish();
                                             }
@@ -254,8 +257,8 @@ public class MainActivity extends AppCompatActivity {
                                             if(value!=null){
                                                 //start the activity of profile of instructor
                                                 mPrefs.edit().putString(loggedStatus,"instructor").apply();
-                                                loading.setVisibility(View.GONE);
-                                                startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
+                                                progressDialog.dismiss();
+                                                startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
                                                 Log.d("Response", "Value is: " + value.toString());
                                                 //finish();
                                             }
@@ -265,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void onCancelled(@NotNull DatabaseError error) {
                                             // Failed to read value
                                             //Log.w("Error", "Failed to read value.", error.toException());
-                                            loading.setVisibility(View.GONE);
+                                            progressDialog.dismiss();
                                         }
                                     });
                                 }
@@ -273,14 +276,14 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Verify your email and try again", Toast.LENGTH_SHORT).show();
                                     editTXTEmail.setText("");
                                     editTXTPassword.setText("");
-                                    loading.setVisibility(View.GONE);
+                                    progressDialog.dismiss();
                                 }
                             }
                             else{
                                 Toast.makeText(getApplicationContext(), "Could not log in", Toast.LENGTH_SHORT).show();
                                 editTXTEmail.setText("");
                                 editTXTPassword.setText("");
-                                loading.setVisibility(View.GONE);
+                                progressDialog.dismiss();
                             }
                         }
                     });

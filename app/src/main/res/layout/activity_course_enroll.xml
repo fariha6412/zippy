@@ -14,7 +14,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mtoolbar"
+            android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="@color/white"
@@ -61,7 +61,7 @@
                 android:layout_width="@dimen/edit_txt_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:background="@color/textfieldColor"
+                android:background="@color/textFieldColor"
                 android:ems="10"
                 android:hint="@string/str_pass_code"
                 android:importantForAutofill="no"

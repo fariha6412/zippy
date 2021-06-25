@@ -23,7 +23,7 @@ import com.example.zippy.helper.CourseHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
-import com.example.zippy.ui.profile.CommonUserProfileActivity;
+import com.example.zippy.ui.profile.ShowCaseUserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,7 +60,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_details);
-        Toolbar toolbar = findViewById(R.id.mtoolbar);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
         MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
@@ -136,7 +136,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         });
     }
     private void initRecyclerView(){
-        RecyclerView recyclerView = findViewById(R.id.recylerview);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -149,7 +149,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
             public void onItemClick(int position) {
                 //show profile of the student
                 mPrefs.edit().putString(strClickedUid, studentUIDs.get(position)).apply();
-                startActivity(new Intent(StudentDetailsActivity.this, CommonUserProfileActivity.class));
+                startActivity(new Intent(StudentDetailsActivity.this, ShowCaseUserProfileActivity.class));
             }
             @Override
             public void onDeleteClick(int position) {

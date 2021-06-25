@@ -1,5 +1,6 @@
 package com.example.zippy.ui.course;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -45,6 +46,8 @@ public class CourseEvaluationActivity extends AppCompatActivity {
     String clickedTestId;
 
     private TextView txtViewTotalPresent, txtViewTotalAbsent, txtViewAttendancePercentage, txtViewFinalGrade;
+    private TextView txtViewYourMarkOnAttendance, txtViewYourTotalMark;
+    private LinearLayout finalGradeLinearLayout, markOnAttendanceLinearLayout, totalMarkLinearLayout;
 
     private ArrayList<String> testIds;
 
@@ -52,21 +55,29 @@ public class CourseEvaluationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_evaluation);
-        Toolbar mtoolbar = findViewById(R.id.mtoolbar);
-        setSupportActionBar(mtoolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(mtoolbar, this);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
+        setSupportActionBar(toolbar);
+        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
         menuHelperClass.handle();
 
         txtViewTotalPresent = findViewById(R.id.txtviewtotalpresent);
         txtViewTotalAbsent = findViewById(R.id.txtviewtotalabsent);
         txtViewAttendancePercentage = findViewById(R.id.txtviewattendancepercentage);
-        txtViewFinalGrade = findViewById(R.id.txtviewfinalgrade);
+        txtViewFinalGrade = findViewById(R.id.txtViewFinalGrade);
+        txtViewYourMarkOnAttendance = findViewById(R.id.txtViewResultedMarkOnAttendance);
+        txtViewYourTotalMark = findViewById(R.id.txtViewTotalMark);
+        txtViewFinalGrade = findViewById(R.id.txtViewFinalGrade);
         LinearLayout attendanceLayout = findViewById(R.id.attendanceLayout);
+        markOnAttendanceLinearLayout = findViewById(R.id.resultedMarkOnAttendanceLinearLayout);
+        totalMarkLinearLayout = findViewById(R.id.totalMarkLinearLayout);
+        finalGradeLinearLayout = findViewById(R.id.finalGradeLinearLayout);
         AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         clickedTestId = mPrefs.getString(strClickedTestId, "");
+        String strIsCompleted = "isCompleted";
+        Boolean isCompleted = mPrefs.getBoolean(strIsCompleted, false);
 
         testIds = new ArrayList<>();
         ArrayList<String> testTitles = new ArrayList<>();
@@ -81,6 +92,13 @@ public class CourseEvaluationActivity extends AppCompatActivity {
                 startActivity(new Intent(CourseEvaluationActivity.this, TestDetailsActivity.class));
             }
         });
+
+        if(isCompleted){
+            totalMarkLinearLayout.setVisibility(View.VISIBLE);
+            finalGradeLinearLayout.setVisibility(View.VISIBLE);
+            markOnAttendanceLinearLayout.setVisibility(View.VISIBLE);
+            getResultData();
+        }
 
         attendanceLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +122,41 @@ public class CourseEvaluationActivity extends AppCompatActivity {
                     txtViewTotalAbsent.setText(String.valueOf(snapshot.child("totalAbsent").getValue()));
                     txtViewAttendancePercentage.setText(String.valueOf ((Long.parseLong(String.valueOf(snapshot.child("totalPresent").getValue())) *100.0 )/ (Long.parseLong(String.valueOf(snapshot.child("totalPresent").getValue())) + Long.parseLong(String.valueOf(snapshot.child("totalAbsent").getValue())))));
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void getResultData(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        assert user != null;
+        DatabaseReference referenceResultAttendance = FirebaseDatabase.getInstance().getReference("result/"+user.getUid()+"/"+clickedCoursePassCode+"/"+"attendance/got");
+        DatabaseReference referenceResultFinalEvaluation = FirebaseDatabase.getInstance().getReference("result/"+user.getUid()+"/"+clickedCoursePassCode+"/"+"finalEvaluation");
+        referenceResultAttendance.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snpt) {
+                if(snpt.exists()){
+                    System.out.println("dsfdsafdsfdsaf");
+                    txtViewYourMarkOnAttendance.setText((String.valueOf(snpt.getValue())));
+                }
+                else txtViewYourMarkOnAttendance.setText("0");
+                referenceResultFinalEvaluation.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot dst) {
+                        txtViewYourTotalMark.setText(((String) dst.child("got").getValue()));
+                        txtViewFinalGrade.setText((String) dst.child("finalGrade").getValue());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
