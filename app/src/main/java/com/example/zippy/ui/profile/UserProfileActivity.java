@@ -145,6 +145,7 @@ public class UserProfileActivity extends AppCompatActivity{
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
                     Log.d("Response", "Value is: " + value.toString());
                     courseList.clear();
+                    courseCompletionStatus.clear();
                     referenceCourseList = rootNode.getReference("students/"+user.getUid()+"/courses");
                     showCourseList();
                 }
@@ -158,7 +159,7 @@ public class UserProfileActivity extends AppCompatActivity{
         });
     }
     public void showInstructorProfile(){
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
@@ -175,6 +176,7 @@ public class UserProfileActivity extends AppCompatActivity{
                     Log.d("Response", "Value is: " + value.toString());
 
                     courseList.clear();
+                    courseCompletionStatus.clear();
                     referenceCourseList = rootNode.getReference("instructors/"+user.getUid()+"/courses");
                     showCourseList();
                 }
@@ -194,6 +196,7 @@ public class UserProfileActivity extends AppCompatActivity{
                 for(DataSnapshot dsnap:snapshot.getChildren()){
                     String coursePassCode = (String) dsnap.getValue();
                     courseList.clear();
+                    courseCompletionStatus.clear();
                     referenceCourse = rootNode.getReference("courses/"+coursePassCode);
                     referenceCourse.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -202,6 +205,7 @@ public class UserProfileActivity extends AppCompatActivity{
 
                             if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
                             else courseCompletionStatus.add(false);
+                            System.out.println(courseCompletionStatus.size()+" "+ courseList.size());
                             CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
                             if(courseHelper!=null) {
                                 courseList.add(courseHelper);

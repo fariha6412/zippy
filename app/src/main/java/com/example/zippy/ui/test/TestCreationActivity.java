@@ -281,7 +281,7 @@ public class TestCreationActivity extends AppCompatActivity {
     }
     private void getQuestionAndMarkSheetPath(TestHelperClass testHelper) {
         DatabaseReference referenceCourse = FirebaseDatabase.getInstance().getReference("courses/" + clickedCoursePassCode);
-        referenceCourse.child("instructoruid").addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceCourse.child("instructorUID").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 instructorUID = (String) snapshot.getValue();

@@ -219,14 +219,18 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
                     referenceCourse = rootNode.getReference("courses/"+coursePassCode);
                     referenceCourse.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                            Boolean isCompleted = (Boolean) snapshot.child("isCompleted").getValue();
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapt) {
 
-                            if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
-                            else courseCompletionStatus.add(false);
-                            CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
-                            if(courseHelper!=null && courseHelper.getInstructorUID().equals(user.getUid())) {
-                                courseList.add(courseHelper);
+                            CourseHelperClass courseHelper = snapt.getValue(CourseHelperClass.class);
+                            if(courseHelper!=null) {
+                                System.out.println(user.getUid());
+                                System.out.println(courseHelper.getInstructorUID());
+                                if(courseHelper.getInstructorUID().equals(user.getUid())){
+                                    Boolean isCompleted = (Boolean) snapt.child("isCompleted").getValue();
+                                    if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
+                                    else courseCompletionStatus.add(false);
+                                    courseList.add(courseHelper);
+                                }
                                 initRecyclerView();
                             }
                         }

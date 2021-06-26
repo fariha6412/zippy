@@ -82,7 +82,7 @@ public class CourseHelperClass {
                 ", coursePassCode='" + coursePassCode + '\'' +
                 ", courseCredit='" + courseCredit + '\'' +
                 ", courseYear='" + courseYear + '\'' +
-                ", instructoruid='" + instructorUID + '\'' +
+                ", instructorUID='" + instructorUID + '\'' +
                 ", noOfStudents=" + noOfStudents +
                 '}';
     }

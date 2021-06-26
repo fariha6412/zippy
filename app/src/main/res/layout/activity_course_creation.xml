@@ -117,7 +117,7 @@
                 android:background="@color/textFieldColor"
                 android:ems="10"
                 android:hint="@string/str_course_credit"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="10dp"
                 android:paddingStart=".1in"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"

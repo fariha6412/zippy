@@ -19,11 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class TestHelperClass {
-    String testTitle;
-    String questionPdfUrl;
-    String markSheetCsvUrl;
-    Long totalMark;
-    Double convertTo;
+    private String testTitle;
+    private String questionPdfUrl;
+    private String markSheetCsvUrl;
+    private Long totalMark;
+    private Double convertTo;
 
     public TestHelperClass(){}
 
@@ -171,6 +171,7 @@ public class TestHelperClass {
             @Override
             public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
                 Toast.makeText(activity, "Test created successfully", Toast.LENGTH_SHORT).show();
+                System.out.println(testHelper.testTitle);
             }
         });
     }
