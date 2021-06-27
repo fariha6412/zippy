@@ -117,4 +117,5 @@
     <string name="str_your_attendance_mark">You mark on Attendance</string>
     <string name="str_show_instructor_profile">Show Instructor Profile</string>
     <string name="default_notification_channel_name">From Zippy</string>
+    <string name="title_requests">Requests</string>
 </resources>

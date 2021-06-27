@@ -155,6 +155,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
                     employeeIDLinearLayout.setVisibility(View.VISIBLE);
                     designationLinearLayout.setVisibility(View.VISIBLE);
                     txtViewCourseHeader.setVisibility(View.VISIBLE);
+                    txtViewCourseHeader.setText(R.string.str_created_courses);
                     courseListHeaderLinearLayout.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
                     Glide.with(getBaseContext()).load(instructorHelper.getImage()).into(imgView);

@@ -33,10 +33,8 @@ import org.jetbrains.annotations.NotNull;
 public class CourseEnrollActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    private FirebaseDatabase rootNode;
-    private DatabaseReference referenceStudentNoOfCourses;
     private DatabaseReference referenceStudentCourses;
-    private DatabaseReference referenceCourse, referenceCourseNoOfStudents, referenceCourseStudents;
+    private DatabaseReference referenceCourse;
     private FirebaseUser user;
 
     private EditText editTXTCoursePassCode;
@@ -52,24 +50,19 @@ public class CourseEnrollActivity extends AppCompatActivity {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        rootNode = FirebaseDatabase.getInstance();
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference referenceStudent = rootNode.getReference("students/" + user.getUid());
-        referenceStudentCourses = rootNode.getReference("students/"+ user.getUid()+"/courses");
-        referenceStudentNoOfCourses = rootNode.getReference("students/"+user.getUid()+"/noOfCourses");
+        referenceStudentCourses = referenceStudent.child("courses");
         referenceCourse = rootNode.getReference("courses");
         editTXTCoursePassCode = findViewById(R.id.edittxtcoursepasscode);
         Button enrollBtn = findViewById(R.id.enrollbtn);
         Button cancelBtn = findViewById(R.id.cancelbtn);
 
         final Long[] noOfCourses = new Long[1];
-        referenceStudent.addValueEventListener(new ValueEventListener() {
+        referenceStudent.child("noOfCourses").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
-                assert value != null;
-                noOfCourses[0] = (value.getNoOfCourses()) + 1L;
+                if(dataSnapshot.exists()) noOfCourses[0] = (Long) dataSnapshot.getValue() + 1L;
             }
 
             @Override
@@ -92,6 +85,15 @@ public class CourseEnrollActivity extends AppCompatActivity {
                         editTXTCoursePassCode.setError("No course found");
                         editTXTCoursePassCode.requestFocus();
                     } else {
+                        try{
+                            if((boolean) snapshot.child("isCompleted").getValue()){
+                                Toast.makeText(CourseEnrollActivity.this, "Course is completed", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }
+                        catch (NullPointerException e){
+                            //pass
+                        }
                         final boolean[] isAlreadyEnrolled = {false};
                         referenceStudentCourses.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -109,15 +111,14 @@ public class CourseEnrollActivity extends AppCompatActivity {
                                     System.out.println(value.toString());
                                     System.out.println(value.getNoOfStudents());
                                     noOfStudents[0] = (value.getNoOfStudents()) + 1L;
-                                    referenceCourseNoOfStudents = rootNode.getReference("courses/"+coursePassCode+"/noOfStudents");
-                                    referenceCourseNoOfStudents.setValue((noOfStudents[0]), new DatabaseReference.CompletionListener() {
+                                    referenceCourse.child("noOfStudents").setValue((noOfStudents[0]), new DatabaseReference.CompletionListener() {
 
                                         @Override
                                         public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
                                             System.err.println("Value was set. Error = " + error);
                                         }
                                     });
-                                    referenceStudentNoOfCourses.setValue((noOfCourses[0]), new DatabaseReference.CompletionListener() {
+                                    referenceStudent.child("noOfCourses").setValue((noOfCourses[0]), new DatabaseReference.CompletionListener() {
 
                                         @Override
                                         public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
@@ -130,8 +131,8 @@ public class CourseEnrollActivity extends AppCompatActivity {
                                             System.err.println("Value was set. Error = " + error);
                                         }
                                     });
-                                    referenceCourseStudents = rootNode.getReference("courses/"+coursePassCode+"/students");
-                                    referenceCourseStudents.child(String.valueOf(noOfStudents[0])).setValue(user.getUid(), new DatabaseReference.CompletionListener() {
+
+                                    referenceCourse.child("students").child(String.valueOf(noOfStudents[0])).setValue(user.getUid(), new DatabaseReference.CompletionListener() {
                                         @Override
                                         public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
                                             System.err.println("Value was set. Error = " + error);

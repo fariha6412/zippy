@@ -2,6 +2,7 @@ package com.example.zippy.ui.test;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.example.zippy.helper.FileHelper;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.ResultHelper;
 import com.example.zippy.helper.TestHelperClass;
+import com.example.zippy.ui.course.CourseDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -147,6 +150,13 @@ public class TestDetailsActivity extends AppCompatActivity {
         getTestDetails();
         getQuestionAndMarkSheetStatus();
         if(loggedProfile.equals("student"))getResult();
+
+        editTotalMarkBtn.setOnClickListener(v -> {
+            changeTotalMark();
+        });
+        editConvertToBtn.setOnClickListener(v -> {
+            changeConvertTo();
+        });
         uploadQuestionBtn.setOnClickListener(v -> {
             FileHelper.filePickIntent(this, PDF_PICK_CODE);
         });
@@ -340,6 +350,86 @@ public class TestDetailsActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
+            }
+        });
+    }
+    private void changeTotalMark(){
+        EditText mark = new EditText(TestDetailsActivity.this);
+        AlertDialog.Builder gettingMarkDialog = new AlertDialog.Builder(TestDetailsActivity.this);
+        gettingMarkDialog.setTitle("Change total mark").setCancelable(true) ;
+        gettingMarkDialog.setView(mark);
+        DialogInterface.OnClickListener yesBtnFunc = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean flag = false;
+            }
+
+        };
+        gettingMarkDialog.setPositiveButton("SET", yesBtnFunc);
+        gettingMarkDialog.setNegativeButton("CANCEL", null);
+        AlertDialog alert = gettingMarkDialog.create();
+        alert.show();
+
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                try {
+                    Long markLng = Long.parseLong(mark.getText().toString().trim());
+                    if(markLng < 0 || markLng > 100){
+                        mark.setError("Give a valid mark");
+                        mark.requestFocus();
+                    }
+                    else{
+                        referenceTest.child("totalMark").setValue(markLng);
+                        alert.dismiss();
+                    }
+                }
+                catch (Exception e){
+                    mark.setError("Give a Valid number");
+                    mark.requestFocus();
+                }
+            }
+        });
+    }
+    private void changeConvertTo(){
+        EditText mark = new EditText(TestDetailsActivity.this);
+        AlertDialog.Builder gettingMarkDialog = new AlertDialog.Builder(TestDetailsActivity.this);
+        gettingMarkDialog.setTitle("Change converting mark").setCancelable(true) ;
+        gettingMarkDialog.setView(mark);
+        DialogInterface.OnClickListener yesBtnFunc = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean flag = false;
+            }
+
+        };
+        gettingMarkDialog.setPositiveButton("SET", yesBtnFunc);
+        gettingMarkDialog.setNegativeButton("CANCEL", null);
+        AlertDialog alert = gettingMarkDialog.create();
+        alert.show();
+
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                try {
+                    double markDbl = Double.parseDouble(mark.getText().toString().trim());
+                    if(markDbl < 0 || markDbl > 100){
+                        mark.setError("Give a valid mark");
+                        mark.requestFocus();
+                    }
+                    else{
+                        referenceTest.child("convertTo").setValue(markDbl);
+                        alert.dismiss();
+                    }
+                }
+                catch (Exception e){
+                    mark.setError("Give a Valid number");
+                    mark.requestFocus();
+                }
             }
         });
     }

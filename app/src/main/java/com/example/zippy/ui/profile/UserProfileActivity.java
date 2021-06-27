@@ -61,7 +61,6 @@ public class UserProfileActivity extends AppCompatActivity{
     private DatabaseReference referenceCourseList;
     private FirebaseUser user;
 
-    private TextView txtViewCourseHeader;
     private TextView txtViewFullName, txtViewInstitution, txtViewRegistrationNo;
     private TextView txtViewDesignation, txtViewEmployeeId;
     private ImageView img;
@@ -79,7 +78,7 @@ public class UserProfileActivity extends AppCompatActivity{
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         if(user==null)finish();
-        txtViewCourseHeader = findViewById(R.id.txtViewCourseHeader);
+        TextView txtViewCourseHeader = findViewById(R.id.txtViewCourseHeader);
         txtViewFullName = findViewById(R.id.txtViewFullName);
         txtViewInstitution = findViewById(R.id.txtViewInstitution);
         txtViewRegistrationNo = findViewById(R.id.txtViewRegistrationNo);
@@ -116,6 +115,7 @@ public class UserProfileActivity extends AppCompatActivity{
         if(loggedProfile.equals("student")){
             reference = rootNode.getReference("students/" + user.getUid());
             txtViewRegistrationNo.setVisibility(View.VISIBLE);
+            menu.getItem(4).setVisible(false);
             showStudentProfile();
         }
         else if(loggedProfile.equals("instructor")){
@@ -123,6 +123,7 @@ public class UserProfileActivity extends AppCompatActivity{
             reference = rootNode.getReference("instructors/" + user.getUid());
             txtViewDesignation.setVisibility(View.VISIBLE);
             txtViewEmployeeId.setVisibility(View.VISIBLE);
+            menu.getItem(4).setVisible(true);
             showInstructorProfile();
         }
 
@@ -201,14 +202,14 @@ public class UserProfileActivity extends AppCompatActivity{
                     courseList.clear();
                     courseCompletionStatus.clear();
                     referenceCourse = rootNode.getReference("courses/"+coursePassCode);
-                    referenceCourse.addValueEventListener(new ValueEventListener() {
+                    referenceCourse.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                             Boolean isCompleted = (Boolean) snapshot.child("isCompleted").getValue();
 
                             if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
                             else courseCompletionStatus.add(false);
-                            System.out.println(courseCompletionStatus.size()+" "+ courseList.size());
+                            //System.out.println(courseCompletionStatus.size()+" "+ courseList.size());
                             CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
                             if(courseHelper!=null) {
                                 courseList.add(courseHelper);

@@ -177,7 +177,70 @@ public class StudentDetailsActivity extends AppCompatActivity {
     }
 
     private void unrollStudent(int position){
-        //
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference referenceCourse = rootNode.getReference("courses/"+clickedCoursePassCode);
+        DatabaseReference referenceStudent = rootNode.getReference("students/"+ studentUIDs.get(position));
+
+        referenceCourse.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dsnap:snapshot.getChildren()){
+                    if(dsnap.getValue() == studentUIDs.get(position)){
+                        referenceCourse.child("students").child(dsnap.getKey()).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        referenceCourse.child("noOfStudents").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    Long noOfStudents = (Long) snapshot.getValue();
+                    referenceCourse.child("noOfStudents").setValue(noOfStudents - 1);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        referenceStudent.child("courses").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dsnap:snapshot.getChildren()){
+                    if(dsnap.getValue() == clickedCoursePassCode){
+                        referenceStudent.child("courses").child(dsnap.getKey()).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        referenceStudent.child("noOfCourses").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    Long noOfCourses = (Long) snapshot.getValue();
+                    referenceStudent.child("noOfCourses").setValue(noOfCourses - 1);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        referenceCourse.child("unrolledStudents").push().setValue(studentUIDs.get(position));
+        showList();
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

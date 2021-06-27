@@ -132,6 +132,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
         getAttendanceStatus();
 
+        if(isCompleted)editMarkOnAttendance.setVisibility(View.GONE);
         testCreationBtn.setOnClickListener(v -> {
             if(isCompleted){
                 Toast.makeText(this, "Course is completed", Toast.LENGTH_SHORT).show();
