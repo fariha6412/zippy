@@ -39,6 +39,8 @@ import com.example.zippy.ui.test.TestDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -74,7 +76,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private TextView txtViewMarkOnAttendance;
     private Button attendanceMarkAssignBtn;
     private Uri gradingScaleUri;
-    private String instructorUID;
     private ArrayList<String> testIds;
     private Boolean isAssignedAttendanceMark = false;
     private Double markOnAttendance = null;
@@ -139,10 +140,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         });
 
         studentDetailsBtn.setOnClickListener(v -> {
-            if(isCompleted){
-                Toast.makeText(this, "Course is completed", Toast.LENGTH_SHORT).show();
-            }
-            else startActivity(new Intent(CourseDetailsActivity.this, StudentDetailsActivity.class));
+            startActivity(new Intent(CourseDetailsActivity.this, StudentDetailsActivity.class));
         });
         attendanceBtn.setOnClickListener(v -> {
             if(isCompleted){
@@ -219,7 +217,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
         progressDialog.setTitle("Please Wait");
         progressDialog.setMessage("Uploading CSV");
         progressDialog.show();
-        String gradingPath = "gradingScales/" +instructorUID+"/"+ clickedCoursePassCode + "/gradingScale";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String gradingPath = "gradingScales/" +user.getUid()+"/"+ clickedCoursePassCode + "/gradingScale";
         StorageReference storageReferenceCsv = FirebaseStorage.getInstance().getReference(gradingPath);
         storageReferenceCsv.putFile(gradingScaleUri).addOnSuccessListener(taskSnapshot -> {
             Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
@@ -301,7 +300,6 @@ public class CourseDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 Object markOnAttendanceOBJ = snapshot.child("markOnAttendance").getValue();
 
-                instructorUID = (String) snapshot.child("instructoruid").getValue();
                 isAssignedAttendanceMark = markOnAttendanceOBJ != null;
 
                 if(isAssignedAttendanceMark){
@@ -314,6 +312,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                     markOnAttendanceLinearLayout.setVisibility(View.VISIBLE);
                     attendanceMarkAssignBtn.setVisibility(View.GONE);
                 }
+                markOnAttendance = 0.0;
             }
 
             @Override

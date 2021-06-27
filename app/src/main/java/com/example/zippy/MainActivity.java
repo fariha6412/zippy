@@ -16,11 +16,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -28,6 +28,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MyFirebaseMessagingService;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.extras.SplashActivity;
@@ -82,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        String loggedProfile = mPrefs.getString(loggedStatus, "nouser");
         boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
         if(darkTheme){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -92,16 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(user!=null){
-
             startActivity(new Intent(this, UserProfileActivity.class));
-            /*if(loggedProfile.equals("instructor")){
-                startActivity(new Intent(MainActivity.this, InstructorProfileActivity.class));
-                finish();
-            }
-            if(loggedProfile.equals("student")){
-                startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-                finish();
-            }*/
         }
 
         TextView txtViewRegister = findViewById(R.id.txtviewregister);
@@ -232,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                                             // whenever data at this location is updated.
                                             StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
                                             if(value!=null){
+                                                saveToken(user.getUid());
                                                 //start the activity of profile of student
                                                 mPrefs.edit().putString(loggedStatus,"student").apply();
                                                 progressDialog.dismiss();
@@ -256,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
                                             InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
                                             if(value!=null){
                                                 //start the activity of profile of instructor
+                                                saveToken(user.getUid());
                                                 mPrefs.edit().putString(loggedStatus,"instructor").apply();
                                                 progressDialog.dismiss();
                                                 startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
@@ -295,6 +288,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void saveToken(String userUID){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("userTokens");
+        reference.child(userUID).setValue(MyFirebaseMessagingService.getToken(MainActivity.this), new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                Toast.makeText(MainActivity.this, "token saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);

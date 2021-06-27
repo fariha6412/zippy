@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="false"
@@ -16,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.test.TestDetailsActivity"></activity>
+        <activity android:name=".ui.course.AfterStudentDetailsActivity" />
+        <activity android:name=".ui.test.TestDetailsActivity" />
         <activity android:name=".ui.profile.ShowCaseUserProfileActivity" />
         <activity android:name=".ui.attendance.AttendanceDetailsActivity" />
         <activity android:name=".ui.setting.SettingsActivity" />

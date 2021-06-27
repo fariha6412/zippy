@@ -45,8 +45,8 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
     SharedPreferences mPrefs;
     final String loggedStatus = "loggedProfile";
     final String strClickedUid = "clickedUid";
-    String clickedUid;
-    String loggedProfile;
+    private String clickedUid;
+    private String loggedProfile;
 
     private ImageView imgView;
     private TextView txtViewProfileLocked, txtViewFullName, txtViewEmail, txtViewInstitution, txtViewDesignation, txtViewEmployeeID, txtViewRegistrationNo, txtViewCourseHeader;

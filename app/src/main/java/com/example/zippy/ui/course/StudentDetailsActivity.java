@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,10 +21,11 @@ import android.widget.TextView;
 
 import com.example.zippy.R;
 import com.example.zippy.helper.CourseHelperClass;
+import com.example.zippy.helper.FcmNotificationsSender;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.NotificationHelper;
 import com.example.zippy.helper.StudentCustomAdapter;
 import com.example.zippy.helper.StudentHelperClass;
-import com.example.zippy.ui.profile.ShowCaseUserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,18 +45,13 @@ public class StudentDetailsActivity extends AppCompatActivity {
     String clickedCoursePassCode;
     final String strClickedUid = "clickedUid";
     String clickedUid;
+    private String courseTitle;
 
     private ArrayList<String> studentUIDs;
     private ArrayList<String> studentNames;
     private ArrayList<String> studentRegistrationNos;
 
     private TextView txtViewTotalStudent;
-
-    private FirebaseDatabase rootNode;
-    private DatabaseReference referenceEnrolledStudents;
-    private DatabaseReference referenceStudent;
-
-    private Long noOfStudents = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,45 +76,55 @@ public class StudentDetailsActivity extends AppCompatActivity {
         showList();
     }
     private void showList(){
-        rootNode = FirebaseDatabase.getInstance();
-        DatabaseReference referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
-        referenceCourse.addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference referenceCourseNoOfStudents = rootNode.getReference("courses/" + clickedCoursePassCode +"/noOfStudents");
+        referenceCourseNoOfStudents.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
-                if(courseHelper!=null){
-                    studentNames.clear();
-                    studentUIDs.clear();
-                    noOfStudents = courseHelper.getNoOfStudents();
-                    txtViewTotalStudent.setText(noOfStudents.toString());
+                if(snapshot.exists()){
+                    txtViewTotalStudent.setText(snapshot.getValue().toString());
+                }
+            }
 
-                    referenceEnrolledStudents = rootNode.getReference("courses/"+clickedCoursePassCode+"/students");
-                    referenceEnrolledStudents.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        DatabaseReference referenceCourseTitle = rootNode.getReference("courses/" + clickedCoursePassCode +"/courseTitle");
+        referenceCourseTitle.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    courseTitle = snapshot.getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        DatabaseReference referenceEnrolledStudents = rootNode.getReference("courses/"+clickedCoursePassCode+"/students");
+        referenceEnrolledStudents.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dsnap:dataSnapshot.getChildren()){
+                    System.out.println(dsnap.getValue());
+
+                    String studentUid = (String) dsnap.getValue();
+                    DatabaseReference referenceStudent = rootNode.getReference("students/"+studentUid);
+                    referenceStudent.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot dsnap:dataSnapshot.getChildren()){
-                                System.out.println(dsnap.getValue());
-
-                                String studentUid = (String) dsnap.getValue();
-                                referenceStudent = rootNode.getReference("students/"+studentUid);
-                                referenceStudent.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
-                                        StudentHelperClass studentHelper = dsnapshot.getValue(StudentHelperClass.class);
-                                        if(studentHelper!=null){
-                                            studentUIDs.add(studentUid);
-                                            studentNames.add(studentHelper.getFullName());
-                                            studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
-                                            initRecyclerView();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                                    }
-                                });
+                        public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
+                            StudentHelperClass studentHelper = dsnapshot.getValue(StudentHelperClass.class);
+                            if(studentHelper!=null){
+                                studentUIDs.add(studentUid);
+                                studentNames.add(studentHelper.getFullName());
+                                studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
+                                initRecyclerView();
                             }
                         }
 
@@ -149,7 +156,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
             public void onItemClick(int position) {
                 //show profile of the student
                 mPrefs.edit().putString(strClickedUid, studentUIDs.get(position)).apply();
-                startActivity(new Intent(StudentDetailsActivity.this, ShowCaseUserProfileActivity.class));
+                startActivity(new Intent(StudentDetailsActivity.this, AfterStudentDetailsActivity.class));
             }
             @Override
             public void onDeleteClick(int position) {
@@ -161,12 +168,14 @@ public class StudentDetailsActivity extends AppCompatActivity {
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                NotificationHelper.notifyUser(studentUIDs.get(position), "Sorry", "you have been removed from " + courseTitle,StudentDetailsActivity.this);
                                 unrollStudent(position);
                             }
                         }).create().show();
             }
         });
     }
+
     private void unrollStudent(int position){
         //
     }

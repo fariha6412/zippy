@@ -2,6 +2,7 @@ package com.example.zippy.helper;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,10 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
             txtViewCourseTitle.setText(course.getCourseTitle());
             txtViewCourseYear.setText(course.getCourseYear());
             txtViewCourseCredit.setText(course.getCourseCredit());
-            if(isCompleted)linearLayout.setBackgroundColor(Color.parseColor("#ebc1be"));
+            if(isCompleted){
+                linearLayout.setBackgroundColor(Color.parseColor("#ebc1be"));
+                linearLayout.setBackgroundTintMode(PorterDuff.Mode.MULTIPLY);
+            }
         }
     }
 

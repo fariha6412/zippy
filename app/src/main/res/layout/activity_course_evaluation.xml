@@ -264,6 +264,15 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/showInstructorProfileBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/button_txt_color"
+                android:backgroundTint="@color/buttonColor"
+                android:text="@string/str_show_instructor_profile"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

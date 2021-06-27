@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ShowCaseUserProfileActivity">
+    tools:context=".ui.course.AfterStudentDetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar"
@@ -17,14 +17,15 @@
             android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/appbarColor"
-            app:titleMarginStart="1in"
             app:titleTextColor="@color/white"
+            app:titleMarginStart="1in"
+            android:background="@color/appbarColor"
             tools:ignore="InOrMmUsage">
 
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,12 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            android:padding="10dp">
-
+            android:padding="30dp">
             <androidx.cardview.widget.CardView
                 android:layout_width="@dimen/profile_img_bg"
                 android:layout_height="@dimen/profile_img_bg"
@@ -203,84 +199,12 @@
                     tools:ignore="TextViewEdits" />
 
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/designationlinearlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:layout_marginTop="10dp">
 
-                <TextView
-                    android:id="@+id/txtviewdesignationlebel"
-                    style="@style/Widget.AppCompat.TextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_designation"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/black"
-                    android:textStyle="normal"
-                    android:layout_weight="1"
-                    android:background="@color/common_profile_txt_view"
-                    android:padding="5dp"
-                    android:textSize="@dimen/little_title"/>
-
-                <TextView
-                    android:id="@+id/txtViewDesignation"
-                    style="@style/Widget.AppCompat.TextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:inputType="text"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/black"
-                    android:textStyle="normal"
-                    android:textSize="@dimen/little_title"
-                    tools:ignore="TextViewEdits" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/employeeidlinearlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/txtviewemployeeidlebel"
-                    style="@style/Widget.AppCompat.TextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_employee_id"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/black"
-                    android:background="@color/common_profile_txt_view"
-                    android:padding="5dp"
-                    android:layout_weight="1"
-                    android:textStyle="normal"
-                    android:textSize="@dimen/little_title"/>
-
-                <TextView
-                    android:id="@+id/txtViewEmployeeId"
-                    style="@style/Widget.AppCompat.TextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:inputType="text"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/black"
-                    android:textStyle="normal"
-                    android:textSize="@dimen/little_title"
-                    tools:ignore="TextViewEdits" />
-
-            </LinearLayout>
             <LinearLayout
                 android:id="@+id/registrationnolinearlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone"
                 android:layout_marginTop="10dp">
 
                 <TextView
@@ -312,89 +236,143 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/txtViewCourseHeader"
-                style="@style/Widget.AppCompat.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/str_enrolled_courses"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textColor="@color/black"
-                android:textStyle="normal"
-                android:visibility="gone"
-                android:textSize="@dimen/little_title"
-                android:layout_marginTop="20dp"
-                android:background="@color/common_profile_txt_view" />
-
             <LinearLayout
-                android:id="@+id/courselistheaderlinearlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:visibility="gone"
-                android:background="@drawable/custom_border">
+                android:id="@+id/attendanceLayout"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
-                    android:id="@+id/txtViewCourseHeaderCode"
+                    android:id="@+id/txtviewstrattendancepercentage"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_present_percentage"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtviewattendancepercentage"
                     style="@style/Widget.AppCompat.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_course_code"
+                    android:text="@string/str_0percent"
+                    android:inputType="text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/titleColor"
+                    android:textColor="@color/black"
                     android:textStyle="normal"
                     android:textSize="@dimen/little_title"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/txtViewCourseHeaderTitle"
-                    style="@style/Widget.AppCompat.TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_course_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/titleColor"
-                    android:textStyle="normal"
-                    android:textSize="@dimen/little_title"
-                    android:layout_weight="2"/>
-
-                <TextView
-                    android:id="@+id/txtViewCourseHeaderYear"
-                    style="@style/Widget.AppCompat.TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_course_year"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/titleColor"
-                    android:textStyle="normal"
-                    android:textSize="@dimen/little_title"
-                    android:layout_weight=".5"/>
-
-                <TextView
-                    android:id="@+id/txtViewCourseHeaderCredit"
-                    style="@style/Widget.AppCompat.TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_course_credit"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/titleColor"
-                    android:textStyle="normal"
-                    android:textSize="@dimen/little_title"
-                    android:layout_weight=".2"/>
+                    tools:ignore="TextViewEdits" />
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:visibility="gone"
+            <LinearLayout
+                android:id="@+id/resultedMarkOnAttendanceLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtViewResultedMarkOnAttendanceLabel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_your_attendance_mark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtViewResultedMarkOnAttendance"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_null"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/totalMarkLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtViewTotalMarkLabel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_your_total_mark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtViewTotalMark"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_null"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/finalGradeLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtViewFinalGradeLabel"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_final_grade"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"/>
+
+                <TextView
+                    android:id="@+id/txtViewFinalGrade"
+                    style="@style/Widget.AppCompat.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_null"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/little_title"
+                    tools:ignore="TextViewEdits" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

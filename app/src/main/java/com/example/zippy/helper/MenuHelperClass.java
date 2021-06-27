@@ -13,6 +13,9 @@ import com.example.zippy.ui.extras.AboutActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class MenuHelperClass{
     Toolbar mtoolbar;
@@ -66,6 +69,7 @@ public class MenuHelperClass{
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDatabase.getInstance().getReference("userTokens").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).removeValue();
                         FirebaseAuth.getInstance().signOut();
                         context.startActivity(new Intent(context, MainActivity.class));
                     }
