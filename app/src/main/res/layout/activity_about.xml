@@ -22,14 +22,14 @@
             android:padding="10dp">
 
             <ImageButton
-                android:id="@+id/backarrow"
+                android:id="@+id/backArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:src="@drawable/ic_baseline_arrow_back_24" />
 
             <TextView
-                android:id="@+id/txtviewabout"
+                android:id="@+id/txtViewBlockList"
                 style="@style/Widget.AppCompat.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

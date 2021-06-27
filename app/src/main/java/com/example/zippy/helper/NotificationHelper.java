@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.ui.course.CourseDetailsActivity;
+import com.example.zippy.ui.test.TestDetailsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -34,6 +35,34 @@ public class NotificationHelper{
                 String token = (String) snapshot.getValue();
                 FcmNotificationsSender fcmNotificationsSender = new FcmNotificationsSender(token, title, body, activity.getApplicationContext(), activity);
                 fcmNotificationsSender.SendNotifications();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public static void notifyAllStudents(Activity activity, String coursePassCode, String title, String body) {
+        FirebaseDatabase.getInstance().getReference("courses/"+coursePassCode+"/students").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dsnap:snapshot.getChildren()){
+                    String uid = (String) dsnap.getKey();
+                    FirebaseDatabase.getInstance().getReference("userTokens/"+uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapt) {
+                            String token = (String)snapt.getValue();
+                            NotificationHelper.notifyUser(token, title, body, activity);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
+                }
             }
 
             @Override

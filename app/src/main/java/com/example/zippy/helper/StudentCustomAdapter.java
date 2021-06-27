@@ -34,7 +34,7 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
 
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            txtViewStudentName = itemView.findViewById(R.id.txtviewstudentname);
+            txtViewStudentName = itemView.findViewById(R.id.txtViewStudentName);
             txtViewStudentRegistrationNo = itemView.findViewById(R.id.txtviewstudentregistrationno);
             deleteBtn = itemView.findViewById(R.id.deletebtn);
 

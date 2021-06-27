@@ -67,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
 
@@ -94,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
         if(user!=null){
             startActivity(new Intent(this, UserProfileActivity.class));
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
         TextView txtViewRegister = findViewById(R.id.txtviewregister);
         editTXTEmail = findViewById(R.id.edittxtemail);
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
         reference.child(userUID).setValue(MyFirebaseMessagingService.getToken(MainActivity.this), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                Toast.makeText(MainActivity.this, "token saved", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "token saved", Toast.LENGTH_SHORT).show();
             }
         });
     }

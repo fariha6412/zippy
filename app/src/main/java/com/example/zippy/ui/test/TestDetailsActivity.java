@@ -26,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.zippy.R;
 import com.example.zippy.helper.FileHelper;
 import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.NotificationHelper;
 import com.example.zippy.helper.ResultHelper;
 import com.example.zippy.helper.TestHelperClass;
 import com.example.zippy.ui.course.CourseDetailsActivity;
@@ -63,6 +64,7 @@ public class TestDetailsActivity extends AppCompatActivity {
     final String strClickedTestId = "clickedTestId";
     private String clickedTestId;
     final String strAlertCsvFormat = "alertCsvFormat";
+    private String courseTitle;
 
     private Uri pdfUri;
     private Uri markSheetUri;
@@ -225,6 +227,21 @@ public class TestDetailsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
     private void getTestDetails(){
+        DatabaseReference referenceCourseTitle = FirebaseDatabase.getInstance().getReference("courses/" + clickedCoursePassCode +"/courseTitle");
+        referenceCourseTitle.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    courseTitle = snapshot.getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
         referenceTest.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -297,7 +314,7 @@ public class TestDetailsActivity extends AppCompatActivity {
             Toast.makeText(TestDetailsActivity.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
 
             ResultHelper.writeTestResultToDatabase(TestDetailsActivity.this, clickedCoursePassCode, testMarks,clickedTestId);
-
+            NotificationHelper.notifyAllStudents(TestDetailsActivity.this, clickedCoursePassCode, "Result is out", "Check your mark for "+txtViewTestTitle.getText()+ " of "+courseTitle);
             referenceTest.child("markSheetCsvUrl").setValue(uploadedMarkSheetUrl);
         }).addOnFailureListener(e -> {
             progressDialog.dismiss();

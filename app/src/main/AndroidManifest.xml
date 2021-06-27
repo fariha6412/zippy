@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup" >
-        <activity android:name=".EnrollApprovalActivity" >
+        <activity android:name=".ui.course.BlockListActivity" >
         </activity>
         <activity android:name=".ui.course.AfterStudentDetailsActivity" />
         <activity android:name=".ui.test.TestDetailsActivity" />

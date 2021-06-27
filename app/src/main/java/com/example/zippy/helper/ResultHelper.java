@@ -1,7 +1,9 @@
 package com.example.zippy.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -167,6 +169,30 @@ public class ResultHelper {
                 SharedPreferences mPrefs;
                 mPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
                 mPrefs.edit().putBoolean(strIsCompleted, true).apply();
+                new AlertDialog.Builder(activity)
+                        .setTitle("Message")
+                        .setMessage("Make sure everything is okay. If you leave you won't be able to make any changes.")
+                        .setNegativeButton("OKAY", null)
+                        .create().show();
+                getCourseTitleAndNotify(activity, coursePassCode);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+    private static void getCourseTitleAndNotify(Activity activity, String coursePassCode){
+        DatabaseReference referenceCourseTitle = FirebaseDatabase.getInstance().getReference("courses/" + coursePassCode +"/courseTitle");
+        referenceCourseTitle.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String courseTitle = snapshot.getValue().toString();
+                    NotificationHelper.notifyAllStudents(activity, coursePassCode, "Course is completed", "Your course "+courseTitle+" is completed. Check the result.");
+                }
             }
 
             @Override

@@ -45,6 +45,7 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
     private Map<String, Boolean> attendance;
     private ArrayList<String> dates;
     private ArrayList<String> presentStatus;
+    private AttendanceDetailsAdapter adapter;
 
     private TextView txtViewTotalDay;
 
@@ -72,6 +73,7 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
 
+        initRecyclerView();
         extractAttendanceRecord();
     }
     private void extractAttendanceRecord(){
@@ -94,12 +96,13 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
                                 presentStatus.add("Absent");
                             }
                         }
+                        adapter.notifyDataSetChanged();
                     }
                     catch (Exception e){
                         Log.w("error: ", e.getMessage());
                     }
                 }
-                initRecyclerView();
+                adapter.notifyDataSetChanged();
                 txtViewTotalDay.setText(String.valueOf(snapshot.getChildrenCount()));
             }
 
@@ -115,7 +118,7 @@ public class AttendanceDetailsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        AttendanceDetailsAdapter adapter = new AttendanceDetailsAdapter(dates, presentStatus);
+        adapter = new AttendanceDetailsAdapter(dates, presentStatus);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

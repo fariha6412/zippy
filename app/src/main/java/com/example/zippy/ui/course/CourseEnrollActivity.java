@@ -34,10 +34,12 @@ public class CourseEnrollActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private DatabaseReference referenceStudentCourses;
-    private DatabaseReference referenceCourse;
+    private DatabaseReference referenceCourse, referenceStudent;
     private FirebaseUser user;
 
     private EditText editTXTCoursePassCode;
+    private static Integer flag = 1;
+    private Boolean canEnroll = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class CourseEnrollActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
-        DatabaseReference referenceStudent = rootNode.getReference("students/" + user.getUid());
+        referenceStudent = rootNode.getReference("students/" + user.getUid());
         referenceStudentCourses = referenceStudent.child("courses");
         referenceCourse = rootNode.getReference("courses");
         editTXTCoursePassCode = findViewById(R.id.edittxtcoursepasscode);
@@ -75,10 +77,11 @@ public class CourseEnrollActivity extends AppCompatActivity {
             finish();
         });
         enrollBtn.setOnClickListener(v -> {
+            canEnroll = false;
             final Long[] noOfStudents = new Long[1];
             String coursePassCode = editTXTCoursePassCode.getText().toString().trim();
             if(ValidationChecker.isFieldEmpty(coursePassCode, editTXTCoursePassCode))return;
-            referenceCourse.child(coursePassCode).addListenerForSingleValueEvent(new ValueEventListener() {
+            referenceCourse.child(coursePassCode).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NotNull DataSnapshot snapshot) {
                     if (!snapshot.exists()) {
@@ -94,6 +97,7 @@ public class CourseEnrollActivity extends AppCompatActivity {
                         catch (NullPointerException e){
                             //pass
                         }
+                        noOfStudents[0] = (Long) snapshot.child("noOfStudents").getValue() + 1L;
                         final boolean[] isAlreadyEnrolled = {false};
                         referenceStudentCourses.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -106,40 +110,26 @@ public class CourseEnrollActivity extends AppCompatActivity {
                                     }
                                 }
                                 if(!isAlreadyEnrolled[0]){
-                                    CourseHelperClass value = snapshot.getValue(CourseHelperClass.class);
-                                    assert value != null;
-                                    System.out.println(value.toString());
-                                    System.out.println(value.getNoOfStudents());
-                                    noOfStudents[0] = (value.getNoOfStudents()) + 1L;
-                                    referenceCourse.child("noOfStudents").setValue((noOfStudents[0]), new DatabaseReference.CompletionListener() {
+
+                                    referenceCourse.child(coursePassCode).child("blockedStudents").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapt) {
+                                            if(snapt.exists()){
+                                                if((boolean)snapt.getValue()){
+                                                    System.out.println("heyhekkkiidsfsdf");
+                                                    Toast.makeText(CourseEnrollActivity.this, "You have been blocked from this course", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                }
+                                                else enroll(coursePassCode, noOfStudents, noOfCourses);
+                                            }
+                                            else enroll(coursePassCode, noOfStudents, noOfCourses);
+                                        }
 
                                         @Override
-                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                            System.err.println("Value was set. Error = " + error);
-                                        }
-                                    });
-                                    referenceStudent.child("noOfCourses").setValue((noOfCourses[0]), new DatabaseReference.CompletionListener() {
+                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                                        @Override
-                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                            System.err.println("Value was set. Error = " + error);
                                         }
                                     });
-                                    referenceStudentCourses.child(String.valueOf(noOfCourses[0])).setValue(coursePassCode, new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                            System.err.println("Value was set. Error = " + error);
-                                        }
-                                    });
-
-                                    referenceCourse.child("students").child(String.valueOf(noOfStudents[0])).setValue(user.getUid(), new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                            System.err.println("Value was set. Error = " + error);
-                                        }
-                                    });
-                                    //Toast.makeText(getApplicationContext(), "Successfully Enrolled", Toast.LENGTH_SHORT).show();
-                                    finish();
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext(), "Enrolled", Toast.LENGTH_SHORT).show();
@@ -160,6 +150,39 @@ public class CourseEnrollActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+    private void enroll(String coursePassCode, Long[] noOfStudents, Long[] noOfCourses){
+
+        System.out.println("sdfdasfsafdasfdsfdasfdasfdsf"+flag+canEnroll);
+        referenceCourse.child(coursePassCode).child("noOfStudents").setValue((noOfStudents[0]), new DatabaseReference.CompletionListener() {
+
+            @Override
+            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                System.err.println("Value was set. Error = " + error);
+            }
+        });
+        referenceStudent.child("noOfCourses").setValue((noOfCourses[0]), new DatabaseReference.CompletionListener() {
+
+            @Override
+            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                System.err.println("Value was set. Error = " + error);
+            }
+        });
+        referenceStudentCourses.push().setValue(coursePassCode, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                System.err.println("Value was set. Error = " + error);
+            }
+        });
+
+        referenceCourse.child(coursePassCode).child("students").push().setValue(user.getUid(), new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                System.err.println("Value was set. Error = " + error);
+            }
+        });
+        //Toast.makeText(getApplicationContext(), "Successfully Enrolled", Toast.LENGTH_SHORT).show();
+        finish();
     }
     //internet related stuff
     @Override

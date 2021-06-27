@@ -55,6 +55,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
     private Map<String, Long> preAbsentTotal;
     private ArrayList<String> studentNames;
     private ArrayList<String> studentRegistrationNos;
+    private AttendanceCustomAdapter adapter;
 
     private ProgressBar loading;
 
@@ -90,13 +91,14 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
 
-        System.out.println(clickedCoursePassCode);
-        showlist();
+        initRecyclerView();
+        //System.out.println(clickedCoursePassCode);
+        showList();
         extractPreviousAttendanceRecord();
         doneBtn.setOnClickListener(v -> {
             loading.setVisibility(View.VISIBLE);
             recordAttendance();
-            System.out.println(attendance);
+            //System.out.println(attendance);
             writeToDatabase();
             Toast.makeText(getApplicationContext(), "Done for today.", Toast.LENGTH_SHORT).show();
             loading.setVisibility(View.INVISIBLE);
@@ -104,7 +106,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         });
     }
 
-    private void showlist() {
+    private void showList() {
         rootNode = FirebaseDatabase.getInstance();
         DatabaseReference referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
         referenceCourse.addValueEventListener(new ValueEventListener() {
@@ -135,7 +137,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
                                             studentUids.add(studentUid);
                                             studentNames.add(studentHelper.getFullName());
                                             studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
-                                            initRecyclerView();
+                                            adapter.notifyDataSetChanged();
                                         }
                                     }
 
@@ -237,7 +239,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        AttendanceCustomAdapter adapter = new AttendanceCustomAdapter(studentNames, studentRegistrationNos);
+        adapter = new AttendanceCustomAdapter(studentNames, studentRegistrationNos);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

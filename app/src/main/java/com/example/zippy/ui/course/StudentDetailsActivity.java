@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class StudentDetailsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
@@ -52,6 +53,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
     private ArrayList<String> studentRegistrationNos;
 
     private TextView txtViewTotalStudent;
+    private StudentCustomAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +75,13 @@ public class StudentDetailsActivity extends AppCompatActivity {
         clickedUid = mPrefs.getString(strClickedUid, "");
 
         System.out.println(clickedCoursePassCode);
+        showNoOfStudents();
         showList();
     }
-    private void showList(){
+    private void showNoOfStudents(){
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference referenceCourseNoOfStudents = rootNode.getReference("courses/" + clickedCoursePassCode +"/noOfStudents");
-        referenceCourseNoOfStudents.addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceCourseNoOfStudents.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -92,6 +95,9 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void showList(){
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference referenceCourseTitle = rootNode.getReference("courses/" + clickedCoursePassCode +"/courseTitle");
         referenceCourseTitle.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -111,9 +117,14 @@ public class StudentDetailsActivity extends AppCompatActivity {
         referenceEnrolledStudents.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                studentUIDs.clear();
+                studentNames.clear();
+                studentRegistrationNos.clear();
                 for(DataSnapshot dsnap:dataSnapshot.getChildren()){
                     System.out.println(dsnap.getValue());
-
+                    studentUIDs.clear();
+                    studentNames.clear();
+                    studentRegistrationNos.clear();
                     String studentUid = (String) dsnap.getValue();
                     DatabaseReference referenceStudent = rootNode.getReference("students/"+studentUid);
                     referenceStudent.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -147,7 +158,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        StudentCustomAdapter adapter = new StudentCustomAdapter(studentNames, studentRegistrationNos);
+        adapter = new StudentCustomAdapter(studentNames, studentRegistrationNos);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -164,38 +175,31 @@ public class StudentDetailsActivity extends AppCompatActivity {
                 new AlertDialog.Builder(StudentDetailsActivity.this)
                         .setTitle("Message")
                         .setMessage("Do you want to remove " + studentNames.get(position) + "?")
+                        .setNeutralButton("Block", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                unrollStudent(position, true);
+                            }
+                        })
                         .setNegativeButton("NO", null)
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 NotificationHelper.notifyUser(studentUIDs.get(position), "Sorry", "you have been removed from " + courseTitle,StudentDetailsActivity.this);
-                                unrollStudent(position);
+                                unrollStudent(position, false);
                             }
                         }).create().show();
             }
         });
     }
 
-    private void unrollStudent(int position){
+    private void unrollStudent(int position, Boolean block){
+        String uid = studentUIDs.get(position);
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference referenceCourse = rootNode.getReference("courses/"+clickedCoursePassCode);
-        DatabaseReference referenceStudent = rootNode.getReference("students/"+ studentUIDs.get(position));
+        DatabaseReference referenceStudent = rootNode.getReference("students/"+ uid);
 
-        referenceCourse.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot dsnap:snapshot.getChildren()){
-                    if(dsnap.getValue() == studentUIDs.get(position)){
-                        referenceCourse.child("students").child(dsnap.getKey()).removeValue();
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
         referenceCourse.child("noOfStudents").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -214,8 +218,31 @@ public class StudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
-                    if(dsnap.getValue() == clickedCoursePassCode){
-                        referenceStudent.child("courses").child(dsnap.getKey()).removeValue();
+                    System.out.println(dsnap.getValue());
+                    if(clickedCoursePassCode.equals((String)dsnap.getValue())){
+
+                        System.out.println("milse");
+
+                        referenceStudent.child("courses").child(Objects.requireNonNull(dsnap.getKey())).removeValue();
+                        referenceCourse.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                for(DataSnapshot dsnp:snapshot.getChildren()){
+                                    if(uid.equals((String)dsnp.getValue())){
+                                        referenceCourse.child("students").child(dsnp.getKey()).removeValue();
+                                    }
+                                    studentNames.remove(position);
+                                    studentRegistrationNos.remove(position);
+                                    studentUIDs.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -239,8 +266,8 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
             }
         });
-        referenceCourse.child("unrolledStudents").push().setValue(studentUIDs.get(position));
-        showList();
+        //referenceCourse.child("unrolledStudents").push().setValue(uid);
+        if(block)referenceCourse.child("blockedStudents").child(uid).setValue(true);
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

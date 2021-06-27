@@ -108,6 +108,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         Button attendanceBtn = findViewById(R.id.attendance);
         attendanceMarkAssignBtn = findViewById(R.id.attendancemark);
         Button completeBtn = findViewById(R.id.completeBtn);
+        Button blockListBtn = findViewById(R.id.blockedStudentsBtn);
         MaterialButton testCreationBtn = findViewById(R.id.testcreationbtn);
         MaterialButton editMarkOnAttendance = findViewById(R.id.markonattendancebtn);
         AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
@@ -179,7 +180,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
             else assignAttendanceMark();
         });
 
-
+        blockListBtn.setOnClickListener(v -> startActivity(new Intent(CourseDetailsActivity.this, BlockListActivity.class)));
         completeBtn.setOnClickListener(v -> {
             if(isCompleted){
                 Toast.makeText(this, "Course is completed", Toast.LENGTH_SHORT).show();

@@ -60,6 +60,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
     private final ArrayList<Boolean> courseCompletionStatus = new ArrayList<>();
+    private CourseCustomAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
         employeeIDLinearLayout = findViewById(R.id.employeeidlinearlayout);
         courseListHeaderLinearLayout = findViewById(R.id.courselistheaderlinearlayout);
 
+        initRecyclerView();
         showData();
     }
 
@@ -189,7 +191,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
                             CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
                             if(courseHelper!=null) {
                                 courseList.add(courseHelper);
-                                initRecyclerView();
+                                adapter.notifyDataSetChanged();
                             }
                         }
 
@@ -232,7 +234,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
                                     else courseCompletionStatus.add(false);
                                     courseList.add(courseHelper);
                                 }
-                                initRecyclerView();
+                                adapter.notifyDataSetChanged();
                             }
                         }
 
@@ -254,7 +256,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        CourseCustomAdapter adapter = new CourseCustomAdapter(courseList, courseCompletionStatus);
+        adapter = new CourseCustomAdapter(courseList, courseCompletionStatus);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

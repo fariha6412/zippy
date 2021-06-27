@@ -14,7 +14,7 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        backbtn = findViewById(R.id.backarrow);
+        backbtn = findViewById(R.id.backArrow);
         backbtn.setOnClickListener(v -> {
             finish();
         });
