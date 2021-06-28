@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.zippy.ui.chat.ChatActivity;
+import com.example.zippy.ui.chat.ChatListActivity;
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
 import com.example.zippy.ui.search.SearchActivity;
@@ -53,7 +53,7 @@ public class BottomNavigationHelper {
             case R.id.navigation_chat:
                 if(bottomNavigationView.getSelectedItemId()==item.getItemId())return true;
 
-                activity.startActivity(new Intent(activity.getApplicationContext(), ChatActivity.class));
+                activity.startActivity(new Intent(activity.getApplicationContext(), ChatListActivity.class));
                 activity.overridePendingTransition(0,0);
                 return true;
             case R.id.navigation_search:
