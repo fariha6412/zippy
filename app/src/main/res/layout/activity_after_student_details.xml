@@ -82,7 +82,7 @@
                 android:backgroundTint="@color/common_profile_txt_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_chat_24"
+                android:src="@drawable/ic_baseline_email_24"
                 android:layout_gravity="bottom|end"
                 android:layout_marginTop="-30dp"
                 android:layout_marginEnd="20dp"/>

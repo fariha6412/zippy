@@ -164,7 +164,7 @@ public class TestDetailsActivity extends AppCompatActivity {
         });
         uploadMarkSheetBtn.setOnClickListener(v -> {
             if(!flag[0]){
-                String warningDetails = "Please upload a csv file with three columns [registrationNo, totalMark, convertedMark]";
+                String warningDetails = "Please upload a csv file with three comma separated values each line [registrationNo, totalMark, convertedMark]";
                 FileHelper.alertForCsvFormat(TestDetailsActivity.this, warningDetails);
                 flag[0] = true;
                 mPrefs.edit().putBoolean(strAlertCsvFormat,true).apply();
@@ -323,7 +323,7 @@ public class TestDetailsActivity extends AppCompatActivity {
     }
     private void getQuestionAndMarkSheetStatus(){
         DatabaseReference referenceCourse = FirebaseDatabase.getInstance().getReference("courses/"+clickedCoursePassCode);
-        referenceCourse.child("instructoruid").addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceCourse.child("instructorUID").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 instructorUID = (String) snapshot.getValue();

@@ -125,7 +125,7 @@ public class CourseEvaluationActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference referenceAttendance = rootNode.getReference("attendanceRecord/total/" + clickedCoursePassCode + "/" + user.getUid());
-        referenceAttendance.addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceAttendance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -152,7 +152,6 @@ public class CourseEvaluationActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snpt) {
                 if(snpt.exists()){
-                    System.out.println("dsfdsafdsfdsaf");
                     txtViewYourMarkOnAttendance.setText((String.valueOf(snpt.getValue())));
                 }
                 else txtViewYourMarkOnAttendance.setText("0");

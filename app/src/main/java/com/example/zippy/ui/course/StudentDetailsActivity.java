@@ -17,7 +17,11 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.zippy.R;
 import com.example.zippy.helper.CourseHelperClass;
@@ -45,6 +49,9 @@ public class StudentDetailsActivity extends AppCompatActivity {
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     String clickedCoursePassCode;
     final String strClickedUid = "clickedUid";
+    final String strIsCompleted = "isCompleted";
+    private Boolean isCompleted;
+
     String clickedUid;
     private String courseTitle;
 
@@ -69,14 +76,16 @@ public class StudentDetailsActivity extends AppCompatActivity {
         studentRegistrationNos = new ArrayList<>();
         txtViewTotalStudent = findViewById(R.id.txtviewtotalstudent);
 
-        //new for saving logged user type and clicked course
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         clickedUid = mPrefs.getString(strClickedUid, "");
+        isCompleted = mPrefs.getBoolean(strIsCompleted, false);
 
         System.out.println(clickedCoursePassCode);
         showNoOfStudents();
         showList();
+        initRecyclerView();
+
     }
     private void showNoOfStudents(){
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
@@ -135,7 +144,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                                 studentUIDs.add(studentUid);
                                 studentNames.add(studentHelper.getFullName());
                                 studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
-                                initRecyclerView();
+                                adapter.notifyDataSetChanged();
                             }
                         }
 
@@ -163,6 +172,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         adapter.setOnItemClickListener(new StudentCustomAdapter.OnItemClickListener() {
+
             @Override
             public void onItemClick(int position) {
                 //show profile of the student
@@ -171,6 +181,10 @@ public class StudentDetailsActivity extends AppCompatActivity {
             }
             @Override
             public void onDeleteClick(int position) {
+                if(isCompleted){
+                    Toast.makeText(StudentDetailsActivity.this, "Course is completed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //delete showing a alert dialog
                 new AlertDialog.Builder(StudentDetailsActivity.this)
                         .setTitle("Message")
@@ -221,8 +235,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
                     System.out.println(dsnap.getValue());
                     if(clickedCoursePassCode.equals((String)dsnap.getValue())){
 
-                        System.out.println("milse");
-
                         referenceStudent.child("courses").child(Objects.requireNonNull(dsnap.getKey())).removeValue();
                         referenceCourse.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -266,8 +278,8 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
             }
         });
-        //referenceCourse.child("unrolledStudents").push().setValue(uid);
         if(block)referenceCourse.child("blockedStudents").child(uid).setValue(true);
+        //else referenceCourse.child("unrolledStudents").push().setValue(uid);
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

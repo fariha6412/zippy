@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zippy.R;
+import com.example.zippy.helper.EmailSender;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.TestHelperClass;
@@ -84,10 +85,9 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         LinearLayout markOnAttendanceLinearLayout = findViewById(R.id.resultedMarkOnAttendanceLinearLayout);
         LinearLayout totalMarkLinearLayout = findViewById(R.id.totalMarkLinearLayout);
         LinearLayout finalGradeLinearLayout = findViewById(R.id.finalGradeLinearLayout);
-        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
 
         String strIsCompleted = "isCompleted";
-        Boolean isCompleted = mPrefs.getBoolean(strIsCompleted, false);
+        boolean isCompleted = mPrefs.getBoolean(strIsCompleted, false);
 
         if(isCompleted){
             totalMarkLinearLayout.setVisibility(View.VISIBLE);
@@ -97,6 +97,10 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         }
 
         showStudentDetails();
+
+        floatingActionButton.setOnClickListener(v -> {
+            EmailSender.sendEmailTo(AfterStudentDetailsActivity.this, new String[] {txtViewEmail.getText().toString().trim()});
+        });
     }
     private void showStudentDetails(){
         DatabaseReference referenceStudent = FirebaseDatabase.getInstance().getReference("students/"+clickedUid);
@@ -147,7 +151,6 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snpt) {
                 if(snpt.exists()){
-                    System.out.println("dsfdsafdsfdsaf");
                     txtViewYourMarkOnAttendance.setText((String.valueOf(snpt.getValue())));
                 }
                 else txtViewYourMarkOnAttendance.setText("0");

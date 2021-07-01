@@ -125,7 +125,7 @@ public class TestCreationActivity extends AppCompatActivity {
             }
             else {
                 if(!flag){
-                    String warningDetails = "Please upload a csv file with three columns [registrationNo, totalMark, convertedMark]";
+                    String warningDetails = "Please upload a csv file with three comma separated values each line [registrationNo, totalMark, convertedMark]";
                     FileHelper.alertForCsvFormat(TestCreationActivity.this, warningDetails);
                     flag = true;
                     mPrefs.edit().putBoolean(strAlertCsvFormat,true).apply();
