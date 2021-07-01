@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.zippy" >
+    package="com.example.zippy">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
@@ -18,9 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
-        tools:ignore="AllowBackup" >
-        <activity android:name=".ui.course.BlockListActivity" >
-        </activity>
+        tools:ignore="AllowBackup">
+        <activity android:name=".ui.setting.ChangeProfileInfoActivity"></activity>
+        <activity android:name=".ui.course.BlockListActivity"></activity>
         <activity android:name=".ui.course.AfterStudentDetailsActivity" />
         <activity android:name=".ui.test.TestDetailsActivity" />
         <activity android:name=".ui.profile.ShowCaseUserProfileActivity" />
@@ -30,7 +32,7 @@
         <activity android:name=".ui.search.SearchActivity" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +42,7 @@
 
         <service
             android:name=".helper.MyFirebaseMessagingService"
-            android:stopWithTask="false" >
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
