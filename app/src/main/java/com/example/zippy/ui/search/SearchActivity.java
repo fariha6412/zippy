@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
+import com.example.zippy.classes.Instructor;
+import com.example.zippy.classes.Student;
 import com.example.zippy.helper.BottomNavigationHelper;
-import com.example.zippy.helper.InstructorHelperClass;
-import com.example.zippy.helper.SearchCustomAdapter;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.adapter.SearchCustomAdapter;
 import com.example.zippy.ui.profile.ShowCaseUserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -92,8 +92,8 @@ public class SearchActivity extends AppCompatActivity {
                     String studentUid = dsnap.getKey();
                     usersUid.add(studentUid);
 
-                    userFullNameList.add(Objects.requireNonNull(dsnap.getValue(StudentHelperClass.class)).getFullName());
-                    userImageList.add(Objects.requireNonNull(dsnap.getValue(StudentHelperClass.class)).getImage());
+                    userFullNameList.add(Objects.requireNonNull(dsnap.getValue(Student.class)).getFullName());
+                    userImageList.add(Objects.requireNonNull(dsnap.getValue(Student.class)).getImage());
                 }
                 refInstructors.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -103,8 +103,8 @@ public class SearchActivity extends AppCompatActivity {
                             usersUid.add(instructorUid);
 
                             System.out.println(instructorUid);
-                            userFullNameList.add(Objects.requireNonNull(dsnap.getValue(InstructorHelperClass.class)).getFullName());
-                            userImageList.add(Objects.requireNonNull(dsnap.getValue(InstructorHelperClass.class)).getImage());
+                            userFullNameList.add(Objects.requireNonNull(dsnap.getValue(Instructor.class)).getFullName());
+                            userImageList.add(Objects.requireNonNull(dsnap.getValue(Instructor.class)).getImage());
                         }
                         if(searchView != null){
                             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

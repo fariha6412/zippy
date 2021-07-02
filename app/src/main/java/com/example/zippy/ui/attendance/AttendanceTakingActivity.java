@@ -22,10 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.AttendanceCustomAdapter;
-import com.example.zippy.helper.CourseHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.adapter.AttendanceCustomAdapter;
+import com.example.zippy.classes.Course;
+import com.example.zippy.helper.MenuHelper;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,8 +72,8 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_attendance_taking);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         Button doneBtn = findViewById(R.id.btnDone);
         loading = findViewById(R.id.loading);
@@ -111,7 +111,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
+                Course courseHelper = snapshot.getValue(Course.class);
                 if (courseHelper != null) {
                     studentNames.clear();
                     studentUIDs.clear();
@@ -130,7 +130,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
                                 referenceStudent.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
-                                        StudentHelperClass studentHelper = dsnapshot.getValue(StudentHelperClass.class);
+                                        Student studentHelper = dsnapshot.getValue(Student.class);
                                         if (studentHelper != null) {
                                             studentUIDs.add(studentUid);
                                             studentNames.add(studentHelper.getFullName());

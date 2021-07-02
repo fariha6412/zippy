@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.zippy.classes.Test;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,81 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class TestHelperClass {
-    private String testTitle;
-    private String questionPdfUrl;
-    private String markSheetCsvUrl;
-    private Long totalMark;
-    private Double convertTo;
+public class TestHelper {
 
-    public TestHelperClass(){}
-
-    public TestHelperClass(String testTitle, Long totalMarks, Double convertTo, String questionPdfUrl) {
-        this.testTitle = testTitle;
-        this.questionPdfUrl = questionPdfUrl;
-        this.markSheetCsvUrl = "";
-        this.totalMark = totalMarks;
-        this.convertTo = convertTo;
-    }
-
-    public TestHelperClass(String testTitle, Long totalMark, Double convertTo) {
-        this.testTitle = testTitle;
-        this.totalMark = totalMark;
-        this.convertTo = convertTo;
-        this.questionPdfUrl = "";
-        this.markSheetCsvUrl = "";
-    }
-
-    public String getTestTitle() {
-        return testTitle;
-    }
-
-    public void setTestTitle(String testTitle) {
-        this.testTitle = testTitle;
-    }
-
-    public String getQuestionPdfUrl() {
-        return questionPdfUrl;
-    }
-
-    public void setQuestionPdfUrl(String questionPdfUrl) {
-        this.questionPdfUrl = questionPdfUrl;
-    }
-
-    public String getMarkSheetCsvUrl() {
-        return markSheetCsvUrl;
-    }
-
-    public void setMarkSheetCsvUrl(String markSheetCsvUrl) {
-        this.markSheetCsvUrl = markSheetCsvUrl;
-    }
-
-    public Long getTotalMark() {
-        return totalMark;
-    }
-
-    public void setTotalMark(Long totalMark) {
-        this.totalMark = totalMark;
-    }
-
-    public Double getConvertTo() {
-        return convertTo;
-    }
-
-    public void setConvertTo(Double convertTo) {
-        this.convertTo = convertTo;
-    }
-
-    @Override
-    public @NotNull String toString() {
-        return "TestHelperClass{" +
-                "testTitle='" + testTitle + '\'' +
-                ", question='" + questionPdfUrl + '\'' +
-                ", markSheet='" + markSheetCsvUrl + '\'' +
-                ", totalMarks=" + totalMark +
-                ", convertTo=" + convertTo +
-                '}';
-    }
     public static class TestMark{
         String regNo;
         Long totalMark;
@@ -166,12 +94,11 @@ public class TestHelperClass {
         });
     }
 
-    public static void createTest(Activity activity, DatabaseReference referenceTests, TestHelperClass testHelper, String testId){
-        referenceTests.child(testId).setValue(testHelper, new DatabaseReference.CompletionListener() {
+    public static void createTest(Activity activity, DatabaseReference referenceTests, Test test, String testId){
+        referenceTests.child(testId).setValue(test, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
                 Toast.makeText(activity, "Test created successfully", Toast.LENGTH_SHORT).show();
-                System.out.println(testHelper.testTitle);
             }
         });
     }

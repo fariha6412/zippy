@@ -30,9 +30,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.R;
 import com.example.zippy.helper.FileHelper;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.ResultHelper;
-import com.example.zippy.helper.TestHelperClass;
+import com.example.zippy.helper.TestHelper;
 import com.example.zippy.ui.attendance.AttendanceTakingActivity;
 import com.example.zippy.ui.test.TestCreationActivity;
 import com.example.zippy.ui.test.TestDetailsActivity;
@@ -97,8 +97,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         dateToday = LocalDate.now();
         rootNode = FirebaseDatabase.getInstance();
@@ -119,7 +119,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         testIds = new ArrayList<>();
         ArrayList<String> testTitles = new ArrayList<>();
 
-        TestHelperClass.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
+        TestHelper.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
         autoCompleteTextView.setThreshold(0);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -1,7 +1,6 @@
 package com.example.zippy.utility;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +13,6 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.MenuHelperClass;
-import com.google.android.gms.common.internal.service.Common;
 
 public class NetworkChangeListener extends BroadcastReceiver {
     @Override
