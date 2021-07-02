@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,9 +38,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Objects;
 
 public class ChatActivity extends AppCompatActivity {
@@ -167,8 +173,8 @@ public class ChatActivity extends AppCompatActivity {
         referenceSent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-               // clearDisplayedText(senderUid);
-               // mChat.clear();
+                // clearDisplayedText(senderUid);
+                // mChat.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     String msgText = (String)dataSnapshot.child("messageText").getValue();
                     String msgTime = (String) Objects.requireNonNull(dataSnapshot.child("messageTime").getValue());
@@ -193,7 +199,7 @@ public class ChatActivity extends AppCompatActivity {
         referenceReceived.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                  clearDisplayedText(receiverUid);
+                clearDisplayedText(receiverUid);
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     String msgText = (String)dataSnapshot.child("messageText").getValue();
                     String msgTime = (String) Objects.requireNonNull(dataSnapshot.child("messageTime").getValue());
@@ -277,4 +283,3 @@ public class ChatActivity extends AppCompatActivity {
         super.onStop();
     }
 }
-
