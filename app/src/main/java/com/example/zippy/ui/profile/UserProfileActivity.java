@@ -147,7 +147,7 @@ public class UserProfileActivity extends AppCompatActivity{
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
-                    Log.d("Response", "Value is: " + value.toString());
+                    //Log.d("Response", "Value is: " + value.toString());
                     courseList.clear();
                     courseCompletionStatus.clear();
                     referenceCourseList = rootNode.getReference("students/"+user.getUid()+"/courses");
@@ -177,7 +177,7 @@ public class UserProfileActivity extends AppCompatActivity{
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
-                    Log.d("Response", "Value is: " + value.toString());
+                    //Log.d("Response", "Value is: " + value.toString());
 
                     courseList.clear();
                     courseCompletionStatus.clear();

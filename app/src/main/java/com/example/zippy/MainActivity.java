@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    private EditText editTXTEmail, editTXTPassword;
+    private TextInputEditText editTXTEmail, editTXTPassword;
     private FirebaseAuth auth;
     private FirebaseDatabase rootNode;
-    private DatabaseReference referenceStudent, referenceInstructor, referenceToken;
+    private DatabaseReference referenceStudent, referenceInstructor;
 
     private SharedPreferences mPrefs;
     final String splashScreenPref = "SplashScreenShown";
@@ -214,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
                                     rootNode = FirebaseDatabase.getInstance();
                                     referenceStudent = rootNode.getReference("students/"+ user.getUid());
                                     referenceInstructor = rootNode.getReference("instructors/"+ user.getUid());
-                                    referenceToken = rootNode.getReference("tokens");
 
                                     referenceStudent.addValueEventListener(new ValueEventListener() {
                                         @Override

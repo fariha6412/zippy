@@ -74,6 +74,10 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
                 linearLayout.setBackgroundColor(Color.parseColor("#ebc1be"));
                 linearLayout.setBackgroundTintMode(PorterDuff.Mode.MULTIPLY);
             }
+            else {
+                linearLayout.setBackgroundColor(Color.parseColor("#00000000"));
+                linearLayout.setBackgroundResource(R.drawable.custom_border);
+            }
         }
     }
 

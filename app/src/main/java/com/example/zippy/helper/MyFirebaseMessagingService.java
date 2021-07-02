@@ -25,7 +25,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        Log.e("newToken", s);
+        //Log.e("newToken", s);
         getSharedPreferences("_", MODE_PRIVATE).edit().putString("fb", s).apply();
     }
 

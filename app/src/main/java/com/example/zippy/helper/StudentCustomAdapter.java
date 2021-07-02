@@ -19,6 +19,7 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
+        void multipleSelection(int position);
         void onItemClick(int position);
         void onDeleteClick(int position);
     }
@@ -31,12 +32,29 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
         private final TextView txtViewStudentName;
         private final TextView txtViewStudentRegistrationNo;
         public ImageView deleteBtn;
+        private Boolean longPress;
 
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             txtViewStudentName = itemView.findViewById(R.id.txtViewStudentName);
             txtViewStudentRegistrationNo = itemView.findViewById(R.id.txtviewstudentregistrationno);
             deleteBtn = itemView.findViewById(R.id.deletebtn);
+            longPress = false;
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    System.out.println("longPressed");
+                    if (listener != null) {
+                        if(!longPress) longPress = true;
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.multipleSelection(position);
+                        }
+                    }
+                    return false;
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -44,7 +62,8 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            if(!longPress)listener.onItemClick(position);
+                            else listener.multipleSelection(position);
                         }
                     }
                 }
