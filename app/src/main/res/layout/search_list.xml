@@ -27,6 +27,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/black"
         android:textStyle="normal"
+        android:paddingLeft="10dp"
         android:textSize="@dimen/little_title"
         android:layout_gravity="center_vertical" />
 

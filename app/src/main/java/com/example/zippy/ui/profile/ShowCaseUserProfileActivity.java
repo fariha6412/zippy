@@ -1,5 +1,6 @@
 package com.example.zippy.ui.profile;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -26,6 +27,7 @@ import com.example.zippy.classes.Instructor;
 import com.example.zippy.helper.EmailSender;
 import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.classes.Student;
+import com.example.zippy.ui.chat.ChatActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -139,8 +141,8 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(ShowCaseUserProfileActivity.this, "start chatActivity",
-                                Toast.LENGTH_SHORT).show();
+                         startActivity(new Intent(ShowCaseUserProfileActivity.this, ChatActivity.class));
+
                     }
                 });
     }
