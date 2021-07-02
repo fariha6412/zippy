@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -13,8 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,16 +20,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.zippy.R;
 import com.example.zippy.helper.EmailSender;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
-import com.example.zippy.helper.TestHelperClass;
-import com.example.zippy.ui.attendance.AttendanceDetailsActivity;
-import com.example.zippy.ui.test.TestDetailsActivity;
+import com.example.zippy.helper.MenuHelper;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,9 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class AfterStudentDetailsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
@@ -67,8 +56,8 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_after_student_details);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedUid = mPrefs.getString(strClickedUid, "");
@@ -152,7 +141,7 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    StudentHelperClass studentHelper = snapshot.getValue(StudentHelperClass.class);
+                    Student studentHelper = snapshot.getValue(Student.class);
                     assert studentHelper != null;
                     txtViewFullName.setText(studentHelper.getFullName());
                     txtViewInstitution.setText(studentHelper.getInstitution());

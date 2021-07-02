@@ -3,7 +3,6 @@ package com.example.zippy.helper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -22,10 +21,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ResultHelper {
-    public static void writeTestResultToDatabase(Activity activity, String clickedCoursePassCode, ArrayList<TestHelperClass.TestMark> testMarks, String testId){
+    public static void writeTestResultToDatabase(Activity activity, String clickedCoursePassCode, ArrayList<TestHelper.TestMark> testMarks, String testId){
         ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(activity);
         progressDialog.setTitle("wait");
@@ -37,7 +35,7 @@ public class ResultHelper {
         HashMap<String, Double> convertedMarks;
         totalMarks = new HashMap<>();
         convertedMarks = new HashMap<>();
-        for(TestHelperClass.TestMark tsm:testMarks){
+        for(TestHelper.TestMark tsm:testMarks){
             totalMarks.put(tsm.getRegNo(), tsm.getTotalMark());
             convertedMarks.put(tsm.getRegNo(), tsm.getConvertedMark());
         }

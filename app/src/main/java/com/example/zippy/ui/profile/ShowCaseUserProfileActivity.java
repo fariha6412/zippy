@@ -1,13 +1,10 @@
 package com.example.zippy.ui.profile;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,13 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.zippy.R;
-import com.example.zippy.helper.CourseCustomAdapter;
-import com.example.zippy.helper.CourseHelperClass;
+import com.example.zippy.adapter.CourseCustomAdapter;
+import com.example.zippy.classes.Course;
+import com.example.zippy.classes.Instructor;
 import com.example.zippy.helper.EmailSender;
-import com.example.zippy.helper.InstructorHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
-import com.example.zippy.ui.course.AfterStudentDetailsActivity;
+import com.example.zippy.helper.MenuHelper;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -65,7 +61,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
     private DatabaseReference referenceStudent, referenceInstructor, referenceCourse, referenceCourseList;
 
     private RecyclerView recyclerView;
-    private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
+    private final ArrayList<Course> courseList = new ArrayList<>();
     private final ArrayList<Boolean> courseCompletionStatus = new ArrayList<>();
     private CourseCustomAdapter adapter;
 
@@ -78,8 +74,8 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedUid = mPrefs.getString(strClickedUid, "");
@@ -158,7 +154,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    StudentHelperClass studentHelper = snapshot.getValue(StudentHelperClass.class);
+                    Student studentHelper = snapshot.getValue(Student.class);
                     assert studentHelper != null;
                     txtViewFullName.setText(studentHelper.getFullName());
                     txtViewInstitution.setText(studentHelper.getInstitution());
@@ -197,7 +193,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    InstructorHelperClass instructorHelper = snapshot.getValue(InstructorHelperClass.class);
+                    Instructor instructorHelper = snapshot.getValue(Instructor.class);
 
                     assert instructorHelper != null;
                     txtViewFullName.setText(instructorHelper.getFullName());
@@ -239,7 +235,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
 
                             if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
                             else courseCompletionStatus.add(false);
-                            CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
+                            Course courseHelper = snapshot.getValue(Course.class);
                             if(courseHelper!=null) {
                                 courseList.add(courseHelper);
                                 adapter.notifyDataSetChanged();
@@ -275,7 +271,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapt) {
 
-                            CourseHelperClass courseHelper = snapt.getValue(CourseHelperClass.class);
+                            Course courseHelper = snapt.getValue(Course.class);
                             if(courseHelper!=null) {
                                 System.out.println(user.getUid());
                                 System.out.println(courseHelper.getInstructorUID());

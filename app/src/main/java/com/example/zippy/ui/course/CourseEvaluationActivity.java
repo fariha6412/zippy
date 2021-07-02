@@ -20,11 +20,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.TestHelperClass;
+import com.example.zippy.helper.MenuHelper;
+import com.example.zippy.helper.TestHelper;
 import com.example.zippy.ui.attendance.AttendanceDetailsActivity;
 import com.example.zippy.ui.profile.ShowCaseUserProfileActivity;
-import com.example.zippy.ui.search.SearchActivity;
 import com.example.zippy.ui.test.TestDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,8 +61,8 @@ public class CourseEvaluationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_evaluation);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         txtViewTotalPresent = findViewById(R.id.txtviewtotalpresent);
         txtViewTotalAbsent = findViewById(R.id.txtviewtotalabsent);
@@ -90,7 +89,7 @@ public class CourseEvaluationActivity extends AppCompatActivity {
         testIds = new ArrayList<>();
         ArrayList<String> testTitles = new ArrayList<>();
 
-        TestHelperClass.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
+        TestHelper.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
         autoCompleteTextView.setThreshold(0);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -5,14 +5,11 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -23,8 +20,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.example.zippy.R;
-import com.example.zippy.ui.test.TestDetailsActivity;
-import com.example.zippy.utility.common;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -32,7 +27,6 @@ import com.opencsv.CSVReader;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,17 +38,17 @@ public class FileHelper {
     private static final int PDF_PICK_CODE = 1000;
     private static final int CSV_PICK_CODE = 1010;
 
-    public static ArrayList<TestHelperClass.TestMark> readMarkSheetCsv(Uri uri, Context context) {
+    public static ArrayList<TestHelper.TestMark> readMarkSheetCsv(Uri uri, Context context) {
             try {
                 CSVReader reader = new CSVReader(new InputStreamReader(new BufferedInputStream(context.getContentResolver().openInputStream(uri))));
                 String [] nextLine;
-                ArrayList<TestHelperClass.TestMark> testMarks = new ArrayList<>();
+                ArrayList<TestHelper.TestMark> testMarks = new ArrayList<>();
                 Boolean flag = true;
 
                 while ((nextLine = reader.readNext()) != null)
                 {
                     int i = 0;
-                    TestHelperClass.TestMark testMark = new TestHelperClass.TestMark();
+                    TestHelper.TestMark testMark = new TestHelper.TestMark();
                     for(String token : nextLine)
                     {
                         if(i==0)testMark.setRegNo(token);

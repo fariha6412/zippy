@@ -1,4 +1,4 @@
-package com.example.zippy.helper;
+package com.example.zippy.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
