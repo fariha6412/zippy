@@ -106,14 +106,11 @@ public class StudentDetailsActivity extends AppCompatActivity {
             EmailSender.sendEmailTo(StudentDetailsActivity.this, emailArray);
         });
         mailSelected.setOnClickListener(v -> {
-            if(selectedPositions.size() <= 0)Toast.makeText(StudentDetailsActivity.this, "No individual selected", Toast.LENGTH_SHORT).show();
-            else {
-                String[] emailArray = new String[selectedPositions.size()];
-                for (int i = 0; i < selectedPositions.size(); i++) {
-                    emailArray[i] = studentEmails.get(selectedPositions.get(i));
-                }
-                EmailSender.sendEmailTo(StudentDetailsActivity.this, emailArray);
+            String[] emailArray = new String[selectedPositions.size()];
+            for(int i = 0; i < selectedPositions.size(); i++){
+                emailArray[i] = studentEmails.get(selectedPositions.get(i));
             }
+            EmailSender.sendEmailTo(StudentDetailsActivity.this, emailArray);
         });
         cancel.setOnClickListener(v -> {
             multipleSelection = false;
