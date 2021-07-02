@@ -8,11 +8,11 @@
     <color name="black">#FFFFFFFF</color>
     <color name="white">#FF000000</color>
     <!-- Customize color here. -->
-    <color name="chat">#8490D7</color>
-    <color name="buttonColor">#6039A5</color>
+    <color name="chat">#8E9BE4</color>
+    <color name="buttonColor">#6474D0</color>
     <color name="textFieldColor">#2F2F2F</color>
-    <color name="appbarColor">#1DDECB</color>
-    <color name="linkColor">#50C2C9</color>
+    <color name="appbarColor">#6474D0</color>
+    <color name="linkColor">#4D8BBD</color>
     <color name="titleColor">#FAFAFA</color>
     <color name="nav_icon_default">#666666</color>
     <color name="button_txt_color">#FF000000</color>

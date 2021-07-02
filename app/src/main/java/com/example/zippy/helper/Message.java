@@ -66,7 +66,7 @@ public class Message {
     }
 
     private String getCurrentTime(){
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
     }
