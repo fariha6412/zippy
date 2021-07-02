@@ -120,4 +120,12 @@
     <string name="title_requests">Requests</string>
     <string name="blocked_from">"This user has been blocked from "</string>
     <string name="str_block_list">BlockList</string>
+    <string name="str_update_profile_information">Update Profile Information</string>
+    <string name="str_new_user_name">New User Name</string>
+    <string name="str_New_Institute">New Institute</string>
+    <string name="str_New_Registration_No">New Registration No</string>
+    <string name="str_update">Update</string>
+    <string name="str_New_designation">New Designation</string>
+    <string name="str_New_Employ_ID">New Employ Id</string>
+    <string name="str_New_Employee_ID">New Employee Id</string>
 </resources>

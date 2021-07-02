@@ -32,8 +32,10 @@
         android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.285">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,98 +48,164 @@
                 android:id="@+id/changeprofilepicturebtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/button_txt"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/str_change_pic"
-                android:layout_gravity="center_horizontal"
-                app:backgroundTint="@color/course_details_btn"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="@dimen/button_txt"
+                app:backgroundTint="@color/course_details_btn" />
+            <!--            <EditText-->
+            <!--                android:id="@+id/edittxtchangeusername"-->
+            <!--                style="@style/Widget.AppCompat.EditText"-->
+            <!--                android:layout_width="@dimen/edit_txt_width"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:background="@color/textFieldColor"-->
+            <!--                android:ems="10"-->
+            <!--                android:hint="@string/str_new_user_name"-->
+            <!--                android:importantForAutofill="no"-->
+            <!--                android:inputType="textPersonName"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:paddingStart=".1in"-->
+            <!--                android:layout_gravity="center_horizontal"-->
 
+            <!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                tools:ignore="MissingConstraints,RtlSymmetry" />-->
+            <!--            <Button-->
+            <!--                android:id="@+id/changeusernamebtn"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:text="@string/str_change_user_name"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="@dimen/button_txt"-->
+            <!--                app:backgroundTint="@color/course_details_btn" />-->
+
+
+            <!--            <Button-->
+            <!--                android:id="@+id/changeinstitutionbtn"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:text="@string/str_change_institution"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="@dimen/button_txt"-->
+            <!--                app:backgroundTint="@color/course_details_btn" />-->
+
+            <!--            <EditText-->
+            <!--                android:id="@+id/edittxtchangedesignation"-->
+            <!--                style="@style/Widget.AppCompat.EditText"-->
+            <!--                android:layout_width="@dimen/edit_txt_width"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:background="@color/textFieldColor"-->
+            <!--                android:ems="10"-->
+            <!--                android:hint="@string/str_New_designation"-->
+            <!--                android:importantForAutofill="no"-->
+            <!--                android:inputType="textPersonName"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:paddingStart=".1in"-->
+            <!--                android:visibility="gone"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                tools:ignore="MissingConstraints,RtlSymmetry" />-->
+            <!--&lt;!&ndash;            <Button&ndash;&gt;-->
+            <!--                android:id="@+id/changedeisgnationbtn"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:text="@string/str_change_designation"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="@dimen/button_txt"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:backgroundTint="@color/course_details_btn" />-->
+            <!--            <EditText-->
+            <!--                android:id="@+id/edittxtchangeemployid"-->
+            <!--                style="@style/Widget.AppCompat.EditText"-->
+            <!--                android:layout_width="@dimen/edit_txt_width"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:background="@color/textFieldColor"-->
+            <!--                android:ems="10"-->
+            <!--                android:hint="@string/str_New_Employ_ID"-->
+            <!--                android:importantForAutofill="no"-->
+            <!--                android:inputType="textPersonName"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:paddingStart=".1in"-->
+            <!--                android:visibility="gone"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                tools:ignore="MissingConstraints,RtlSymmetry" />-->
+
+
+            <!--            <Button-->
+            <!--                android:id="@+id/changeregistrationnobtn"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:text="@string/str_change_registration_no"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="@dimen/button_txt"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:backgroundTint="@color/course_details_btn" />-->
+            <!--            <Button-->
+            <!--                android:id="@+id/updatebtn"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:text="@string/str_update"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="@dimen/button_txt"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:backgroundTint="@color/course_details_btn" />-->
             <Button
-                android:id="@+id/changeusernamebtn"
+                android:id="@+id/updateProfileInfobtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/button_txt"
-                android:text="@string/str_change_user_name"
                 android:layout_gravity="center_horizontal"
-                app:backgroundTint="@color/course_details_btn"
-                android:textColor="@color/black"/>
+                android:text="@string/str_update_profile_information"
+                android:textColor="@color/black"
+                android:textSize="@dimen/button_txt"
+                app:backgroundTint="@color/course_details_btn" />
 
-            <Button
-                android:id="@+id/changeinstitutionbtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/button_txt"
-                android:text="@string/str_change_institution"
-                android:layout_gravity="center_horizontal"
-                app:backgroundTint="@color/course_details_btn"
-                android:textColor="@color/black"/>
 
-            <Button
-                android:id="@+id/changedeisgnationbtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/button_txt"
-                android:text="@string/str_change_designation"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
-                app:backgroundTint="@color/course_details_btn"
-                android:textColor="@color/black"/>
-
-            <Button
-                android:id="@+id/changeemployeeidbtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/button_txt"
-                android:text="@string/str_change_employee_id"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
-                app:backgroundTint="@color/course_details_btn"
-                android:textColor="@color/black"/>
-
-            <Button
-                android:id="@+id/changeregistrationnobtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/button_txt"
-                android:text="@string/str_change_registration_no"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
-                app:backgroundTint="@color/course_details_btn"
-                android:textColor="@color/black"/>
 
             <Switch
                 android:id="@+id/profileLockSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:checked="false"
                 android:switchMinWidth="56dp"
                 android:text="@string/str_profile_lock"
-                android:checked="false"
+                android:textOff="@string/str_off"
+                android:textOn="@string/str_on"
                 android:textSize="@dimen/button_txt"
                 android:textStyle="bold"
-                android:layout_marginTop="15dp"
                 android:thumbTint="@color/black"
                 android:trackTint="@color/appbarColor"
-                android:visibility="gone"
-                android:textOff="@string/str_off"
-                android:textOn="@string/str_on"/>
+                android:visibility="gone" />
 
             <Switch
                 android:id="@+id/darkThemeSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:checked="false"
                 android:switchMinWidth="56dp"
                 android:text="@string/str_dark_theme"
-                android:checked="false"
+                android:textOff="@string/str_off"
+                android:textOn="@string/str_on"
                 android:textSize="@dimen/button_txt"
                 android:textStyle="bold"
-                android:layout_marginTop="15dp"
                 android:thumbTint="@color/black"
-                android:trackTint="@color/appbarColor"
-                android:textOff="@string/str_off"
-                android:textOn="@string/str_on"/>
+                android:trackTint="@color/appbarColor" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="0dp"
