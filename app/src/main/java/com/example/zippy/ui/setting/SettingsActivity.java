@@ -11,15 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.zippy.ChangeInstructorProfileInfoActivity;
-import com.example.zippy.ChangeStudentProfileInfoActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.MenuHelper;
