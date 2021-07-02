@@ -94,6 +94,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <Button
+                android:id="@+id/mailAllBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/appbarColor"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:text="@string/str_mail_all"/>
+            <Button
+                android:id="@+id/mailSelectedBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:visibility="gone"
+                android:backgroundTint="@color/appbarColor"
+                android:padding="10dp"
+                android:text="@string/str_mail_selected"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/cancelBtn"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/appbarColor"
+                android:text="@string/str_cancel"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

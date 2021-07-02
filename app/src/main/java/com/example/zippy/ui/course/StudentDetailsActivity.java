@@ -12,14 +12,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zippy.R;
+import com.example.zippy.helper.EmailSender;
 import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.NotificationHelper;
 import com.example.zippy.adapter.StudentCustomAdapter;
@@ -52,8 +57,13 @@ public class StudentDetailsActivity extends AppCompatActivity {
     private ArrayList<String> studentUIDs;
     private ArrayList<String> studentNames;
     private ArrayList<String> studentRegistrationNos;
+    private ArrayList<Integer> selectedPositions;
+    private ArrayList<String> studentEmails;
+
+    private Boolean multipleSelection;
 
     private TextView txtViewTotalStudent;
+    private Button mailAll, mailSelected, cancel;
     private StudentCustomAdapter adapter;
 
     @Override
@@ -68,18 +78,49 @@ public class StudentDetailsActivity extends AppCompatActivity {
         studentUIDs = new ArrayList<>();
         studentNames = new ArrayList<>();
         studentRegistrationNos = new ArrayList<>();
+        studentEmails = new ArrayList<>();
+        selectedPositions = new ArrayList<>();
         txtViewTotalStudent = findViewById(R.id.txtviewtotalstudent);
+
+        mailAll = findViewById(R.id.mailAllBtn);
+        mailSelected = findViewById(R.id.mailSelectedBtn);
+        cancel = findViewById(R.id.cancelBtn);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         clickedUid = mPrefs.getString(strClickedUid, "");
         isCompleted = mPrefs.getBoolean(strIsCompleted, false);
 
+        multipleSelection = false;
+
         System.out.println(clickedCoursePassCode);
         showNoOfStudents();
         showList();
         initRecyclerView();
 
+        mailAll.setOnClickListener(v -> {
+            String[] emailArray = new String[studentEmails.size()];
+            for(int i = 0; i < studentEmails.size(); i++){
+                emailArray[i] = studentEmails.get(i);
+            }
+            EmailSender.sendEmailTo(StudentDetailsActivity.this, emailArray);
+        });
+        mailSelected.setOnClickListener(v -> {
+            String[] emailArray = new String[selectedPositions.size()];
+            for(int i = 0; i < selectedPositions.size(); i++){
+                emailArray[i] = studentEmails.get(selectedPositions.get(i));
+            }
+            EmailSender.sendEmailTo(StudentDetailsActivity.this, emailArray);
+        });
+        cancel.setOnClickListener(v -> {
+            multipleSelection = false;
+            selectedPositions.clear();
+            adapter.setMultipleSelection(false);
+            adapter.notifyDataSetChanged();
+            cancel.setVisibility(View.GONE);
+            mailAll.setVisibility(View.GONE);
+            mailSelected.setVisibility(View.GONE);
+        });
     }
     private void showNoOfStudents(){
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
@@ -123,11 +164,12 @@ public class StudentDetailsActivity extends AppCompatActivity {
                 studentUIDs.clear();
                 studentNames.clear();
                 studentRegistrationNos.clear();
+                studentEmails.clear();
                 for(DataSnapshot dsnap:dataSnapshot.getChildren()){
-                    System.out.println(dsnap.getValue());
                     studentUIDs.clear();
                     studentNames.clear();
                     studentRegistrationNos.clear();
+                    studentEmails.clear();
                     String studentUid = (String) dsnap.getValue();
                     DatabaseReference referenceStudent = rootNode.getReference("students/"+studentUid);
                     referenceStudent.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -138,6 +180,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                                 studentUIDs.add(studentUid);
                                 studentNames.add(studentHelper.getFullName());
                                 studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
+                                studentEmails.add(studentHelper.getEmail());
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -161,7 +204,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new StudentCustomAdapter(studentNames, studentRegistrationNos);
+        adapter = new StudentCustomAdapter(studentNames, studentRegistrationNos, selectedPositions);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -169,14 +212,25 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
             @Override
             public void multipleSelection(int position) {
-
+                if (!multipleSelection){
+                    multipleSelection = true;
+                    mailAll.setVisibility(View.VISIBLE);
+                    mailSelected.setVisibility(View.VISIBLE);
+                    cancel.setVisibility(View.VISIBLE);
+                }
+                if (!selectedPositions.contains(Integer.valueOf(position))) {
+                    selectedPositions.add(position);
+                }
+                else selectedPositions.remove(Integer.valueOf(position));
             }
 
             @Override
             public void onItemClick(int position) {
                 //show profile of the student
+                System.out.println(selectedPositions);
                 mPrefs.edit().putString(strClickedUid, studentUIDs.get(position)).apply();
                 startActivity(new Intent(StudentDetailsActivity.this, AfterStudentDetailsActivity.class));
+
             }
             @Override
             public void onDeleteClick(int position) {
@@ -231,7 +285,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
-                    System.out.println(dsnap.getValue());
                     if(clickedCoursePassCode.equals((String)dsnap.getValue())){
 
                         referenceStudent.child("courses").child(Objects.requireNonNull(dsnap.getKey())).removeValue();

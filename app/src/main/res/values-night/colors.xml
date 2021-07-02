@@ -22,4 +22,5 @@
     <color name="colorNoInternet">#6D6D73</color>
     <color name="course_details_btn">#2F2F2F</color>
     <color name="common_profile_txt_view">#212121</color>
+    <color name="cyan">#91c9a0</color>
 </resources>
