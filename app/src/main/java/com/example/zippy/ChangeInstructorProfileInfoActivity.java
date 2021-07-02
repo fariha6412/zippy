@@ -1,27 +1,21 @@
 package com.example.zippy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.zippy.helper.InstructorHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,8 +64,8 @@ public class ChangeInstructorProfileInfoActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
         showAllUserData();
         updatebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +138,7 @@ public class ChangeInstructorProfileInfoActivity extends AppCompatActivity {
     public void updateinfo() {
         if (isNameChanged() || isisInstituteChanged() || isDesignationChanged() || isEmployIdChanged()) {
             Toast.makeText(ChangeInstructorProfileInfoActivity.this, "Data has been updated", Toast.LENGTH_LONG).show();
+            finish();
         } else
             Toast.makeText(ChangeInstructorProfileInfoActivity.this, "Data is same and can not be updated", Toast.LENGTH_LONG).show();
 

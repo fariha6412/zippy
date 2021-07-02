@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,8 +61,8 @@ public class ChangeStudentProfileInfoActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
         showAllUserData();
         updatebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +118,7 @@ public class ChangeStudentProfileInfoActivity extends AppCompatActivity {
     public void updateinfo() {
         if (isNameChanged() || isInstituteChanged() || isREgistrationNoChanged()) {
             Toast.makeText(ChangeStudentProfileInfoActivity.this, "Data has been updated", Toast.LENGTH_LONG).show();
+            finish();
         } else
             Toast.makeText(ChangeStudentProfileInfoActivity.this, "Data is same and can not be updated", Toast.LENGTH_LONG).show();
 
