@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentEnd="true"
+        android:paddingRight="10dp"
+        >
+
+        <TextView
+            android:id="@+id/txtviewsent"
+            android:layout_alignParentTop="@+id/receiver_message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/senderbackgroud"
+            android:hint="sent message"
+            android:padding="10dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/little_title" />
+
+        <TextView
+            android:id="@+id/txtviewsenttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="sent time"
+            android:layout_gravity="end"
+            android:paddingLeft="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recieved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtviewreceived"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/receiverbackground"
+            android:hint="received message"
+            android:padding="10dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/little_title" />
+
+        <TextView
+            android:id="@+id/txtviewrecievedtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="received time"
+            android:paddingLeft="10dp" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>
