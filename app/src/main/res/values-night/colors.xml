@@ -8,7 +8,8 @@
     <color name="black">#FFFFFFFF</color>
     <color name="white">#FF000000</color>
     <!-- Customize color here. -->
-    <color name="buttonColor">#1DDECB</color>
+    <color name="chat">#8490D7</color>
+    <color name="buttonColor">#6039A5</color>
     <color name="textFieldColor">#2F2F2F</color>
     <color name="appbarColor">#1DDECB</color>
     <color name="linkColor">#50C2C9</color>

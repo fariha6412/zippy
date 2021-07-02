@@ -115,6 +115,12 @@
     <string name="str_assign_attendance_mark">Assign Mark on Attendance</string>
     <string name="str_attendance_mark">Mark on Attendance</string>
     <string name="str_your_attendance_mark">You mark on Attendance</string>
+    <string name="str_new_user_name">New User Name</string>
+    <string name="str_New_Institute">New Institute</string>
+    <string name="str_New_Registration_No">New Registration No</string>
+    <string name="str_New_designation">New Designation</string>
+    <string name="str_New_Employ_ID">New Employ Id</string>
+    <string name="str_New_Employee_ID">New Employee Id</string>
     <string name="str_show_instructor_profile">Show Instructor Profile</string>
     <string name="default_notification_channel_name">From Zippy</string>
     <string name="title_requests">Requests</string>

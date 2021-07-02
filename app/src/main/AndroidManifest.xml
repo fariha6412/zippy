@@ -21,14 +21,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.setting.ChangeProfileInfoActivity"></activity>
-        <activity android:name=".ui.course.BlockListActivity"></activity>
+        <activity android:name=".ChangeInstructorProfileInfoActivity"></activity>
+        <activity android:name=".ChangeStudentProfileInfoActivity" />
+        <activity android:name=".ui.chat.ChatActivity"></activity>
+        <activity android:name=".ui.chat.ChatListActivity" />
+        <activity android:name=".ui.setting.ChangeProfileInfoActivity" />
+        <activity android:name=".ui.course.BlockListActivity" />
         <activity android:name=".ui.course.AfterStudentDetailsActivity" />
         <activity android:name=".ui.test.TestDetailsActivity" />
         <activity android:name=".ui.profile.ShowCaseUserProfileActivity" />
         <activity android:name=".ui.attendance.AttendanceDetailsActivity" />
         <activity android:name=".ui.setting.SettingsActivity" />
-        <activity android:name=".ui.chat.ChatActivity" />
         <activity android:name=".ui.search.SearchActivity" />
         <activity
             android:name=".MainActivity"

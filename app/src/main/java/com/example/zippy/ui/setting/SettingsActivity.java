@@ -11,12 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.zippy.ChangeInstructorProfileInfoActivity;
+import com.example.zippy.ChangeStudentProfileInfoActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
 import com.example.zippy.helper.MenuHelper;
@@ -51,11 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         menuHelper.handle();
 
         Button changeProfilePicBtn = findViewById(R.id.changeprofilepicturebtn);
-        Button changeUserNameBtn = findViewById(R.id.changeusernamebtn);
-        Button changeInstitutionBtn = findViewById(R.id.changeinstitutionbtn);
-        Button changeDesignationBtn = findViewById(R.id.changedeisgnationbtn);
-        Button changeRegistrationNoBtn = findViewById(R.id.changeregistrationnobtn);
-        Button changeEmployeeIDBtn = findViewById(R.id.changeemployeeidbtn);
+        Button updateProfileInfoBtn= findViewById(R.id.updateProfileInfobtn);
         darkThemeSwitch = findViewById(R.id.darkThemeSwitch);
         profileLockSwitch = findViewById(R.id.profileLockSwitch);
 
@@ -64,12 +63,11 @@ public class SettingsActivity extends AppCompatActivity {
         boolean lockedProfile = mPrefs.getBoolean(lockedStatus, false);
         boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
 
-        if(loggedProfile.equals("instructor")){
-            changeDesignationBtn.setVisibility(View.VISIBLE);
-            changeEmployeeIDBtn.setVisibility(View.VISIBLE);
-        }
+//        if(loggedProfile.equals("instructor")){
+//
+//        }
         if(loggedProfile.equals("student")){
-            changeRegistrationNoBtn.setVisibility(View.VISIBLE);
+
             profileLockSwitch.setVisibility(View.VISIBLE);
         }
         if(lockedProfile){
@@ -91,6 +89,8 @@ public class SettingsActivity extends AppCompatActivity {
         bottomNavigationHelper.handle();
 
         changeProfilePicBtn.setOnClickListener(v -> startActivity(new Intent(this, ChangeProfilePictureActivity.class)));
+        if(loggedProfile.equals("student"))updateProfileInfoBtn.setOnClickListener(v -> startActivity(new Intent(this, ChangeStudentProfileInfoActivity.class)));
+        if(loggedProfile.equals("instructor"))updateProfileInfoBtn.setOnClickListener(v -> startActivity(new Intent(this, ChangeInstructorProfileInfoActivity.class)));
 
         profileLockSwitch.setOnClickListener(v -> {
             System.out.println();
