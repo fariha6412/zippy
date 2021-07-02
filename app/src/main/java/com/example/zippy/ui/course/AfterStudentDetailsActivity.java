@@ -18,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zippy.R;
@@ -28,6 +29,7 @@ import com.example.zippy.helper.TestHelperClass;
 import com.example.zippy.ui.attendance.AttendanceDetailsActivity;
 import com.example.zippy.ui.test.TestDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,6 +58,8 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
     private TextView txtViewAttendancePercentage, txtViewFinalGrade;
     private TextView txtViewYourMarkOnAttendance, txtViewYourTotalMark;
 
+    private Boolean isFabHidden;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +74,10 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         clickedUid = mPrefs.getString(strClickedUid, "");
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         imgView = findViewById(R.id.imgView);
-        FloatingActionButton floatingActionButton = findViewById(R.id.chatbtn);
+        FloatingActionButton sendMail = findViewById(R.id.email_fab);
+        FloatingActionButton sendMessage = findViewById(R.id.message_fab);
+        ExtendedFloatingActionButton contact = findViewById(R.id.contact_fab);
+
 
         txtViewFullName = findViewById(R.id.txtViewFullName);
         txtViewEmail = findViewById(R.id.txtviewemail);
@@ -82,9 +89,16 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         txtViewYourMarkOnAttendance = findViewById(R.id.txtViewResultedMarkOnAttendance);
         txtViewYourTotalMark = findViewById(R.id.txtViewTotalMark);
         txtViewFinalGrade = findViewById(R.id.txtViewFinalGrade);
+
         LinearLayout markOnAttendanceLinearLayout = findViewById(R.id.resultedMarkOnAttendanceLinearLayout);
         LinearLayout totalMarkLinearLayout = findViewById(R.id.totalMarkLinearLayout);
         LinearLayout finalGradeLinearLayout = findViewById(R.id.finalGradeLinearLayout);
+
+        sendMail.setVisibility(View.GONE);
+        sendMessage.setVisibility(View.GONE);
+
+        isFabHidden = true;
+        contact.shrink();
 
         String strIsCompleted = "isCompleted";
         boolean isCompleted = mPrefs.getBoolean(strIsCompleted, false);
@@ -98,9 +112,38 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
 
         showStudentDetails();
 
-        floatingActionButton.setOnClickListener(v -> {
-            EmailSender.sendEmailTo(AfterStudentDetailsActivity.this, new String[] {txtViewEmail.getText().toString().trim()});
-        });
+        contact.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isFabHidden) {
+                            sendMail.show();
+                            sendMessage.show();
+                            contact.extend();
+                            isFabHidden = false;
+                        } else {
+                            sendMail.hide();
+                            sendMessage.hide();
+                            contact.shrink();
+                            isFabHidden = true;
+                        }
+                    }
+                });
+        sendMail.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EmailSender.sendEmailTo(AfterStudentDetailsActivity.this, new String[] {txtViewEmail.getText().toString().trim()});
+                    }
+                });
+        sendMessage.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(AfterStudentDetailsActivity.this, "start chatActivity",
+                                        Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
     private void showStudentDetails(){
         DatabaseReference referenceStudent = FirebaseDatabase.getInstance().getReference("students/"+clickedUid);

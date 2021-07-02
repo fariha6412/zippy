@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.ValidationChecker;
+import com.example.zippy.ui.profile.UserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -171,7 +173,7 @@ public class CourseCreationActivity extends AppCompatActivity {
                             }
                         });
                         Toast.makeText(getApplicationContext(), "Course Created", Toast.LENGTH_SHORT).show();
-                        finish();
+                        startActivity(new Intent(CourseCreationActivity.this, UserProfileActivity.class));
                     }
                 }
 

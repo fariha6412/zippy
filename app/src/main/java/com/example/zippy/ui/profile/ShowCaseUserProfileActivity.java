@@ -29,7 +29,9 @@ import com.example.zippy.helper.EmailSender;
 import com.example.zippy.helper.InstructorHelperClass;
 import com.example.zippy.helper.MenuHelperClass;
 import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.ui.course.AfterStudentDetailsActivity;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -67,6 +69,8 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
     private final ArrayList<Boolean> courseCompletionStatus = new ArrayList<>();
     private CourseCustomAdapter adapter;
 
+    private Boolean isFabHidden;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +86,10 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
         loggedProfile = mPrefs.getString(loggedStatus, "nouser");
 
         imgView = findViewById(R.id.imgView);
-        FloatingActionButton floatingActionButton = findViewById(R.id.chatbtn);
+
+        FloatingActionButton sendMail = findViewById(R.id.email_fab);
+        FloatingActionButton sendMessage = findViewById(R.id.message_fab);
+        ExtendedFloatingActionButton contact = findViewById(R.id.contact_fab);
 
         txtViewProfileLocked = findViewById(R.id.txtviewprofileloced);
         txtViewFullName = findViewById(R.id.txtViewFullName);
@@ -99,11 +106,47 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
         employeeIDLinearLayout = findViewById(R.id.employeeidlinearlayout);
         courseListHeaderLinearLayout = findViewById(R.id.courselistheaderlinearlayout);
 
+        sendMail.setVisibility(View.GONE);
+        sendMessage.setVisibility(View.GONE);
+
+        isFabHidden = true;
+        contact.shrink();
+
         initRecyclerView();
         showData();
-        floatingActionButton.setOnClickListener(v -> {
-            EmailSender.sendEmailTo(ShowCaseUserProfileActivity.this, new String[] {txtViewEmail.getText().toString().trim()});
-        });
+
+        contact.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isFabHidden) {
+                            sendMail.show();
+                            sendMessage.show();
+                            contact.extend();
+                            isFabHidden = false;
+                        } else {
+                            sendMail.hide();
+                            sendMessage.hide();
+                            contact.shrink();
+                            isFabHidden = true;
+                        }
+                    }
+                });
+        sendMail.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EmailSender.sendEmailTo(ShowCaseUserProfileActivity.this, new String[] {txtViewEmail.getText().toString().trim()});
+                    }
+                });
+        sendMessage.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(ShowCaseUserProfileActivity.this, "start chatActivity",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void showData(){

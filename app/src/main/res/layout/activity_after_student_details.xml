@@ -76,17 +76,6 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="@dimen/under_title"/>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/chatbtn"
-                android:tint="@color/appbarColor"
-                android:backgroundTint="@color/common_profile_txt_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_email_24"
-                android:layout_gravity="bottom|end"
-                android:layout_marginTop="-30dp"
-                android:layout_marginEnd="20dp"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -374,5 +363,47 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/contact_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/appbarColor"
+        android:text="@string/str_contact"
+        android:textColor="@color/button_txt_color"
+        app:icon="@drawable/ic_baseline_connect_without_contact_24"
+        app:iconTint="@color/button_txt_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/email_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/common_profile_txt_view"
+        app:fabSize="normal"
+        app:tint="@color/appbarColor"
+        app:layout_constraintBottom_toTopOf="@+id/contact_fab"
+        app:layout_constraintEnd_toEndOf="@+id/contact_fab"
+        app:srcCompat="@drawable/ic_baseline_email_24"
+        android:contentDescription="@string/app_name" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/message_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/common_profile_txt_view"
+        app:fabSize="normal"
+        app:tint="@color/appbarColor"
+        app:layout_constraintBottom_toTopOf="@+id/email_fab"
+        app:layout_constraintEnd_toEndOf="@+id/email_fab"
+        app:layout_constraintStart_toStartOf="@+id/email_fab"
+        app:srcCompat="@drawable/ic_baseline_chat_24"
+        android:contentDescription="@string/app_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
