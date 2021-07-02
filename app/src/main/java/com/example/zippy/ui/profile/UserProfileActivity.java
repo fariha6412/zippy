@@ -193,7 +193,7 @@ public class UserProfileActivity extends AppCompatActivity{
         });
     }
     private void showCourseList(){
-        referenceCourseList.addValueEventListener(new ValueEventListener() {
+        referenceCourseList.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
