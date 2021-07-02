@@ -115,6 +115,12 @@
     <string name="str_assign_attendance_mark">Assign Mark on Attendance</string>
     <string name="str_attendance_mark">Mark on Attendance</string>
     <string name="str_your_attendance_mark">You mark on Attendance</string>
+    <string name="str_new_user_name">New User Name</string>
+    <string name="str_New_Institute">New Institute</string>
+    <string name="str_New_Registration_No">New Registration No</string>
+    <string name="str_New_designation">New Designation</string>
+    <string name="str_New_Employ_ID">New Employ Id</string>
+    <string name="str_New_Employee_ID">New Employee Id</string>
     <string name="str_show_instructor_profile">Show Instructor Profile</string>
     <string name="default_notification_channel_name">From Zippy</string>
     <string name="title_requests">Requests</string>
@@ -123,4 +129,7 @@
     <string name="str_instruction">Instructions :</string>
     <string name="str_instruction_for_students">If you are a student, you have an extra feature to lock your profile to prevent others from seeing your enrolled courses but the instructors can see their courses in your profile as they have the right to see their courses, you know. If you have mistakenly enrolled in any course or the instructor do not want to have you in his courses anymore [I guess you must have annoyed him that much] he/she can get you out of their courses and remember you can hide your marks from you fellow buddies but can not hide from your instructor so be aware of that. If you have any enquiry to anyone just go search for him and message him it is that easy to communicate.</string>
     <string name="str_instruction_for_instructors">In case you are a instructor and are uploading a csv markSheet you need to make sure there is only three comma separated values in each line which must be students regNo, totalMark and convertedMark. You will be able to re-upload markSheet until the course completion. Again, be aware while uploading your gradingScale. You must follow the specific format for your csv like there would be two values in each line. One for upper limit of mark range for certain grade and the other for letter grade or point grade whichever you prefer. Make sure you have uploaded everything right before exiting the screen as you would not be able to re-upload gradingScale if you made a mistake.</string>
+    <string name="str_send_message">Send message</string>
+    <string name="str_send_mail">Send Mail</string>
+    <string name="str_contact">Contact</string>
 </resources>
