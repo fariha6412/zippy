@@ -21,7 +21,7 @@
             app:titleTextColor="@color/white"
             tools:ignore="InOrMmUsage">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

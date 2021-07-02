@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -22,6 +23,7 @@ import com.example.zippy.R;
 import com.example.zippy.helper.EmailSender;
 import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.classes.Student;
+import com.example.zippy.ui.chat.ChatActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -129,8 +131,8 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(AfterStudentDetailsActivity.this, "start chatActivity",
-                                        Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AfterStudentDetailsActivity.this, ChatActivity.class));
+
                     }
                 });
     }

@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="8dp"
     android:clickable="true"
     android:focusable="true">
 
 
-    <ImageView
-        android:id="@+id/imgView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_baseline_perm_identity_24"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/str_img_des" />
+   <de.hdodenhof.circleimageview.CircleImageView
+       android:id="@+id/imgView"
+       android:layout_width="50dp"
+       android:layout_height="50dp"
+       android:src="@drawable/ic_baseline_perm_identity_24"
+       android:scaleType="centerCrop"
+       android:contentDescription="@string/str_img_des" />
+
 
     <TextView
         android:id="@+id/txtViewFullName"
@@ -24,6 +27,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/black"
         android:textStyle="normal"
+        android:paddingLeft="10dp"
         android:textSize="@dimen/little_title"
         android:layout_gravity="center_vertical" />
 
