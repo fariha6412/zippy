@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -18,14 +17,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.CourseHelperClass;
-import com.example.zippy.helper.FcmNotificationsSender;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.NotificationHelper;
-import com.example.zippy.helper.StudentCustomAdapter;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.adapter.StudentCustomAdapter;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +43,9 @@ public class StudentDetailsActivity extends AppCompatActivity {
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     String clickedCoursePassCode;
     final String strClickedUid = "clickedUid";
+    final String strIsCompleted = "isCompleted";
+    private Boolean isCompleted;
+
     String clickedUid;
     private String courseTitle;
 
@@ -61,22 +62,24 @@ public class StudentDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_details);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         studentUIDs = new ArrayList<>();
         studentNames = new ArrayList<>();
         studentRegistrationNos = new ArrayList<>();
         txtViewTotalStudent = findViewById(R.id.txtviewtotalstudent);
 
-        //new for saving logged user type and clicked course
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         clickedUid = mPrefs.getString(strClickedUid, "");
+        isCompleted = mPrefs.getBoolean(strIsCompleted, false);
 
         System.out.println(clickedCoursePassCode);
         showNoOfStudents();
         showList();
+        initRecyclerView();
+
     }
     private void showNoOfStudents(){
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
@@ -130,12 +133,12 @@ public class StudentDetailsActivity extends AppCompatActivity {
                     referenceStudent.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
-                            StudentHelperClass studentHelper = dsnapshot.getValue(StudentHelperClass.class);
+                            Student studentHelper = dsnapshot.getValue(Student.class);
                             if(studentHelper!=null){
                                 studentUIDs.add(studentUid);
                                 studentNames.add(studentHelper.getFullName());
                                 studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
-                                initRecyclerView();
+                                adapter.notifyDataSetChanged();
                             }
                         }
 
@@ -163,6 +166,12 @@ public class StudentDetailsActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         adapter.setOnItemClickListener(new StudentCustomAdapter.OnItemClickListener() {
+
+            @Override
+            public void multipleSelection(int position) {
+
+            }
+
             @Override
             public void onItemClick(int position) {
                 //show profile of the student
@@ -171,6 +180,10 @@ public class StudentDetailsActivity extends AppCompatActivity {
             }
             @Override
             public void onDeleteClick(int position) {
+                if(isCompleted){
+                    Toast.makeText(StudentDetailsActivity.this, "Course is completed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //delete showing a alert dialog
                 new AlertDialog.Builder(StudentDetailsActivity.this)
                         .setTitle("Message")
@@ -221,8 +234,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
                     System.out.println(dsnap.getValue());
                     if(clickedCoursePassCode.equals((String)dsnap.getValue())){
 
-                        System.out.println("milse");
-
                         referenceStudent.child("courses").child(Objects.requireNonNull(dsnap.getKey())).removeValue();
                         referenceCourse.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -266,8 +277,8 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
             }
         });
-        //referenceCourse.child("unrolledStudents").push().setValue(uid);
         if(block)referenceCourse.child("blockedStudents").child(uid).setValue(true);
+        //else referenceCourse.child("unrolledStudents").push().setValue(uid);
     }
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);

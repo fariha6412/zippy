@@ -64,43 +64,39 @@
                 android:textColor="@color/titleColor"
                 android:textSize="@dimen/title" />
 
-            <EditText
-                android:id="@+id/edittxtemail"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="@dimen/edit_txt_width"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:background="@color/textFieldColor"
-                android:ems="10"
-                android:hint="@string/str_email"
-                android:importantForAutofill="yes"
-                android:inputType="textEmailAddress"
-                android:autofillHints="@string/str_email"
-                android:padding="10dp"
-                android:paddingStart=".1in"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black"
-                tools:ignore="MissingConstraints,RtlSymmetry" />
+                android:background="@color/appbarColor"
+                android:layout_width="@dimen/edit_txt_width">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edittxtemail"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:imeOptions="actionNext"
+                    android:background="@color/textFieldColor"
+                    android:hint="@string/str_email"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/edittxtpassword"
-                style="@style/Widget.AppCompat.EditText"
-                android:layout_width="@dimen/edit_txt_width"
+            <com.google.android.material.textfield.TextInputLayout
+                app:passwordToggleEnabled="true"
+                app:passwordToggleDrawable="@drawable/show_password_selector"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:background="@color/textFieldColor"
-                android:ems="10"
-                android:hint="@string/str_password"
-                android:importantForAutofill="yes"
-                android:inputType="textPassword"
-                android:autofillHints="str_password"
-                android:padding="10dp"
-                android:paddingStart=".1in"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black"
-                tools:ignore="MissingConstraints,RtlSymmetry" />
+                android:background="@color/appbarColor"
+                android:layout_width="@dimen/edit_txt_width">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edittxtpassword"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:imeOptions="actionNext"
+                    android:background="@color/textFieldColor"
+                    android:hint="@string/str_password"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btnlogin"

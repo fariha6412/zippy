@@ -26,10 +26,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.zippy.helper.InstructorHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.classes.Instructor;
+import com.example.zippy.classes.Student;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.MyFirebaseMessagingService;
-import com.example.zippy.helper.StudentHelperClass;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.ui.extras.SplashActivity;
 import com.example.zippy.ui.profile.UserProfileActivity;
@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-    private EditText editTXTEmail, editTXTPassword;
+    private TextInputEditText editTXTEmail, editTXTPassword;
     private FirebaseAuth auth;
     private FirebaseDatabase rootNode;
-    private DatabaseReference referenceStudent, referenceInstructor, referenceToken;
+    private DatabaseReference referenceStudent, referenceInstructor;
 
     private SharedPreferences mPrefs;
     final String splashScreenPref = "SplashScreenShown";
@@ -214,14 +215,13 @@ public class MainActivity extends AppCompatActivity {
                                     rootNode = FirebaseDatabase.getInstance();
                                     referenceStudent = rootNode.getReference("students/"+ user.getUid());
                                     referenceInstructor = rootNode.getReference("instructors/"+ user.getUid());
-                                    referenceToken = rootNode.getReference("tokens");
 
                                     referenceStudent.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                                             // This method is called once with the initial value and again
                                             // whenever data at this location is updated.
-                                            StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
+                                            Student value = dataSnapshot.getValue(Student.class);
                                             if(value!=null){
                                                 saveToken(user.getUid());
                                                 //start the activity of profile of student
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                                             // This method is called once with the initial value and again
                                             // whenever data at this location is updated.
-                                            InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
+                                            Instructor value = dataSnapshot.getValue(Instructor.class);
                                             if(value!=null){
                                                 //start the activity of profile of instructor
                                                 saveToken(user.getUid());
@@ -308,10 +308,10 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
+                MenuHelper.showAbout(this);
                 return true;
             case R.id.menuexit:
-                MenuHelperClass.exit(this);
+                MenuHelper.exit(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -332,6 +332,6 @@ public class MainActivity extends AppCompatActivity {
     //end stuff
     @Override
     public void onBackPressed() {
-        MenuHelperClass.exit(this);
+        MenuHelper.exit(this);
     }
 }

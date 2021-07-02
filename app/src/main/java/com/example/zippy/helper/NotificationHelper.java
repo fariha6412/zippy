@@ -50,18 +50,8 @@ public class NotificationHelper{
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
                     String uid = (String) dsnap.getKey();
-                    FirebaseDatabase.getInstance().getReference("userTokens/"+uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot snapt) {
-                            String token = (String)snapt.getValue();
-                            NotificationHelper.notifyUser(token, title, body, activity);
-                        }
+                    NotificationHelper.notifyUser(uid, title, body, activity);
 
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                        }
-                    });
                 }
             }
 

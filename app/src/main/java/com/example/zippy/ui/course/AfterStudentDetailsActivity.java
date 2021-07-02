@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -13,23 +12,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zippy.R;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
-import com.example.zippy.helper.TestHelperClass;
-import com.example.zippy.ui.attendance.AttendanceDetailsActivity;
-import com.example.zippy.ui.test.TestDetailsActivity;
+import com.example.zippy.helper.EmailSender;
+import com.example.zippy.helper.MenuHelper;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class AfterStudentDetailsActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
@@ -55,6 +47,8 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
     private TextView txtViewAttendancePercentage, txtViewFinalGrade;
     private TextView txtViewYourMarkOnAttendance, txtViewYourTotalMark;
 
+    private Boolean isFabHidden;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +56,17 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_after_student_details);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedUid = mPrefs.getString(strClickedUid, "");
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
         imgView = findViewById(R.id.imgView);
-        FloatingActionButton floatingActionButton = findViewById(R.id.chatbtn);
+        FloatingActionButton sendMail = findViewById(R.id.email_fab);
+        FloatingActionButton sendMessage = findViewById(R.id.message_fab);
+        ExtendedFloatingActionButton contact = findViewById(R.id.contact_fab);
+
 
         txtViewFullName = findViewById(R.id.txtViewFullName);
         txtViewEmail = findViewById(R.id.txtviewemail);
@@ -81,13 +78,19 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         txtViewYourMarkOnAttendance = findViewById(R.id.txtViewResultedMarkOnAttendance);
         txtViewYourTotalMark = findViewById(R.id.txtViewTotalMark);
         txtViewFinalGrade = findViewById(R.id.txtViewFinalGrade);
+
         LinearLayout markOnAttendanceLinearLayout = findViewById(R.id.resultedMarkOnAttendanceLinearLayout);
         LinearLayout totalMarkLinearLayout = findViewById(R.id.totalMarkLinearLayout);
         LinearLayout finalGradeLinearLayout = findViewById(R.id.finalGradeLinearLayout);
-        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+
+        sendMail.setVisibility(View.GONE);
+        sendMessage.setVisibility(View.GONE);
+
+        isFabHidden = true;
+        contact.shrink();
 
         String strIsCompleted = "isCompleted";
-        Boolean isCompleted = mPrefs.getBoolean(strIsCompleted, false);
+        boolean isCompleted = mPrefs.getBoolean(strIsCompleted, false);
 
         if(isCompleted){
             totalMarkLinearLayout.setVisibility(View.VISIBLE);
@@ -97,6 +100,39 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
         }
 
         showStudentDetails();
+
+        contact.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isFabHidden) {
+                            sendMail.show();
+                            sendMessage.show();
+                            contact.extend();
+                            isFabHidden = false;
+                        } else {
+                            sendMail.hide();
+                            sendMessage.hide();
+                            contact.shrink();
+                            isFabHidden = true;
+                        }
+                    }
+                });
+        sendMail.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EmailSender.sendEmailTo(AfterStudentDetailsActivity.this, new String[] {txtViewEmail.getText().toString().trim()});
+                    }
+                });
+        sendMessage.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(AfterStudentDetailsActivity.this, "start chatActivity",
+                                        Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
     private void showStudentDetails(){
         DatabaseReference referenceStudent = FirebaseDatabase.getInstance().getReference("students/"+clickedUid);
@@ -105,7 +141,7 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    StudentHelperClass studentHelper = snapshot.getValue(StudentHelperClass.class);
+                    Student studentHelper = snapshot.getValue(Student.class);
                     assert studentHelper != null;
                     txtViewFullName.setText(studentHelper.getFullName());
                     txtViewInstitution.setText(studentHelper.getInstitution());
@@ -147,7 +183,6 @@ public class AfterStudentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snpt) {
                 if(snpt.exists()){
-                    System.out.println("dsfdsafdsfdsaf");
                     txtViewYourMarkOnAttendance.setText((String.valueOf(snpt.getValue())));
                 }
                 else txtViewYourMarkOnAttendance.setText("0");

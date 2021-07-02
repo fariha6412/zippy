@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -15,10 +16,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.CourseHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.ValidationChecker;
+import com.example.zippy.ui.profile.UserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,8 +47,8 @@ public class CourseEnrollActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_enroll);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -116,7 +116,6 @@ public class CourseEnrollActivity extends AppCompatActivity {
                                         public void onDataChange(@NonNull @NotNull DataSnapshot snapt) {
                                             if(snapt.exists()){
                                                 if((boolean)snapt.getValue()){
-                                                    System.out.println("heyhekkkiidsfsdf");
                                                     Toast.makeText(CourseEnrollActivity.this, "You have been blocked from this course", Toast.LENGTH_SHORT).show();
                                                     finish();
                                                 }
@@ -153,7 +152,6 @@ public class CourseEnrollActivity extends AppCompatActivity {
     }
     private void enroll(String coursePassCode, Long[] noOfStudents, Long[] noOfCourses){
 
-        System.out.println("sdfdasfsafdasfdsfdasfdasfdsf"+flag+canEnroll);
         referenceCourse.child(coursePassCode).child("noOfStudents").setValue((noOfStudents[0]), new DatabaseReference.CompletionListener() {
 
             @Override
@@ -181,8 +179,7 @@ public class CourseEnrollActivity extends AppCompatActivity {
                 System.err.println("Value was set. Error = " + error);
             }
         });
-        //Toast.makeText(getApplicationContext(), "Successfully Enrolled", Toast.LENGTH_SHORT).show();
-        finish();
+        startActivity(new Intent(CourseEnrollActivity.this, UserProfileActivity.class));
     }
     //internet related stuff
     @Override

@@ -21,8 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.classes.Student;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.ValidationChecker;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.Task;
@@ -45,7 +45,7 @@ public class RegisterStudentActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
-    private StudentHelperClass studentHelper;
+    private Student studentHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class RegisterStudentActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Verification Email has been sent", Toast.LENGTH_SHORT).show();
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("students");
-                            studentHelper = new StudentHelperClass(image, fullName, email, institution, registrationNo);
+                            studentHelper = new Student(image, fullName, email, institution, registrationNo);
 
                             reference.child(user.getUid()).setValue(studentHelper, (error, ref) -> System.err.println("Value was set. Error = "+error));
 
@@ -137,10 +137,10 @@ public class RegisterStudentActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
+                MenuHelper.showAbout(this);
                 return true;
             case R.id.menuexit:
-                MenuHelperClass.exit(this);
+                MenuHelper.exit(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

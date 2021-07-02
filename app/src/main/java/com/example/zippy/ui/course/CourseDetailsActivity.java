@@ -30,9 +30,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.R;
 import com.example.zippy.helper.FileHelper;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.ResultHelper;
-import com.example.zippy.helper.TestHelperClass;
+import com.example.zippy.helper.TestHelper;
 import com.example.zippy.ui.attendance.AttendanceTakingActivity;
 import com.example.zippy.ui.test.TestCreationActivity;
 import com.example.zippy.ui.test.TestDetailsActivity;
@@ -73,7 +73,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private final boolean[] flag = new boolean[1];
 
     private LinearLayout markOnAttendanceLinearLayout;
-    private TextView txtViewMarkOnAttendance;
+    private TextView txtViewMarkOnAttendance, uploadedGradingScaleFileName;
     private Button attendanceMarkAssignBtn;
     private Uri gradingScaleUri;
     private ArrayList<String> testIds;
@@ -81,6 +81,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private Double markOnAttendance = null;
     private LocalDate dateToday;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,13 +97,14 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         dateToday = LocalDate.now();
         rootNode = FirebaseDatabase.getInstance();
 
         TextView txtViewCoursePassCode = findViewById(R.id.txtviewcoursepasscode);
+        uploadedGradingScaleFileName = findViewById(R.id.uploadedGradingScaleFileName);
         txtViewMarkOnAttendance = findViewById(R.id.txtviewattendancemark);
         Button studentDetailsBtn = findViewById(R.id.studentdetailsbtn);
         Button attendanceBtn = findViewById(R.id.attendance);
@@ -117,12 +119,11 @@ public class CourseDetailsActivity extends AppCompatActivity {
         testIds = new ArrayList<>();
         ArrayList<String> testTitles = new ArrayList<>();
 
-        TestHelperClass.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
+        TestHelper.getTestList(this, testIds, testTitles, autoCompleteTextView, clickedCoursePassCode);
         autoCompleteTextView.setThreshold(0);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println(testIds.get(i));
                 mPrefs.edit().putString(strClickedTestId,testIds.get(i)).apply();
                 startActivity(new Intent(CourseDetailsActivity.this, TestDetailsActivity.class));
             }
@@ -133,7 +134,11 @@ public class CourseDetailsActivity extends AppCompatActivity {
         referenceCourse = rootNode.getReference("courses/" + clickedCoursePassCode);
         getAttendanceStatus();
 
-        if(isCompleted)editMarkOnAttendance.setVisibility(View.GONE);
+        if(isCompleted){
+            editMarkOnAttendance.setVisibility(View.GONE);
+            attendanceBtn.setVisibility(View.GONE);
+            completeBtn.setVisibility(View.GONE);
+        }
         testCreationBtn.setOnClickListener(v -> {
             if(isCompleted){
                 Toast.makeText(this, "Course is completed", Toast.LENGTH_SHORT).show();
@@ -200,7 +205,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
                             .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    String warningDetails = "Please upload a csv file with two columns [upper limit of mark, grade]. You won't be able to re-upload if you make any mistake.";
+                                    String warningDetails = "Please upload a csv file with two comma separate values in each line [upper limit of mark, grade]. You won't be able to re-upload if you make any mistake.";
                                     FileHelper.alertForCsvFormat(CourseDetailsActivity.this, warningDetails);
                                 }
                             }).create().show();
@@ -220,6 +225,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
         progressDialog.setMessage("Uploading CSV");
         progressDialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
         String gradingPath = "gradingScales/" +user.getUid()+"/"+ clickedCoursePassCode + "/gradingScale";
         StorageReference storageReferenceCsv = FirebaseStorage.getInstance().getReference(gradingPath);
         storageReferenceCsv.putFile(gradingScaleUri).addOnSuccessListener(taskSnapshot -> {
@@ -241,7 +247,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         if(resultCode == RESULT_OK) {
             if(requestCode == CSV_PICK_CODE){
-                gradingScaleUri = FileHelper.findPickedFileUri(this, null, requestCode, data );
+                gradingScaleUri = FileHelper.findPickedFileUri(this, uploadedGradingScaleFileName, requestCode, data );
                 if(gradingScaleUri != null){
                     uploadGradingScale();
                 }

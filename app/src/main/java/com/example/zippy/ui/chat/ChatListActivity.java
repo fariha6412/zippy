@@ -1,4 +1,10 @@
-package com.example.zippy.ui.search;
+package com.example.zippy.ui.chat;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,21 +14,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SearchView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.zippy.MainActivity;
 import com.example.zippy.R;
-import com.example.zippy.classes.Instructor;
-import com.example.zippy.classes.Student;
 import com.example.zippy.helper.BottomNavigationHelper;
+import com.example.zippy.classes.Instructor;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.adapter.SearchCustomAdapter;
-import com.example.zippy.ui.profile.ShowCaseUserProfileActivity;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,91 +35,86 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class SearchActivity extends AppCompatActivity {
+public class ChatListActivity extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
-    private BottomNavigationView bottomNavigationView;
+    BottomNavigationView bottomNavigationView;
 
-    private SharedPreferences mPrefs;
+    SharedPreferences mPrefs;
     final String strClickedUid = "clickedUid";
     String clickedUid;
 
-    private SearchView searchView;
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
+    SearchCustomAdapter adapter;
+    LinearLayoutManager layoutManager;
 
-    private FirebaseAuth auth;
-    private FirebaseUser user;
-    private DatabaseReference refStudents, refInstructors;
-    private ArrayList<String> userImageList;
-    private ArrayList<String> userFullNameList;
-    private ArrayList<String> usersUid;
+    FirebaseAuth auth;
+    FirebaseUser user;
+    FirebaseDatabase rootNode;
+    DatabaseReference refStudents, refInstructors, ref;
+    ArrayList<String> userImageList;
+    ArrayList<String> userFullNameList;
+    ArrayList<String> usersUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_chat_list);
+
+        Toolbar toolbar = findViewById(R.id.mToolbar);
+        setSupportActionBar(toolbar);
+        MenuHelper menuHelperClass = new MenuHelper(toolbar, this);
+        menuHelperClass.handle();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         BottomNavigationHelper bottomNavigationHelper = new BottomNavigationHelper(bottomNavigationView, this);
         Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.getItem(2);
+        MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
         bottomNavigationHelper.handle();
-
-        searchView = findViewById(R.id.searchview);
-        recyclerView = findViewById(R.id.recyclerviewsearch);
+        //bottomNavigationView.setSelectedItemId(R.id.navigation_chat);
         userFullNameList = new ArrayList<>();
         usersUid = new ArrayList<>();
         userImageList = new ArrayList<>();
+        initRecyclerView(userFullNameList,usersUid, userImageList);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedUid = mPrefs.getString(strClickedUid, "");
 
-        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        rootNode = FirebaseDatabase.getInstance();
         refStudents = rootNode.getReference("students");
         refInstructors = rootNode.getReference("instructors");
 
         getUserList();
+
     }
+
     private void getUserList(){
 
         refStudents.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dsnap:snapshot.getChildren()){
-                    String studentUid = dsnap.getKey();
+                    String studentUid = (String) dsnap.getKey();
                     usersUid.add(studentUid);
 
-                    userFullNameList.add(Objects.requireNonNull(dsnap.getValue(Student.class)).getFullName());
-                    userImageList.add(Objects.requireNonNull(dsnap.getValue(Student.class)).getImage());
+                    //System.out.println(studentUid);
+                    userFullNameList.add(dsnap.getValue(Student.class).getFullName());
+                    userImageList.add(dsnap.getValue(Student.class).getImage());
                 }
+                adapter.notifyDataSetChanged();
                 refInstructors.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                         for(DataSnapshot dsnap: dataSnapshot.getChildren()){
-                            String instructorUid = dsnap.getKey();
+                            String instructorUid = (String) dsnap.getKey();
                             usersUid.add(instructorUid);
 
                             System.out.println(instructorUid);
-                            userFullNameList.add(Objects.requireNonNull(dsnap.getValue(Instructor.class)).getFullName());
-                            userImageList.add(Objects.requireNonNull(dsnap.getValue(Instructor.class)).getImage());
+                            userFullNameList.add(dsnap.getValue(Instructor.class).getFullName());
+                            userImageList.add(dsnap.getValue(Instructor.class).getImage());
                         }
-                        if(searchView != null){
-                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                @Override
-                                public boolean onQueryTextSubmit(String query) {
-                                    Search(query);
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onQueryTextChange(String newText) {
-                                    Search(newText);
-                                    return false;
-                                }
-                            });
-                        }
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -136,53 +130,39 @@ public class SearchActivity extends AppCompatActivity {
             }
 
         });
+        //System.out.println("baire");
     }
 
     private void initRecyclerView(ArrayList<String> nameList, ArrayList<String> uidList, ArrayList<String> imgList){
-        recyclerView = findViewById(R.id.recyclerviewsearch);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView = findViewById(R.id.recyclerviewChatList);
+        layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        SearchCustomAdapter adapter = new SearchCustomAdapter(nameList, imgList, this);
+        adapter = new SearchCustomAdapter(nameList, imgList, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        adapter.setOnItemClickListener(position -> {
-            //start profile
-            mPrefs.edit().putString(strClickedUid, uidList.get(position)).apply();
-            auth = FirebaseAuth.getInstance();
-            user = auth.getCurrentUser();
-            assert user != null;
-            if(user.getUid().equals(uidList.get(position))){
-                startActivity(new Intent(SearchActivity.this, MainActivity.class));
-            }
-            else startActivity(new Intent(SearchActivity.this, ShowCaseUserProfileActivity.class));
+        adapter.setOnItemClickListener(new SearchCustomAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //start profile
+                mPrefs.edit().putString(strClickedUid, uidList.get(position)).apply();
+                auth = FirebaseAuth.getInstance();
+                user = auth.getCurrentUser();
+                assert user != null;
+                // if(user.getUid().equals(uidList.get(position))){
+                // startActivity(new Intent(ChatListActivity.this, MainActivity.class));
+                // }
+                startActivity(new Intent(ChatListActivity.this, ChatActivity.class));            }
         });
     }
+
+
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
-
-
-    private void Search(String str){
-
-        ArrayList<String> nameList = new ArrayList<>();
-        ArrayList<String> uidList = new ArrayList<>();
-        ArrayList<String> imgList = new ArrayList<>();
-        int i = 0;
-        for(String element : userFullNameList){
-            if(element.toLowerCase().contains(str.toLowerCase())){
-                nameList.add(element);
-                uidList.add(usersUid.get(i));
-                imgList.add(userImageList.get(i));
-            }
-            i++;
-        }
-        initRecyclerView(nameList, uidList, imgList);
-    }
-
     @Override
     protected void onStart() {
         IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -194,6 +174,7 @@ public class SearchActivity extends AppCompatActivity {
         unregisterReceiver(networkChangeListener);
         super.onStop();
     }
+
     @Override
     public void onBackPressed() {
         BottomNavigationHelper.backToProfile(bottomNavigationView, this);

@@ -1,15 +1,15 @@
-package com.example.zippy.helper;
+package com.example.zippy.classes;
 
 import org.jetbrains.annotations.NotNull;
 
-public class InstructorHelperClass {
+public class Instructor {
     String image, fullName, email, institution, employeeID, designation;
     Long noOfCourses;
 
-    public InstructorHelperClass(){
+    public Instructor(){
     }
 
-    public InstructorHelperClass(String image, String fullName, String email, String institution, String employeeID, String designation) {
+    public Instructor(String image, String fullName, String email, String institution, String employeeID, String designation) {
         this.image = image;
         this.fullName = fullName;
         this.email = email;
@@ -77,7 +77,7 @@ public class InstructorHelperClass {
 
     @Override
     public @NotNull String toString() {
-        return "InstructorHelperClass{" +
+        return "Instructor{" +
                 "image='" + image + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +

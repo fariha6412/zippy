@@ -22,7 +22,7 @@ import com.example.zippy.ChangeInstructorProfileInfoActivity;
 import com.example.zippy.ChangeStudentProfileInfoActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,8 +50,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         Button changeProfilePicBtn = findViewById(R.id.changeprofilepicturebtn);
         Button updateProfileInfoBtn= findViewById(R.id.updateProfileInfobtn);

@@ -24,12 +24,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.R;
+import com.example.zippy.classes.Test;
 import com.example.zippy.helper.FileHelper;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.NotificationHelper;
 import com.example.zippy.helper.ResultHelper;
-import com.example.zippy.helper.TestHelperClass;
-import com.example.zippy.ui.course.CourseDetailsActivity;
+import com.example.zippy.helper.TestHelper;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -87,8 +87,8 @@ public class TestDetailsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         loggedProfile = mPrefs.getString(loggedStatus, "nouser");
@@ -164,7 +164,7 @@ public class TestDetailsActivity extends AppCompatActivity {
         });
         uploadMarkSheetBtn.setOnClickListener(v -> {
             if(!flag[0]){
-                String warningDetails = "Please upload a csv file with three columns [registrationNo, totalMark, convertedMark]";
+                String warningDetails = "Please upload a csv file with three comma separated values each line [registrationNo, totalMark, convertedMark]";
                 FileHelper.alertForCsvFormat(TestDetailsActivity.this, warningDetails);
                 flag[0] = true;
                 mPrefs.edit().putBoolean(strAlertCsvFormat,true).apply();
@@ -215,7 +215,7 @@ public class TestDetailsActivity extends AppCompatActivity {
             else {
                 markSheetUri = FileHelper.findPickedFileUri(this, txtViewUploadMarkSheetFileName, requestCode, data );
                 if(markSheetUri != null){
-                    ArrayList<TestHelperClass.TestMark> testMarks;
+                    ArrayList<TestHelper.TestMark> testMarks;
                     testMarks = FileHelper.readMarkSheetCsv(markSheetUri, TestDetailsActivity.this);
                     if(testMarks != null) uploadMarkSheetToDatabase(testMarks);
                 }
@@ -246,7 +246,7 @@ public class TestDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    TestHelperClass testHelper = snapshot.getValue(TestHelperClass.class);
+                    Test testHelper = snapshot.getValue(Test.class);
                     assert testHelper != null;
                     totalMark = testHelper.getTotalMark().toString();
                     convertTo = testHelper.getConvertTo().toString();
@@ -299,7 +299,7 @@ public class TestDetailsActivity extends AppCompatActivity {
             Toast.makeText(TestDetailsActivity.this, "pdf upload failed due to "+e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
-    private void uploadMarkSheetToDatabase(ArrayList<TestHelperClass.TestMark> testMarks){
+    private void uploadMarkSheetToDatabase(ArrayList<TestHelper.TestMark> testMarks){
         ProgressDialog progressDialog = new ProgressDialog(TestDetailsActivity.this);
         progressDialog.setTitle("Wait");
         progressDialog.setMessage("Uploading CSV");
@@ -323,7 +323,7 @@ public class TestDetailsActivity extends AppCompatActivity {
     }
     private void getQuestionAndMarkSheetStatus(){
         DatabaseReference referenceCourse = FirebaseDatabase.getInstance().getReference("courses/"+clickedCoursePassCode);
-        referenceCourse.child("instructoruid").addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceCourse.child("instructorUID").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 instructorUID = (String) snapshot.getValue();

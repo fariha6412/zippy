@@ -17,11 +17,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
-public class MenuHelperClass{
+public class MenuHelper {
     Toolbar mtoolbar;
     Activity activity;
 
-    public MenuHelperClass(Toolbar toolbar, Activity activity) {
+    public MenuHelper(Toolbar toolbar, Activity activity) {
         this.mtoolbar = toolbar;
         this.activity = activity;
     }
@@ -35,13 +35,13 @@ public class MenuHelperClass{
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                MenuHelperClass.showAbout(activity);
+                MenuHelper.showAbout(activity);
                 break;
             case R.id.menuexit:
-                MenuHelperClass.exit(activity);
+                MenuHelper.exit(activity);
                 break;
             case R.id.menulogout:
-                MenuHelperClass.signOut(activity);
+                MenuHelper.signOut(activity);
                 break;
         }
         return true;

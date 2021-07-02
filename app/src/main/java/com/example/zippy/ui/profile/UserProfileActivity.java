@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,17 +20,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.zippy.helper.InstructorHelperClass;
+import com.example.zippy.classes.Instructor;
+import com.example.zippy.classes.Student;
 import com.example.zippy.ui.course.CourseCreationActivity;
 import com.example.zippy.ui.course.CourseDetailsActivity;
 import com.example.zippy.ui.course.CourseEnrollActivity;
 import com.example.zippy.ui.course.CourseEvaluationActivity;
 import com.example.zippy.R;
 import com.example.zippy.helper.BottomNavigationHelper;
-import com.example.zippy.helper.CourseCustomAdapter;
-import com.example.zippy.helper.CourseHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.adapter.CourseCustomAdapter;
+import com.example.zippy.classes.Course;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -65,7 +64,7 @@ public class UserProfileActivity extends AppCompatActivity{
     private TextView txtViewDesignation, txtViewEmployeeId;
     private ImageView img;
 
-    private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
+    private final ArrayList<Course> courseList = new ArrayList<>();
     private final ArrayList<Boolean> courseCompletionStatus = new ArrayList<>();
     private CourseCustomAdapter adapter;
 
@@ -95,8 +94,8 @@ public class UserProfileActivity extends AppCompatActivity{
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         BottomNavigationHelper bottomNavigationHelper = new BottomNavigationHelper(bottomNavigationView, this);
@@ -140,14 +139,14 @@ public class UserProfileActivity extends AppCompatActivity{
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                StudentHelperClass value = dataSnapshot.getValue(StudentHelperClass.class);
+                Student value = dataSnapshot.getValue(Student.class);
                 if(value!=null){
                     txtViewFullName.setText(value.getFullName());
                     txtViewRegistrationNo.setText("RegistrationNO: "+value.getRegistrationNo());
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
-                    Log.d("Response", "Value is: " + value.toString());
+                    //Log.d("Response", "Value is: " + value.toString());
                     courseList.clear();
                     courseCompletionStatus.clear();
                     referenceCourseList = rootNode.getReference("students/"+user.getUid()+"/courses");
@@ -169,7 +168,7 @@ public class UserProfileActivity extends AppCompatActivity{
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
+                Instructor value = dataSnapshot.getValue(Instructor.class);
                 if(value!=null){
                     txtViewFullName.setText(value.getFullName());
                     txtViewDesignation.setText(value.getDesignation());
@@ -177,7 +176,7 @@ public class UserProfileActivity extends AppCompatActivity{
                     txtViewInstitution.setText(value.getInstitution());
 
                     Glide.with(getBaseContext()).load(value.getImage()).into(img);
-                    Log.d("Response", "Value is: " + value.toString());
+                    //Log.d("Response", "Value is: " + value.toString());
 
                     courseList.clear();
                     courseCompletionStatus.clear();
@@ -210,7 +209,7 @@ public class UserProfileActivity extends AppCompatActivity{
                             if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
                             else courseCompletionStatus.add(false);
                             //System.out.println(courseCompletionStatus.size()+" "+ courseList.size());
-                            CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
+                            Course courseHelper = snapshot.getValue(Course.class);
                             if(courseHelper!=null) {
                                 courseList.add(courseHelper);
                                 adapter.notifyDataSetChanged();
@@ -254,7 +253,7 @@ public class UserProfileActivity extends AppCompatActivity{
     }
     @Override
     public void onBackPressed() {
-        MenuHelperClass.exit(this);
+        MenuHelper.exit(this);
     }
     //internet related stuff
     @Override

@@ -1,5 +1,6 @@
-package com.example.zippy.helper;
+package com.example.zippy.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,8 @@ import com.example.zippy.R;
 import java.util.ArrayList;
 
 
-public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdapter.ViewHolder> {
+public class BlockListCustomAdapter extends RecyclerView.Adapter<BlockListCustomAdapter.ViewHolder> {
     private final ArrayList<String> studentNameList;
-    private final ArrayList<String> studentRegistrationNoList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -29,14 +29,12 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtViewStudentName;
-        private final TextView txtViewStudentRegistrationNo;
-        public ImageView deleteBtn;
+        public ImageView unBlock;
 
         public ViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             txtViewStudentName = itemView.findViewById(R.id.txtViewStudentName);
-            txtViewStudentRegistrationNo = itemView.findViewById(R.id.txtviewstudentregistrationno);
-            deleteBtn = itemView.findViewById(R.id.deletebtn);
+            unBlock = itemView.findViewById(R.id.unBlockBtn);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -50,7 +48,7 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
                 }
             });
 
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
+            unBlock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
@@ -64,25 +62,23 @@ public class StudentCustomAdapter extends RecyclerView.Adapter<StudentCustomAdap
         }
     }
 
-    public StudentCustomAdapter(ArrayList<String> studentNameList, ArrayList<String> studentRegistrationNoList) {
+    public BlockListCustomAdapter(ArrayList<String> studentNameList) {
         this.studentNameList = studentNameList;
-        this.studentRegistrationNoList = studentRegistrationNoList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.student_list, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.block_list, parent, false);
         ViewHolder evh = new ViewHolder(v, mListener);
         return evh;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String currentName = studentNameList.get(position);
-        String currentRegistrationNo = studentRegistrationNoList.get(position);
 
         holder.txtViewStudentName.setText(currentName);
-        holder.txtViewStudentRegistrationNo.setText(currentRegistrationNo);
     }
 
     @Override

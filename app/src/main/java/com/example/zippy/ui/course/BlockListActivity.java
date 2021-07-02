@@ -15,13 +15,9 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.BlockListCustomAdapter;
-import com.example.zippy.helper.CourseCustomAdapter;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.adapter.BlockListCustomAdapter;
 import com.example.zippy.helper.NotificationHelper;
 import com.example.zippy.ui.profile.ShowCaseUserProfileActivity;
-import com.example.zippy.ui.profile.UserProfileActivity;
-import com.example.zippy.ui.search.SearchActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

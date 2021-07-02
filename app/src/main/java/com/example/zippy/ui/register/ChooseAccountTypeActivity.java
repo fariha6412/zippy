@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.helper.MenuHelper;
 
 
 public class ChooseAccountTypeActivity extends AppCompatActivity {
@@ -39,10 +39,10 @@ public class ChooseAccountTypeActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuabout:
-                MenuHelperClass.showAbout(this);
+                MenuHelper.showAbout(this);
                 return true;
             case R.id.menuexit:
-                MenuHelperClass.exit(this);
+                MenuHelper.exit(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

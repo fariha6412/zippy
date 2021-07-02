@@ -220,6 +220,16 @@
                 app:backgroundTint="@color/course_details_btn"
                 android:textColor="@color/black"/>
 
+            <TextView
+                android:id="@+id/uploadedGradingScaleFileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_border"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:visibility="gone"
+                android:focusable="true" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

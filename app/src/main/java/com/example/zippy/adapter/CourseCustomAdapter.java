@@ -1,4 +1,4 @@
-package com.example.zippy.helper;
+package com.example.zippy.adapter;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -12,16 +12,17 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.zippy.R;
+import com.example.zippy.classes.Course;
 
 import java.util.ArrayList;
 
 
 public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapter.ViewHolder> {
-    private final ArrayList<CourseHelperClass> courseList;
+    private final ArrayList<Course> courseList;
     private final ArrayList<Boolean> courseCompletionStatus;
     private OnItemClickListener mListener;
   
-    public CourseCustomAdapter(ArrayList<CourseHelperClass> courseList, ArrayList<Boolean> courseCompletionStatus) {
+    public CourseCustomAdapter(ArrayList<Course> courseList, ArrayList<Boolean> courseCompletionStatus) {
         this.courseList = courseList;
         this.courseCompletionStatus = courseCompletionStatus;
     }
@@ -64,7 +65,7 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
         }
 
         @SuppressLint("ResourceAsColor")
-        private void bind(CourseHelperClass course, Boolean isCompleted){
+        private void bind(Course course, Boolean isCompleted){
 
             txtViewCourseCode.setText(course.getCourseCode());
             txtViewCourseTitle.setText(course.getCourseTitle());
@@ -73,6 +74,10 @@ public class CourseCustomAdapter extends RecyclerView.Adapter<CourseCustomAdapte
             if(isCompleted){
                 linearLayout.setBackgroundColor(Color.parseColor("#ebc1be"));
                 linearLayout.setBackgroundTintMode(PorterDuff.Mode.MULTIPLY);
+            }
+            else {
+                linearLayout.setBackgroundColor(Color.parseColor("#00000000"));
+                linearLayout.setBackgroundResource(R.drawable.custom_border);
             }
         }
     }

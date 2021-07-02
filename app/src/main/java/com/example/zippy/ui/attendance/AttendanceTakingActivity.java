@@ -22,10 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.AttendanceCustomAdapter;
-import com.example.zippy.helper.CourseHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.adapter.AttendanceCustomAdapter;
+import com.example.zippy.classes.Course;
+import com.example.zippy.helper.MenuHelper;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +48,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     String clickedCoursePassCode;
 
-    private ArrayList<String> studentUids;
+    private ArrayList<String> studentUIDs;
     private ArrayList<Integer> presentCheckedPositions;
     private Map<String, Boolean> attendance;
     private Map<String, Long> prePresentTotal;
@@ -72,15 +72,15 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_attendance_taking);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         Button doneBtn = findViewById(R.id.btnDone);
         loading = findViewById(R.id.loading);
         TextView txtViewDateToday = findViewById(R.id.txtViewDateToday);
         txtViewDateToday.setText(dateToday.toString());
 
-        studentUids = new ArrayList<>();
+        studentUIDs = new ArrayList<>();
         studentNames = new ArrayList<>();
         studentRegistrationNos = new ArrayList<>();
         presentCheckedPositions = new ArrayList<>();
@@ -92,13 +92,11 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         clickedCoursePassCode = mPrefs.getString(strClickedCoursePassCode, "");
 
         initRecyclerView();
-        //System.out.println(clickedCoursePassCode);
         showList();
         extractPreviousAttendanceRecord();
         doneBtn.setOnClickListener(v -> {
             loading.setVisibility(View.VISIBLE);
             recordAttendance();
-            //System.out.println(attendance);
             writeToDatabase();
             Toast.makeText(getApplicationContext(), "Done for today.", Toast.LENGTH_SHORT).show();
             loading.setVisibility(View.INVISIBLE);
@@ -113,16 +111,16 @@ public class AttendanceTakingActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
+                Course courseHelper = snapshot.getValue(Course.class);
                 if (courseHelper != null) {
                     studentNames.clear();
-                    studentUids.clear();
+                    studentUIDs.clear();
 
                     referenceEnrolledStudents = rootNode.getReference("courses/" + clickedCoursePassCode + "/students");
                     referenceEnrolledStudents.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                            studentUids.clear();
+                            studentUIDs.clear();
                             studentNames.clear();
                             for (DataSnapshot dsnap : dataSnapshot.getChildren()) {
                                 System.out.println(dsnap.getValue());
@@ -132,9 +130,9 @@ public class AttendanceTakingActivity extends AppCompatActivity {
                                 referenceStudent.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot dsnapshot) {
-                                        StudentHelperClass studentHelper = dsnapshot.getValue(StudentHelperClass.class);
+                                        Student studentHelper = dsnapshot.getValue(Student.class);
                                         if (studentHelper != null) {
-                                            studentUids.add(studentUid);
+                                            studentUIDs.add(studentUid);
                                             studentNames.add(studentHelper.getFullName());
                                             studentRegistrationNos.add("RegNo-"+studentHelper.getRegistrationNo());
                                             adapter.notifyDataSetChanged();
@@ -164,9 +162,9 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         });
     }
     private void recordAttendance(){
-        for (int i = 0; i < studentUids.size(); i++){
-            if(presentCheckedPositions.contains(i))attendance.put(studentUids.get(i), true);
-            else attendance.put(studentUids.get(i), false);
+        for (int i = 0; i < studentUIDs.size(); i++){
+            if(presentCheckedPositions.contains(i))attendance.put(studentUIDs.get(i), true);
+            else attendance.put(studentUIDs.get(i), false);
         }
     }
     private void extractPreviousAttendanceRecord(){
@@ -244,8 +242,7 @@ public class AttendanceTakingActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         adapter.setOnItemClickListener(position -> {
-            //record as present
-            //givePresent(position);
+            //givePresent(position) if not selected previously
             if(presentCheckedPositions.contains(position))presentCheckedPositions.remove(Integer.valueOf(position));
             else presentCheckedPositions.add(position);
         });

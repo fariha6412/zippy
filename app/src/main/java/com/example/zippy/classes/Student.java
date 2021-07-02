@@ -1,8 +1,8 @@
-package com.example.zippy.helper;
+package com.example.zippy.classes;
 
 import org.jetbrains.annotations.NotNull;
 
-public class StudentHelperClass {
+public class Student {
 
     String image;
     String fullName;
@@ -11,10 +11,10 @@ public class StudentHelperClass {
     String registrationNo;
     Long noOfCourses;
 
-    public StudentHelperClass(){
+    public Student(){
     }
 
-    public StudentHelperClass(String image, String fullName, String email, String institution, String registrationNo) {
+    public Student(String image, String fullName, String email, String institution, String registrationNo) {
         this.image = image;
         this.fullName = fullName;
         this.email = email;
@@ -69,7 +69,7 @@ public class StudentHelperClass {
 
     @Override
     public @NotNull String toString() {
-        return "StudentHelperClass{" +
+        return "Student{" +
                 "image='" + image + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +

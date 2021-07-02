@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -18,11 +19,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.zippy.R;
-import com.example.zippy.helper.CourseHelperClass;
-import com.example.zippy.helper.InstructorHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
+import com.example.zippy.classes.Course;
+import com.example.zippy.classes.Instructor;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.helper.PassCodeGenerator;
 import com.example.zippy.helper.ValidationChecker;
+import com.example.zippy.ui.profile.UserProfileActivity;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,8 +54,8 @@ public class CourseCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_creation);
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         edtTXTCourseCode = findViewById(R.id.edittxtcoursecode);
         edtTXTCourseTitle = findViewById(R.id.edittxtcoursetitle);
@@ -80,7 +82,7 @@ public class CourseCreationActivity extends AppCompatActivity {
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                InstructorHelperClass value = dataSnapshot.getValue(InstructorHelperClass.class);
+                Instructor value = dataSnapshot.getValue(Instructor.class);
                 assert value != null;
                 noOfCourses[0] = (value.getNoOfCourses()) + 1L;
             }
@@ -147,7 +149,7 @@ public class CourseCreationActivity extends AppCompatActivity {
                         editTXTCoursePassCode.requestFocus();
                     }
                     else{
-                        CourseHelperClass courseHelper = new CourseHelperClass(courseCode, courseTitle, courseYear, courseCredit, finalCoursePassCode, instructoruid);
+                        Course courseHelper = new Course(courseCode, courseTitle, courseYear, courseCredit, finalCoursePassCode, instructoruid);
                         referenceCourse.child(finalCoursePassCode).setValue(courseHelper, new DatabaseReference.CompletionListener(){
 
                             @Override
@@ -171,7 +173,7 @@ public class CourseCreationActivity extends AppCompatActivity {
                             }
                         });
                         Toast.makeText(getApplicationContext(), "Course Created", Toast.LENGTH_SHORT).show();
-                        finish();
+                        startActivity(new Intent(CourseCreationActivity.this, UserProfileActivity.class));
                     }
                 }
 

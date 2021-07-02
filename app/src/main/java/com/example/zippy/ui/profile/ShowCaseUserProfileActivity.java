@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.zippy.R;
-import com.example.zippy.helper.CourseCustomAdapter;
-import com.example.zippy.helper.CourseHelperClass;
-import com.example.zippy.helper.InstructorHelperClass;
-import com.example.zippy.helper.MenuHelperClass;
-import com.example.zippy.helper.StudentHelperClass;
+import com.example.zippy.adapter.CourseCustomAdapter;
+import com.example.zippy.classes.Course;
+import com.example.zippy.classes.Instructor;
+import com.example.zippy.helper.EmailSender;
+import com.example.zippy.helper.MenuHelper;
+import com.example.zippy.classes.Student;
 import com.example.zippy.utility.NetworkChangeListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,9 +61,11 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
     private DatabaseReference referenceStudent, referenceInstructor, referenceCourse, referenceCourseList;
 
     private RecyclerView recyclerView;
-    private final ArrayList<CourseHelperClass> courseList = new ArrayList<>();
+    private final ArrayList<Course> courseList = new ArrayList<>();
     private final ArrayList<Boolean> courseCompletionStatus = new ArrayList<>();
     private CourseCustomAdapter adapter;
+
+    private Boolean isFabHidden;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +74,18 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        MenuHelperClass menuHelperClass = new MenuHelperClass(toolbar, this);
-        menuHelperClass.handle();
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         clickedUid = mPrefs.getString(strClickedUid, "");
         loggedProfile = mPrefs.getString(loggedStatus, "nouser");
 
         imgView = findViewById(R.id.imgView);
-        FloatingActionButton floatingActionButton = findViewById(R.id.chatbtn);
+
+        FloatingActionButton sendMail = findViewById(R.id.email_fab);
+        FloatingActionButton sendMessage = findViewById(R.id.message_fab);
+        ExtendedFloatingActionButton contact = findViewById(R.id.contact_fab);
 
         txtViewProfileLocked = findViewById(R.id.txtviewprofileloced);
         txtViewFullName = findViewById(R.id.txtViewFullName);
@@ -94,8 +102,47 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
         employeeIDLinearLayout = findViewById(R.id.employeeidlinearlayout);
         courseListHeaderLinearLayout = findViewById(R.id.courselistheaderlinearlayout);
 
+        sendMail.setVisibility(View.GONE);
+        sendMessage.setVisibility(View.GONE);
+
+        isFabHidden = true;
+        contact.shrink();
+
         initRecyclerView();
         showData();
+
+        contact.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isFabHidden) {
+                            sendMail.show();
+                            sendMessage.show();
+                            contact.extend();
+                            isFabHidden = false;
+                        } else {
+                            sendMail.hide();
+                            sendMessage.hide();
+                            contact.shrink();
+                            isFabHidden = true;
+                        }
+                    }
+                });
+        sendMail.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EmailSender.sendEmailTo(ShowCaseUserProfileActivity.this, new String[] {txtViewEmail.getText().toString().trim()});
+                    }
+                });
+        sendMessage.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(ShowCaseUserProfileActivity.this, "start chatActivity",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void showData(){
@@ -107,7 +154,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    StudentHelperClass studentHelper = snapshot.getValue(StudentHelperClass.class);
+                    Student studentHelper = snapshot.getValue(Student.class);
                     assert studentHelper != null;
                     txtViewFullName.setText(studentHelper.getFullName());
                     txtViewInstitution.setText(studentHelper.getInstitution());
@@ -146,7 +193,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    InstructorHelperClass instructorHelper = snapshot.getValue(InstructorHelperClass.class);
+                    Instructor instructorHelper = snapshot.getValue(Instructor.class);
 
                     assert instructorHelper != null;
                     txtViewFullName.setText(instructorHelper.getFullName());
@@ -188,7 +235,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
 
                             if(isCompleted != null && isCompleted)courseCompletionStatus.add(true);
                             else courseCompletionStatus.add(false);
-                            CourseHelperClass courseHelper = snapshot.getValue(CourseHelperClass.class);
+                            Course courseHelper = snapshot.getValue(Course.class);
                             if(courseHelper!=null) {
                                 courseList.add(courseHelper);
                                 adapter.notifyDataSetChanged();
@@ -224,7 +271,7 @@ public class ShowCaseUserProfileActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapt) {
 
-                            CourseHelperClass courseHelper = snapt.getValue(CourseHelperClass.class);
+                            Course courseHelper = snapt.getValue(Course.class);
                             if(courseHelper!=null) {
                                 System.out.println(user.getUid());
                                 System.out.println(courseHelper.getInstructorUID());
