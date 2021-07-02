@@ -2,6 +2,7 @@ package com.example.zippy.ui.setting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.zippy.MainActivity;
 import com.example.zippy.R;
+import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,6 +58,10 @@ public class ChangeProfilePictureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_profile_picture);
+        Toolbar toolbar = findViewById(R.id.mToolbar);
+        setSupportActionBar(toolbar);
+        MenuHelper menuHelper = new MenuHelper(toolbar, this);
+        menuHelper.handle();
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         loggedProfile = mPrefs.getString(loggedStatus, "nouser");
         btnUpload = (Button) findViewById(R.id.uploadbtn);

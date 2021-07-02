@@ -1,4 +1,4 @@
-package com.example.zippy;
+package com.example.zippy.ui.setting;
 
 import android.content.Context;
 import android.content.IntentFilter;
@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.zippy.R;
 import com.example.zippy.helper.MenuHelper;
 import com.example.zippy.utility.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;

@@ -21,8 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zippy"
         tools:ignore="AllowBackup">
-        <activity android:name=".ChangeInstructorProfileInfoActivity"></activity>
-        <activity android:name=".ChangeStudentProfileInfoActivity" />
+        <activity android:name=".ui.setting.ChangeInstructorProfileInfoActivity"></activity>
+        <activity android:name=".ui.setting.ChangeStudentProfileInfoActivity" />
         <activity android:name=".ui.chat.ChatActivity"></activity>
         <activity android:name=".ui.chat.ChatListActivity" />
         <activity android:name=".ui.setting.ChangeProfileInfoActivity" />
