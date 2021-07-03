@@ -67,11 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
-
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(user!=null){
+            startActivity(new Intent(this, UserProfileActivity.class));
+            overridePendingTransition(0,0);
+        }
         boolean splashScreenShown = mPrefs.getBoolean(splashScreenPref, false);
         if (!splashScreenShown) {
             Intent intent = new Intent(MainActivity.this, SplashActivity.class);
@@ -87,10 +89,6 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-
-        if(user!=null){
-            startActivity(new Intent(this, UserProfileActivity.class));
         }
 
         super.onCreate(savedInstanceState);
