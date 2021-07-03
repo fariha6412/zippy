@@ -298,6 +298,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                                     studentNames.remove(position);
                                     studentRegistrationNos.remove(position);
                                     studentUIDs.remove(position);
+                                    studentEmails.remove(position);
                                     adapter.notifyDataSetChanged();
                                 }
                             }

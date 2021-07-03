@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +55,7 @@ public class UserProfileActivity extends AppCompatActivity{
     final String strClickedCoursePassCode = "clickedCoursePassCode";
     final String loggedStatus = "loggedProfile";
     private String loggedProfile;
+    final String darkThemeStatus = "darkTheme";
 
     private FirebaseDatabase rootNode;
     private DatabaseReference referenceCourse, reference;
@@ -71,6 +73,15 @@ public class UserProfileActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean darkTheme = mPrefs.getBoolean(darkThemeStatus, false);
+        if(darkTheme){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         setContentView(R.layout.activity_user_profile);
 
         FirebaseMessaging.getInstance().subscribeToTopic("all");
@@ -87,7 +98,6 @@ public class UserProfileActivity extends AppCompatActivity{
         img = findViewById(R.id.imgView);
         MaterialButton addBtn = findViewById(R.id.addBtn);
 
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         loggedProfile = mPrefs.getString(loggedStatus, "nouser");
 
         rootNode = FirebaseDatabase.getInstance();
