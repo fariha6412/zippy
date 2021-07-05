@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
-        if(user!=null){
+        if(user!=null && user.isEmailVerified()){
             startActivity(new Intent(this, UserProfileActivity.class));
             overridePendingTransition(0,0);
         }
