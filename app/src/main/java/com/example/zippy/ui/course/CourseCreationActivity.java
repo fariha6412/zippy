@@ -166,7 +166,7 @@ public class CourseCreationActivity extends AppCompatActivity {
                             }
                         });
                         String strNoOfCourses = String.valueOf(noOfCourses[0]);
-                        referenceInstructorCourses.child(strNoOfCourses).setValue(finalCoursePassCode, new DatabaseReference.CompletionListener() {
+                        referenceInstructorCourses.push().setValue(finalCoursePassCode, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
                                 System.err.println("Value was set. Error = "+error);
