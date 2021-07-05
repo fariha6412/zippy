@@ -65,7 +65,7 @@ public class RegisterStudentActivity extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         TextView txtViewLogin = findViewById(R.id.txtviewlogin);
         Button registerBtn = findViewById(R.id.registerbtn);
-        String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/student.png?alt=media&token=112e1b57-ec64-4992-b24d-8c9aba3c88f7";
+        String image = "https://firebasestorage.googleapis.com/v0/b/zippy-162e8.appspot.com/o/student.png?alt=media&token=784d27b3-e5ad-4601-93e5-6ab1e2b51b4f";
 
         Toolbar toolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
