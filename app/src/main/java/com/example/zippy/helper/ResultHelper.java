@@ -222,16 +222,7 @@ public class ResultHelper {
                 System.out.println("total"+totalMark);
                 Double highestGradeMark = getHighestGradeMark(gradingScaleHash)*1.0;
                 System.out.println("highest"+highestGradeMark);
-                if(!totalMark.equals(highestGradeMark)){
-                    new AlertDialog.Builder(activity)
-                            .setTitle("Error")
-                            .setMessage("Your total converted mark for tests doesn't match highest grading mark")
-                            .setPositiveButton("OKAY", null)
-                            .create().show();
-                }
-                else {
-                    getTotalMark(activity, coursePassCode, gradingScaleHash, attendanceMark, totalMark);
-                }
+                getTotalMark(activity, coursePassCode, gradingScaleHash, attendanceMark, totalMark);
             }
 
             @Override
